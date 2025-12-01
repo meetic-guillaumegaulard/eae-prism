@@ -47,6 +47,10 @@ class WidgetbookApp extends StatelessWidget {
                   name: 'Loading State',
                   builder: (context) => buildLoadingButton(context),
                 ),
+                WidgetbookUseCase(
+                  name: 'Width Behavior',
+                  builder: (context) => buildButtonWidthBehavior(context),
+                ),
               ],
             ),
             WidgetbookComponent(
@@ -59,6 +63,10 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Group',
                   builder: (context) => buildSelectableButtonGroup(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Width Behavior',
+                  builder: (context) => buildSelectableButtonWidthBehavior(context),
                 ),
               ],
             ),

@@ -32,7 +32,8 @@ class MeeticBrand implements BrandConfig {
         activeColor: Color(0xFFE9006D),
         checkColor: Colors.white,
         backgroundColor: Color(0xFFE9006D),
-        borderRadius: 4.0,
+        borderRadius: 8.0,
+        checkStrokeWidth: 2.0, // Standard
       );
 
   @override

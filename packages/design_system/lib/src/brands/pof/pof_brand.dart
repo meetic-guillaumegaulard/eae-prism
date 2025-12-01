@@ -40,8 +40,10 @@ class PofBrand implements BrandConfig {
         activeColor: Colors.black,
         checkColor: Colors.black,
         backgroundColor: Color(0xFFFF9E80), // Salmon background
-        borderRadius: 4.0,
-        borderWidth: 2.0,
+        borderRadius: 8.0, // Rounded
+        borderWidth: 2.0, // Thin when unselected
+        selectedBorderWidth: 3.0, // Thick when selected
+        checkStrokeWidth: 3.0, // Thick check
       );
 
   @override

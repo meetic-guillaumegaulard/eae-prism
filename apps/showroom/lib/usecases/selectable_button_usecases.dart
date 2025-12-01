@@ -5,11 +5,13 @@ import 'package:design_system/design_system.dart';
 class _SelectableButtonDemo extends StatefulWidget {
   final String label;
   final ButtonEAESize size;
+  final bool isFullWidth;
 
   const _SelectableButtonDemo({
     Key? key,
     required this.label,
     this.size = ButtonEAESize.medium,
+    this.isFullWidth = false,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class _SelectableButtonDemoState extends State<_SelectableButtonDemo> {
       label: widget.label,
       isSelected: isSelected,
       size: widget.size,
+      isFullWidth: widget.isFullWidth,
       onChanged: (value) {
         setState(() {
           isSelected = value;
@@ -54,3 +57,29 @@ Widget buildSelectableButtonGroup(BuildContext context) {
   );
 }
 
+Widget buildSelectableButtonWidthBehavior(BuildContext context) {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text('Fit Content (Default):',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 8),
+          _SelectableButtonDemo(label: 'Short'),
+          SizedBox(height: 8),
+          _SelectableButtonDemo(label: 'A bit longer label'),
+          SizedBox(height: 32),
+          Text('Full Width:', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 8),
+          _SelectableButtonDemo(
+            label: 'I take all available width',
+            isFullWidth: true,
+          ),
+        ],
+      ),
+    ),
+  );
+}

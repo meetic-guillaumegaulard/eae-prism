@@ -65,6 +65,7 @@ class BrandSelectableButtonConfig {
   final Color? selectedForegroundColor;
   final Color? selectedBorderColor;
   final double selectedBorderWidth;
+  final bool showRadioButton;
 
   const BrandSelectableButtonConfig({
     this.unselectedBorderColor,
@@ -75,6 +76,7 @@ class BrandSelectableButtonConfig {
     this.selectedForegroundColor,
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0,
+    this.showRadioButton = false,
   });
 }
 
@@ -83,7 +85,10 @@ class BrandCheckboxConfig {
   final Color? checkColor;
   final Color? backgroundColor;
   final double borderRadius;
-  final double borderWidth;
+  final double borderWidth; // Unselected border width
+  final double
+      selectedBorderWidth; // Selected border width (defaults to borderWidth if null)
+  final double checkStrokeWidth;
 
   const BrandCheckboxConfig({
     required this.activeColor,
@@ -91,7 +96,9 @@ class BrandCheckboxConfig {
     this.backgroundColor,
     this.borderRadius = 4.0,
     this.borderWidth = 2.0,
-  });
+    double? selectedBorderWidth,
+    this.checkStrokeWidth = 2.0,
+  }) : selectedBorderWidth = selectedBorderWidth ?? borderWidth;
 }
 
 class BrandRadioButtonConfig {

@@ -21,7 +21,13 @@ class CheckboxEAE extends StatelessWidget {
     final checkColor = checkboxTheme?.checkColor ?? theme.colorScheme.onPrimary;
     final backgroundColor = checkboxTheme?.backgroundColor ?? activeColor;
     final borderRadius = checkboxTheme?.borderRadius ?? 4.0;
-    final borderWidth = checkboxTheme?.borderWidth ?? 2.0;
+    
+    // Determine border width based on selection state
+    final borderWidth = value 
+        ? (checkboxTheme?.selectedBorderWidth ?? 2.0) 
+        : (checkboxTheme?.borderWidth ?? 2.0);
+        
+    final checkStrokeWidth = checkboxTheme?.checkStrokeWidth ?? 2.0;
 
     return InkWell(
       onTap: onChanged != null ? () => onChanged!(!value) : null,
@@ -38,10 +44,11 @@ class CheckboxEAE extends StatelessWidget {
           ),
         ),
         child: value
-            ? Icon(
-                Icons.check,
-                size: 16,
-                color: checkColor,
+            ? CustomPaint(
+                painter: _CheckPainter(
+                  color: checkColor,
+                  strokeWidth: checkStrokeWidth,
+                ),
               )
             : null,
       ),
@@ -49,3 +56,34 @@ class CheckboxEAE extends StatelessWidget {
   }
 }
 
+class _CheckPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+
+  _CheckPainter({required this.color, required this.strokeWidth});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final path = Path();
+    
+    final w = size.width;
+    final h = size.height;
+    
+    path.moveTo(w * 0.25, h * 0.52);
+    path.lineTo(w * 0.42, h * 0.69);
+    path.lineTo(w * 0.75, h * 0.31);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(_CheckPainter oldDelegate) =>
+      color != oldDelegate.color || strokeWidth != oldDelegate.strokeWidth;
+}

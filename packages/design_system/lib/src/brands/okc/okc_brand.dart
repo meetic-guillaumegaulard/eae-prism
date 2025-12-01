@@ -21,23 +21,34 @@ class OkcBrand implements BrandConfig {
   );
 
   @override
-  BrandSelectableButtonConfig get selectableButtonConfig => const BrandSelectableButtonConfig();
+  BrandSelectableButtonConfig get selectableButtonConfig => const BrandSelectableButtonConfig(
+    showRadioButton: true,
+    unselectedBackgroundColor: Colors.white,
+    unselectedBorderColor: Color(0xFFE0E0E0), 
+    unselectedTextColor: Colors.black87,
+    unselectedBorderWidth: 1.0,
+    selectedBorderColor: Color(0xFFE0E0E0), 
+    selectedBorderWidth: 1.0, 
+    selectedBackgroundColor: Colors.white, 
+    selectedForegroundColor: Colors.black87, 
+  );
 
   @override
   BrandCheckboxConfig get checkboxConfig => const BrandCheckboxConfig(
-    activeColor: Color(0xFF0046D5), // Primary Blue border
-    checkColor: Color(0xFF0046D5), // Primary Blue check
-    backgroundColor: Colors.transparent, // Transparent background
-    borderRadius: 6.0, // Slightly rounded
-    borderWidth: 2.5, // Thicker border
+    activeColor: Color(0xFF0046D5), 
+    checkColor: Color(0xFF0046D5), 
+    backgroundColor: Colors.transparent, 
+    borderRadius: 6.0, 
+    borderWidth: 2.5, 
+    checkStrokeWidth: 2.5, // Slightly thicker
   );
 
   @override
   BrandRadioButtonConfig get radioButtonConfig => const BrandRadioButtonConfig(
-    unselectedBorderColor: Color(0xFF0046D5), // Blue Outline
-    selectedBorderColor: Color(0xFF0046D5), // Blue Outline
-    selectedBackgroundColor: Colors.transparent, // Transparent Fill
-    dotColor: Color(0xFF0046D5), // Blue Dot
-    borderWidth: 3.0, // Thicker border like the image
+    unselectedBorderColor: Color(0xFF0046D5), 
+    selectedBorderColor: Color(0xFF0046D5), 
+    selectedBackgroundColor: Colors.transparent, 
+    dotColor: Color(0xFF0046D5), 
+    borderWidth: 2.0, 
   );
 }

@@ -32,6 +32,7 @@ class BrandTheme {
           selectedForegroundColor: selectableButtonConfig.selectedForegroundColor,
           selectedBorderColor: selectableButtonConfig.selectedBorderColor,
           selectedBorderWidth: selectableButtonConfig.selectedBorderWidth,
+          showRadioButton: selectableButtonConfig.showRadioButton,
         ),
         BrandCheckboxTheme(
           activeColor: checkboxConfig.activeColor,
@@ -39,6 +40,8 @@ class BrandTheme {
           backgroundColor: checkboxConfig.backgroundColor,
           borderRadius: checkboxConfig.borderRadius,
           borderWidth: checkboxConfig.borderWidth,
+          selectedBorderWidth: checkboxConfig.selectedBorderWidth,
+          checkStrokeWidth: checkboxConfig.checkStrokeWidth,
         ),
         BrandRadioButtonTheme(
           unselectedBorderColor: radioButtonConfig.unselectedBorderColor,

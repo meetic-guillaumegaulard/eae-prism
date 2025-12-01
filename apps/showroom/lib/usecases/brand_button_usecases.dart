@@ -108,3 +108,49 @@ Widget buildLoadingButton(BuildContext context) {
     ),
   );
 }
+
+Widget buildButtonWidthBehavior(BuildContext context) {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Fit Content (Auto width):',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              ButtonEAE(
+                label: 'OK',
+                onPressed: () {},
+                size: ButtonEAESize.small,
+              ),
+              ButtonEAE(
+                label: 'Validate',
+                onPressed: () {},
+                size: ButtonEAESize.small,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ButtonEAE(
+            label: 'This button adapts to its long text content',
+            onPressed: () {},
+          ),
+          const SizedBox(height: 32),
+          const Text('Full Width:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          ButtonEAE(
+            label: 'I take all available width',
+            isFullWidth: true,
+            onPressed: () {},
+          ),
+        ],
+      ),
+    ),
+  );
+}

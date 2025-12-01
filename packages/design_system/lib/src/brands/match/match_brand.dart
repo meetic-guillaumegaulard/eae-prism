@@ -31,7 +31,8 @@ class MatchBrand implements BrandConfig {
         activeColor: Color(0xFF11144C),
         checkColor: Colors.white,
         backgroundColor: Color(0xFF11144C),
-        borderRadius: 4.0,
+        borderRadius: 8.0,
+        checkStrokeWidth: 2.0, // Standard
       );
 
   @override
