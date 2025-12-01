@@ -154,3 +154,24 @@ Widget buildButtonWidthBehavior(BuildContext context) {
     ),
   );
 }
+
+Widget buildDisabledButton(BuildContext context) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ButtonEAE(
+          label: 'Disabled Button',
+          onPressed: null, // Setting onPressed to null disables the button
+          variant: ButtonEAEVariant.primary,
+        ),
+        const SizedBox(height: 16),
+        ButtonEAE(
+          label: 'Enabled for comparison',
+          onPressed: () {},
+          variant: ButtonEAEVariant.primary,
+        ),
+      ],
+    ),
+  );
+}

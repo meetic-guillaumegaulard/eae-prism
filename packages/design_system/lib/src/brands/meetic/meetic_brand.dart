@@ -16,6 +16,9 @@ class MeeticBrand implements BrandConfig {
   @override
   BrandButtonConfig get buttonConfig => const BrandButtonConfig(
         borderRadius: 999.0, // Capsule shape
+        horizontalPadding: 48.0, // Wide padding
+        disabledBackgroundColor: Color(0xFFF2C4D9), // Light pink for disabled
+        disabledForegroundColor: Colors.white, // White text
       );
 
   @override

@@ -29,6 +29,7 @@ class ButtonEAE extends StatelessWidget {
   // New properties for layout flexibility
   final Widget? trailing;
   final MainAxisAlignment mainAxisAlignment;
+  final EdgeInsetsGeometry? contentPadding;
 
   const ButtonEAE({
     Key? key,
@@ -44,35 +45,52 @@ class ButtonEAE extends StatelessWidget {
     this.borderSide,
     this.trailing,
     this.mainAxisAlignment = MainAxisAlignment.center,
+    this.contentPadding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final elevatedButtonTheme = theme.elevatedButtonTheme.style;
+
+    // Retrieve padding from theme or override
+    double? themeHorizontalPadding;
+    double? themeVerticalPadding;
+
+    final resolvedPadding =
+        contentPadding?.resolve(Directionality.of(context)) ??
+            elevatedButtonTheme?.padding?.resolve({});
+
+    if (resolvedPadding != null) {
+      themeHorizontalPadding = resolvedPadding.horizontal / 2;
+      themeVerticalPadding = resolvedPadding.vertical / 2;
+    }
 
     // Size configuration
-    final double height;
+    final double minHeight;
     final double horizontalPadding;
     final double fontSize;
     final double iconSize;
 
     switch (size) {
       case ButtonEAESize.small:
-        height = 36;
-        horizontalPadding = 16;
+        minHeight = 36;
+        horizontalPadding =
+            themeHorizontalPadding != null ? themeHorizontalPadding * 0.75 : 16;
         fontSize = 14;
         iconSize = 16;
         break;
       case ButtonEAESize.medium:
-        height = 48;
-        horizontalPadding = 24;
+        minHeight = 48;
+        horizontalPadding = themeHorizontalPadding ?? 24;
         fontSize = 16;
         iconSize = 20;
         break;
       case ButtonEAESize.large:
-        height = 56;
-        horizontalPadding = 32;
+        minHeight = 56;
+        horizontalPadding =
+            themeHorizontalPadding != null ? themeHorizontalPadding * 1.25 : 32;
         fontSize = 18;
         iconSize = 24;
         break;
@@ -83,9 +101,24 @@ class ButtonEAE extends StatelessWidget {
     final Color effectiveForegroundColor;
     final BorderSide? effectiveBorderSide;
 
-    if (backgroundColor != null ||
+    final bool isDisabled = onPressed == null;
+
+    if (isDisabled) {
+      // Disabled state logic
+      // Use 'resolve' on the standard backgroundColor/foregroundColor properties with MaterialState.disabled
+      effectiveBackgroundColor = elevatedButtonTheme?.backgroundColor
+              ?.resolve({WidgetState.disabled}) ??
+          theme.colorScheme.onSurface.withOpacity(0.12);
+
+      effectiveForegroundColor = elevatedButtonTheme?.foregroundColor
+              ?.resolve({WidgetState.disabled}) ??
+          theme.colorScheme.onSurface.withOpacity(0.38);
+
+      effectiveBorderSide = null;
+    } else if (backgroundColor != null ||
         foregroundColor != null ||
         borderSide != null) {
+      // Custom overrides
       Color defaultBg;
       Color defaultFg;
       BorderSide? defaultBorder;
@@ -112,6 +145,7 @@ class ButtonEAE extends StatelessWidget {
       effectiveForegroundColor = foregroundColor ?? defaultFg;
       effectiveBorderSide = borderSide ?? defaultBorder;
     } else {
+      // Standard variant logic
       switch (variant) {
         case ButtonEAEVariant.primary:
           effectiveBackgroundColor = colorScheme.primary;
@@ -143,101 +177,55 @@ class ButtonEAE extends StatelessWidget {
             ),
           )
         : Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment: mainAxisAlignment,
             children: [
-              // Content Group (Icon + Text)
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (icon != null) ...[
-                      Icon(icon,
-                          size: iconSize, color: effectiveForegroundColor),
-                      const SizedBox(width: 8),
-                    ],
-                    Flexible(
-                      child: Text(
-                        label,
-                        style: TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.w600,
-                          color: effectiveForegroundColor,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+              // Content Group
+              isFullWidth
+                  ? Expanded(
+                      child: _buildInnerContent(mainAxisAlignment, icon,
+                          iconSize, effectiveForegroundColor, label, fontSize),
+                    )
+                  : Flexible(
+                      child: _buildInnerContent(mainAxisAlignment, icon,
+                          iconSize, effectiveForegroundColor, label, fontSize),
                     ),
-                  ],
-                ),
-              ),
 
               if (trailing != null) ...[
-                const SizedBox(width: 8),
+                if (mainAxisAlignment != MainAxisAlignment.spaceBetween)
+                  const SizedBox(width: 8),
                 trailing!,
               ],
             ],
           );
 
-    // If spaceBetween, we need the Row to fill the width.
-    // Material > InkWell > Container > Center > Row(min) is current.
-    // If spaceBetween, we want Row(max) inside Container.
-
-    Widget contentWrapper = buttonContent;
-    if (mainAxisAlignment != MainAxisAlignment.center || isFullWidth) {
-      // Remove 'Center' and ensure Row takes full width if needed
-    }
-
-    final elevatedButtonTheme = theme.elevatedButtonTheme.style;
     final double elevation = elevatedButtonTheme?.elevation?.resolve({}) ?? 0.0;
     final Color? shadowColor = elevatedButtonTheme?.shadowColor?.resolve({});
 
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
-      height: height,
       child: Material(
         color: effectiveBackgroundColor,
-        elevation: elevation,
+        elevation: isDisabled ? 0.0 : elevation, // No elevation when disabled
         shadowColor: shadowColor,
         borderRadius: BorderRadius.circular(999),
         child: InkWell(
-          onTap: isLoading ? null : onPressed,
+          onTap: (isLoading || isDisabled) ? null : onPressed,
           borderRadius: BorderRadius.circular(999),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: themeVerticalPadding ?? 0,
+            ),
+            constraints: BoxConstraints(
+                minHeight: themeVerticalPadding != null ? 0 : minHeight),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
               border: effectiveBorderSide != null
                   ? Border.fromBorderSide(effectiveBorderSide)
                   : null,
             ),
-            // We use a Row here to control alignment.
-            child: Row(
-              mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                // Left/Center part
-                isFullWidth
-                    ? Expanded(
-                        child: _buildInnerContent(
-                            mainAxisAlignment,
-                            icon,
-                            iconSize,
-                            effectiveForegroundColor,
-                            label,
-                            fontSize),
-                      )
-                    : Flexible(
-                        child: _buildInnerContent(
-                            mainAxisAlignment,
-                            icon,
-                            iconSize,
-                            effectiveForegroundColor,
-                            label,
-                            fontSize),
-                      ),
-                if (trailing != null) trailing!,
-              ],
-            ),
+            child: buttonContent,
           ),
         ),
       ),

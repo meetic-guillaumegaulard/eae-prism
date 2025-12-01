@@ -16,6 +16,10 @@ class MatchBrand implements BrandConfig {
   @override
   BrandButtonConfig get buttonConfig => const BrandButtonConfig(
         borderRadius: 999.0, // Capsule shape
+        horizontalPadding: 48.0, // Wide padding
+        disabledBackgroundColor:
+            Color(0xFFD1D1D6), // Grey background for disabled
+        disabledForegroundColor: Colors.white, // White text for disabled
       );
 
   @override

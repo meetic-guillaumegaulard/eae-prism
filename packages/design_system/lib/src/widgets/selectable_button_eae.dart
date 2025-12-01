@@ -69,6 +69,23 @@ class SelectableButtonEAE extends StatelessWidget {
       }
     }
 
+    // Check for custom padding overrides
+    EdgeInsets? contentPadding;
+    if (selectableTheme?.horizontalPadding != null ||
+        selectableTheme?.verticalPadding != null) {
+      final elevatedButtonTheme = theme.elevatedButtonTheme.style;
+      final defaultPadding =
+          elevatedButtonTheme?.padding?.resolve({}) as EdgeInsets? ??
+              const EdgeInsets.symmetric(horizontal: 32, vertical: 12);
+
+      contentPadding = EdgeInsets.symmetric(
+        horizontal:
+            selectableTheme?.horizontalPadding ?? defaultPadding.horizontal / 2,
+        vertical:
+            selectableTheme?.verticalPadding ?? defaultPadding.vertical / 2,
+      );
+    }
+
     // If we need to show a radio button, we can't just pass label/icon to ButtonEAE directly
     // because ButtonEAE centers content. We need a custom child content.
     // But ButtonEAE doesn't accept 'child', only label/icon.
@@ -95,6 +112,7 @@ class SelectableButtonEAE extends StatelessWidget {
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       borderSide: borderSide,
+      contentPadding: contentPadding,
       trailing: showRadioButton
           ? Padding(
               padding: const EdgeInsets.only(left: 8.0),

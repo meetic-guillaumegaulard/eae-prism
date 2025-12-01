@@ -14,6 +14,8 @@ class BrandSelectableButtonTheme
   final double selectedBorderWidth;
 
   final bool showRadioButton;
+  final double? horizontalPadding;
+  final double? verticalPadding;
 
   const BrandSelectableButtonTheme({
     this.unselectedBorderColor,
@@ -25,6 +27,8 @@ class BrandSelectableButtonTheme
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0,
     this.showRadioButton = false,
+    this.horizontalPadding,
+    this.verticalPadding,
   });
 
   @override
@@ -38,6 +42,8 @@ class BrandSelectableButtonTheme
     Color? selectedBorderColor,
     double? selectedBorderWidth,
     bool? showRadioButton,
+    double? horizontalPadding,
+    double? verticalPadding,
   }) {
     return BrandSelectableButtonTheme(
       unselectedBorderColor:
@@ -54,6 +60,8 @@ class BrandSelectableButtonTheme
       selectedBorderColor: selectedBorderColor ?? this.selectedBorderColor,
       selectedBorderWidth: selectedBorderWidth ?? this.selectedBorderWidth,
       showRadioButton: showRadioButton ?? this.showRadioButton,
+      horizontalPadding: horizontalPadding ?? this.horizontalPadding,
+      verticalPadding: verticalPadding ?? this.verticalPadding,
     );
   }
 
@@ -83,6 +91,9 @@ class BrandSelectableButtonTheme
       selectedBorderWidth:
           lerpDouble(selectedBorderWidth, other.selectedBorderWidth, t)!,
       showRadioButton: t < 0.5 ? showRadioButton : other.showRadioButton,
+      horizontalPadding:
+          lerpDouble(horizontalPadding, other.horizontalPadding, t),
+      verticalPadding: lerpDouble(verticalPadding, other.verticalPadding, t),
     );
   }
 }

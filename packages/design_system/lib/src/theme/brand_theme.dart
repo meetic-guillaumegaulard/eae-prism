@@ -26,13 +26,18 @@ class BrandTheme {
         BrandSelectableButtonTheme(
           unselectedBorderColor: selectableButtonConfig.unselectedBorderColor,
           unselectedTextColor: selectableButtonConfig.unselectedTextColor,
-          unselectedBackgroundColor: selectableButtonConfig.unselectedBackgroundColor,
+          unselectedBackgroundColor:
+              selectableButtonConfig.unselectedBackgroundColor,
           unselectedBorderWidth: selectableButtonConfig.unselectedBorderWidth,
-          selectedBackgroundColor: selectableButtonConfig.selectedBackgroundColor,
-          selectedForegroundColor: selectableButtonConfig.selectedForegroundColor,
+          selectedBackgroundColor:
+              selectableButtonConfig.selectedBackgroundColor,
+          selectedForegroundColor:
+              selectableButtonConfig.selectedForegroundColor,
           selectedBorderColor: selectableButtonConfig.selectedBorderColor,
           selectedBorderWidth: selectableButtonConfig.selectedBorderWidth,
           showRadioButton: selectableButtonConfig.showRadioButton,
+          horizontalPadding: selectableButtonConfig.horizontalPadding,
+          verticalPadding: selectableButtonConfig.verticalPadding,
         ),
         BrandCheckboxTheme(
           activeColor: checkboxConfig.activeColor,
@@ -55,7 +60,12 @@ class BrandTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: colors.primary,
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          disabledBackgroundColor: buttonConfig.disabledBackgroundColor,
+          disabledForegroundColor: buttonConfig.disabledForegroundColor,
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonConfig.horizontalPadding ?? 32.0,
+            vertical: buttonConfig.verticalPadding ?? 12.0,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(buttonConfig.borderRadius),
           ),

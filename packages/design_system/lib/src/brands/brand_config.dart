@@ -45,11 +45,20 @@ class BrandButtonConfig {
   final double borderRadius;
   final double elevation;
   final Color? shadowColor;
+  final double? horizontalPadding; // Override default padding if set
+  final double?
+      verticalPadding; // Override default vertical padding (and remove fixed height)
+  final Color? disabledBackgroundColor;
+  final Color? disabledForegroundColor;
 
   const BrandButtonConfig({
     this.borderRadius = 12.0,
     this.elevation = 0.0,
     this.shadowColor,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.disabledBackgroundColor,
+    this.disabledForegroundColor,
   });
 }
 
@@ -66,6 +75,8 @@ class BrandSelectableButtonConfig {
   final Color? selectedBorderColor;
   final double selectedBorderWidth;
   final bool showRadioButton;
+  final double? horizontalPadding;
+  final double? verticalPadding;
 
   const BrandSelectableButtonConfig({
     this.unselectedBorderColor,
@@ -77,6 +88,8 @@ class BrandSelectableButtonConfig {
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0,
     this.showRadioButton = false,
+    this.horizontalPadding,
+    this.verticalPadding,
   });
 }
 

@@ -51,6 +51,10 @@ class WidgetbookApp extends StatelessWidget {
                   name: 'Width Behavior',
                   builder: (context) => buildButtonWidthBehavior(context),
                 ),
+                WidgetbookUseCase(
+                  name: 'Disabled State',
+                  builder: (context) => buildDisabledButton(context),
+                ),
               ],
             ),
             WidgetbookComponent(
