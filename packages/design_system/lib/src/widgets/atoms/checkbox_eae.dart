@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/brand_theme_extensions.dart';
+import '../../theme/brand_theme_extensions.dart';
 
 class CheckboxEAE extends StatelessWidget {
   final bool value;

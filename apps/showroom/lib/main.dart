@@ -3,6 +3,7 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:design_system/design_system.dart';
 import 'usecases/brand_button_usecases.dart';
 import 'usecases/selectable_button_usecases.dart';
+import 'usecases/selectable_button_group_usecases.dart';
 import 'usecases/checkbox_usecases.dart';
 import 'usecases/radio_button_usecases.dart';
 import 'usecases/text_input_usecases.dart';
@@ -19,7 +20,7 @@ class WidgetbookApp extends StatelessWidget {
     return Widgetbook.material(
       directories: [
         WidgetbookCategory(
-          name: 'Components',
+          name: 'Atoms',
           children: [
             WidgetbookComponent(
               name: 'ButtonEAE',
@@ -108,6 +109,44 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'No Label',
                   builder: (context) => buildTextInputNoLabel(context),
+                ),
+              ],
+            ),
+          ],
+        ),
+        WidgetbookCategory(
+          name: 'Molecules',
+          children: [
+            WidgetbookComponent(
+              name: 'SelectableButtonGroupEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Vertical - Start',
+                  builder: (context) => buildSelectableButtonGroupVerticalStart(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Vertical - End',
+                  builder: (context) => buildSelectableButtonGroupVerticalEnd(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Vertical - Stretch',
+                  builder: (context) => buildSelectableButtonGroupVerticalStretch(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Horizontal',
+                  builder: (context) => buildSelectableButtonGroupHorizontal(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'With Additional Options',
+                  builder: (context) => buildSelectableButtonGroupWithAdditional(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Sizes',
+                  builder: (context) => buildSelectableButtonGroupSizes(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'With Icons',
+                  builder: (context) => buildSelectableButtonGroupWithIcons(context),
                 ),
               ],
             ),
