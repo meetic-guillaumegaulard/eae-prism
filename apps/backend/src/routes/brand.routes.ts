@@ -6,8 +6,8 @@ const brandConfigs: Record<Brand, BrandConfig> = {
   match: {
     id: "match",
     name: "Match",
-    primaryColor: "#D6002F",
-    secondaryColor: "#FF6B6B",
+    primaryColor: "#11144C",
+    secondaryColor: "#2A2D7C",
     backgroundColor: "#FFFFFF",
     surfaceColor: "#F8F8F8",
     features: ["messaging", "likes", "super-likes", "boost"],
@@ -20,8 +20,8 @@ const brandConfigs: Record<Brand, BrandConfig> = {
   meetic: {
     id: "meetic",
     name: "Meetic",
-    primaryColor: "#6C5CE7",
-    secondaryColor: "#A29BFE",
+    primaryColor: "#E9006D",
+    secondaryColor: "#FF4D9A",
     backgroundColor: "#FFFFFF",
     surfaceColor: "#F5F4F9",
     features: ["messaging", "likes", "events", "boost"],
@@ -34,8 +34,8 @@ const brandConfigs: Record<Brand, BrandConfig> = {
   okc: {
     id: "okc",
     name: "OKCupid",
-    primaryColor: "#00A8E8",
-    secondaryColor: "#00D9FF",
+    primaryColor: "#0046D5",
+    secondaryColor: "#002A80",
     backgroundColor: "#FFFFFF",
     surfaceColor: "#F0F9FF",
     features: ["messaging", "likes", "questions", "personality-match"],
@@ -48,7 +48,7 @@ const brandConfigs: Record<Brand, BrandConfig> = {
   pof: {
     id: "pof",
     name: "Plenty of Fish",
-    primaryColor: "#FF6B35",
+    primaryColor: "#000000",
     secondaryColor: "#4ECDC4",
     backgroundColor: "#FFFFFF",
     surfaceColor: "#FFF5F0",

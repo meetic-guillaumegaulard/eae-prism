@@ -5,14 +5,14 @@ import 'screens/home_page.dart';
 void main() {
   // You can change the brand here to test different themes
   const brand = Brand.match; // Try: match, meetic, okc, pof
-  
-  runApp(MyApp(brand: brand));
+
+  runApp(const MyApp(brand: brand));
 }
 
 class MyApp extends StatelessWidget {
   final Brand brand;
 
-  const MyApp({Key? key, required this.brand}) : super(key: key);
+  const MyApp({super.key, required this.brand});
 
   @override
   Widget build(BuildContext context) {
@@ -24,4 +24,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

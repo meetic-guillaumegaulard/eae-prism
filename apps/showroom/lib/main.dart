@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:design_system/design_system.dart';
 import 'usecases/brand_button_usecases.dart';
+import 'usecases/selectable_button_usecases.dart';
+import 'usecases/checkbox_usecases.dart';
+import 'usecases/radio_button_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -18,7 +21,7 @@ class WidgetbookApp extends StatelessWidget {
           name: 'Components',
           children: [
             WidgetbookComponent(
-              name: 'BrandButton',
+              name: 'ButtonEAE',
               useCases: [
                 WidgetbookUseCase(
                   name: 'Primary',
@@ -43,6 +46,37 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Loading State',
                   builder: (context) => buildLoadingButton(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'SelectableButtonEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => buildSelectableButton(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Group',
+                  builder: (context) => buildSelectableButtonGroup(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'CheckboxEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => buildCheckbox(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'RadioButtonEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => buildRadioButton(context),
                 ),
               ],
             ),
@@ -83,4 +117,3 @@ class WidgetbookApp extends StatelessWidget {
     );
   }
 }
-

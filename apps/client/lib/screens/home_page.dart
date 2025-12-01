@@ -4,7 +4,7 @@ import 'package:design_system/design_system.dart';
 class HomePage extends StatefulWidget {
   final Brand brand;
 
-  const HomePage({Key? key, required this.brand}) : super(key: key);
+  const HomePage({super.key, required this.brand});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     final brandName = BrandTheme.getBrandName(widget.brand);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         title: Text(brandName),
         backgroundColor: theme.colorScheme.primary,
@@ -126,35 +126,35 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 16),
 
                 // Primary Button with loading state
-                BrandButton(
+                ButtonEAE(
                   label: _isLoading ? 'Loading...' : 'Increment Counter',
                   icon: Icons.add,
                   onPressed: _isLoading ? null : _incrementCounter,
                   isLoading: _isLoading,
-                  variant: BrandButtonVariant.primary,
-                  size: BrandButtonSize.large,
+                  variant: ButtonEAEVariant.primary,
+                  size: ButtonEAESize.large,
                   isFullWidth: true,
                 ),
                 const SizedBox(height: 16),
 
                 // Secondary Button
-                BrandButton(
+                ButtonEAE(
                   label: 'Reset Counter',
                   icon: Icons.refresh,
                   onPressed: _resetCounter,
-                  variant: BrandButtonVariant.secondary,
-                  size: BrandButtonSize.medium,
+                  variant: ButtonEAEVariant.secondary,
+                  size: ButtonEAESize.medium,
                   isFullWidth: true,
                 ),
                 const SizedBox(height: 16),
 
                 // Outline Button
-                BrandButton(
+                ButtonEAE(
                   label: 'Send Message',
                   icon: Icons.send,
                   onPressed: () => _showMessage('Message sent!'),
-                  variant: BrandButtonVariant.outline,
-                  size: BrandButtonSize.medium,
+                  variant: ButtonEAEVariant.outline,
+                  size: ButtonEAESize.medium,
                   isFullWidth: true,
                 ),
                 const SizedBox(height: 32),
@@ -169,26 +169,26 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: BrandButton(
+                      child: ButtonEAE(
                         label: 'Small',
                         onPressed: () => _showMessage('Small button clicked'),
-                        size: BrandButtonSize.small,
+                        size: ButtonEAESize.small,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: BrandButton(
+                      child: ButtonEAE(
                         label: 'Medium',
                         onPressed: () => _showMessage('Medium button clicked'),
-                        size: BrandButtonSize.medium,
+                        size: ButtonEAESize.medium,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: BrandButton(
+                      child: ButtonEAE(
                         label: 'Large',
                         onPressed: () => _showMessage('Large button clicked'),
-                        size: BrandButtonSize.large,
+                        size: ButtonEAESize.large,
                       ),
                     ),
                   ],
@@ -205,20 +205,20 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: BrandButton(
+                      child: ButtonEAE(
                         label: 'Like',
                         icon: Icons.favorite,
                         onPressed: () => _showMessage('Liked!'),
-                        variant: BrandButtonVariant.primary,
+                        variant: ButtonEAEVariant.primary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: BrandButton(
+                      child: ButtonEAE(
                         label: 'Share',
                         icon: Icons.share,
                         onPressed: () => _showMessage('Shared!'),
-                        variant: BrandButtonVariant.secondary,
+                        variant: ButtonEAEVariant.secondary,
                       ),
                     ),
                   ],
@@ -264,4 +264,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

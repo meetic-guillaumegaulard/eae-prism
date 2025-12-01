@@ -1,34 +1,63 @@
 import 'package:flutter/material.dart';
-import 'brand_colors.dart';
+import '../brands/brand_config.dart';
+import '../models/brand.dart';
+import 'brand_theme_extensions.dart';
 
 class BrandTheme {
   static ThemeData getTheme(Brand brand) {
-    final primaryColor = BrandColors.getPrimaryColor(brand);
-    final secondaryColor = BrandColors.getSecondaryColor(brand);
-    final backgroundColor = BrandColors.getBackgroundColor(brand);
-    final surfaceColor = BrandColors.getSurfaceColor(brand);
+    final config = BrandConfig.fromBrand(brand);
+    final colors = config.colors;
+    final buttonConfig = config.buttonConfig;
+    final selectableButtonConfig = config.selectableButtonConfig;
+    final checkboxConfig = config.checkboxConfig;
+    final radioButtonConfig = config.radioButtonConfig;
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.light(
-        primary: primaryColor,
-        secondary: secondaryColor,
-        background: backgroundColor,
-        surface: surfaceColor,
+        primary: colors.primary,
+        secondary: colors.secondary,
+        surface: colors.surface,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onBackground: Colors.black87,
         onSurface: Colors.black87,
       ),
+      extensions: [
+        BrandSelectableButtonTheme(
+          unselectedBorderColor: selectableButtonConfig.unselectedBorderColor,
+          unselectedTextColor: selectableButtonConfig.unselectedTextColor,
+          unselectedBackgroundColor: selectableButtonConfig.unselectedBackgroundColor,
+          unselectedBorderWidth: selectableButtonConfig.unselectedBorderWidth,
+          selectedBackgroundColor: selectableButtonConfig.selectedBackgroundColor,
+          selectedForegroundColor: selectableButtonConfig.selectedForegroundColor,
+          selectedBorderColor: selectableButtonConfig.selectedBorderColor,
+          selectedBorderWidth: selectableButtonConfig.selectedBorderWidth,
+        ),
+        BrandCheckboxTheme(
+          activeColor: checkboxConfig.activeColor,
+          checkColor: checkboxConfig.checkColor,
+          backgroundColor: checkboxConfig.backgroundColor,
+          borderRadius: checkboxConfig.borderRadius,
+          borderWidth: checkboxConfig.borderWidth,
+        ),
+        BrandRadioButtonTheme(
+          unselectedBorderColor: radioButtonConfig.unselectedBorderColor,
+          selectedBorderColor: radioButtonConfig.selectedBorderColor,
+          selectedBackgroundColor: radioButtonConfig.selectedBackgroundColor,
+          dotColor: radioButtonConfig.dotColor,
+          borderWidth: radioButtonConfig.borderWidth,
+        ),
+      ],
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
+          backgroundColor: colors.primary,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(buttonConfig.borderRadius),
           ),
-          elevation: 2,
+          elevation: buttonConfig.elevation,
+          shadowColor: buttonConfig.shadowColor,
           textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -59,16 +88,6 @@ class BrandTheme {
   }
 
   static String getBrandName(Brand brand) {
-    switch (brand) {
-      case Brand.match:
-        return 'Match';
-      case Brand.meetic:
-        return 'Meetic';
-      case Brand.okc:
-        return 'OKCupid';
-      case Brand.pof:
-        return 'Plenty of Fish';
-    }
+    return BrandConfig.fromBrand(brand).name;
   }
 }
-

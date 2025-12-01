@@ -3,30 +3,30 @@ import 'package:design_system/design_system.dart';
 
 Widget buildPrimaryButton(BuildContext context) {
   return Center(
-    child: BrandButton(
+    child: ButtonEAE(
       label: 'Primary Button',
       onPressed: () {},
-      variant: BrandButtonVariant.primary,
+      variant: ButtonEAEVariant.primary,
     ),
   );
 }
 
 Widget buildSecondaryButton(BuildContext context) {
   return Center(
-    child: BrandButton(
+    child: ButtonEAE(
       label: 'Secondary Button',
       onPressed: () {},
-      variant: BrandButtonVariant.secondary,
+      variant: ButtonEAEVariant.secondary,
     ),
   );
 }
 
 Widget buildOutlineButton(BuildContext context) {
   return Center(
-    child: BrandButton(
+    child: ButtonEAE(
       label: 'Outline Button',
       onPressed: () {},
-      variant: BrandButtonVariant.outline,
+      variant: ButtonEAEVariant.outline,
     ),
   );
 }
@@ -36,25 +36,25 @@ Widget buildButtonWithIcon(BuildContext context) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        BrandButton(
+        ButtonEAE(
           label: 'Like',
           icon: Icons.favorite,
           onPressed: () {},
-          variant: BrandButtonVariant.primary,
+          variant: ButtonEAEVariant.primary,
         ),
         const SizedBox(height: 16),
-        BrandButton(
+        ButtonEAE(
           label: 'Send Message',
           icon: Icons.send,
           onPressed: () {},
-          variant: BrandButtonVariant.secondary,
+          variant: ButtonEAEVariant.secondary,
         ),
         const SizedBox(height: 16),
-        BrandButton(
+        ButtonEAE(
           label: 'Share',
           icon: Icons.share,
           onPressed: () {},
-          variant: BrandButtonVariant.outline,
+          variant: ButtonEAEVariant.outline,
         ),
       ],
     ),
@@ -66,21 +66,21 @@ Widget buildButtonSizes(BuildContext context) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        BrandButton(
+        ButtonEAE(
           label: 'Small Button',
-          size: BrandButtonSize.small,
+          size: ButtonEAESize.small,
           onPressed: () {},
         ),
         const SizedBox(height: 16),
-        BrandButton(
+        ButtonEAE(
           label: 'Medium Button',
-          size: BrandButtonSize.medium,
+          size: ButtonEAESize.medium,
           onPressed: () {},
         ),
         const SizedBox(height: 16),
-        BrandButton(
+        ButtonEAE(
           label: 'Large Button',
-          size: BrandButtonSize.large,
+          size: ButtonEAESize.large,
           onPressed: () {},
         ),
       ],
@@ -93,13 +93,13 @@ Widget buildLoadingButton(BuildContext context) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        BrandButton(
+        ButtonEAE(
           label: 'Loading...',
           isLoading: true,
           onPressed: () {},
         ),
         const SizedBox(height: 16),
-        BrandButton(
+        ButtonEAE(
           label: 'Normal Button',
           isLoading: false,
           onPressed: () {},
@@ -108,4 +108,3 @@ Widget buildLoadingButton(BuildContext context) {
     ),
   );
 }
-
