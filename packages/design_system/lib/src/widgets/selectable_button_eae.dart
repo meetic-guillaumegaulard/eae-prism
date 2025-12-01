@@ -33,6 +33,40 @@ class SelectableButtonEAE extends StatelessWidget {
     final BorderSide? borderSide;
     final ButtonEAEVariant variant;
 
+    // Calculate effective border widths for layout stability
+    // We need to ensure the total size (content + padding + border) remains constant
+    // by adjusting padding to compensate for border width changes.
+
+    double effectiveSelectedBorderWidth = 0.0;
+    if (selectableTheme?.selectedBorderColor != null) {
+      effectiveSelectedBorderWidth =
+          (selectableTheme?.selectedBorderWidth ?? 0) > 0
+              ? selectableTheme!.selectedBorderWidth
+              : 1.0;
+    }
+
+    double effectiveUnselectedBorderWidth = 0.0;
+    if (selectableTheme?.unselectedBorderColor != null) {
+      effectiveUnselectedBorderWidth =
+          (selectableTheme?.unselectedBorderWidth ?? 0) > 0
+              ? selectableTheme!.unselectedBorderWidth
+              : 1.0; // Default assumption if width is 0 but color is present?
+      // Actually config defaults unselectedBorderWidth to 1.0.
+    } else {
+      // If no unselected border color, usually no border, so width 0.
+      effectiveUnselectedBorderWidth = 0.0;
+    }
+
+    final double maxBorderWidth =
+        effectiveSelectedBorderWidth > effectiveUnselectedBorderWidth
+            ? effectiveSelectedBorderWidth
+            : effectiveUnselectedBorderWidth;
+
+    final double currentBorderWidth = isSelected
+        ? effectiveSelectedBorderWidth
+        : effectiveUnselectedBorderWidth;
+    final double borderDelta = maxBorderWidth - currentBorderWidth;
+
     if (isSelected) {
       // Selected state
       variant = ButtonEAEVariant.primary;
@@ -44,9 +78,7 @@ class SelectableButtonEAE extends StatelessWidget {
       if (selectableTheme?.selectedBorderColor != null) {
         borderSide = BorderSide(
           color: selectableTheme!.selectedBorderColor!,
-          width: selectableTheme.selectedBorderWidth > 0
-              ? selectableTheme.selectedBorderWidth
-              : 1.0,
+          width: effectiveSelectedBorderWidth,
         );
       } else {
         borderSide = null;
@@ -69,22 +101,44 @@ class SelectableButtonEAE extends StatelessWidget {
       }
     }
 
-    // Check for custom padding overrides
-    EdgeInsets? contentPadding;
-    if (selectableTheme?.horizontalPadding != null ||
-        selectableTheme?.verticalPadding != null) {
-      final elevatedButtonTheme = theme.elevatedButtonTheme.style;
-      final defaultPadding =
-          elevatedButtonTheme?.padding?.resolve({}) as EdgeInsets? ??
-              const EdgeInsets.symmetric(horizontal: 32, vertical: 12);
+    // Check for custom padding overrides and apply stability adjustment
+    final elevatedButtonTheme = theme.elevatedButtonTheme.style;
+    final defaultPadding =
+        elevatedButtonTheme?.padding?.resolve({}) as EdgeInsets? ??
+            const EdgeInsets.symmetric(horizontal: 32, vertical: 12);
 
-      contentPadding = EdgeInsets.symmetric(
-        horizontal:
-            selectableTheme?.horizontalPadding ?? defaultPadding.horizontal / 2,
-        vertical:
-            selectableTheme?.verticalPadding ?? defaultPadding.vertical / 2,
-      );
+    double baseHorizontal = defaultPadding.horizontal / 2;
+    double baseVertical = defaultPadding.vertical / 2;
+
+    if (selectableTheme?.horizontalPadding != null) {
+      baseHorizontal = selectableTheme!.horizontalPadding!;
     }
+    if (selectableTheme?.verticalPadding != null) {
+      baseVertical = selectableTheme!.verticalPadding!;
+    }
+
+    // Determine scale factor used by ButtonEAE to reverse-engineer the input padding
+    double horizontalScale = 1.0;
+    switch (size) {
+      case ButtonEAESize.small:
+        horizontalScale = 0.75;
+        break;
+      case ButtonEAESize.medium:
+        horizontalScale = 1.0;
+        break;
+      case ButtonEAESize.large:
+        horizontalScale = 1.25;
+        break;
+    }
+
+    // Apply adjustment: Add delta to padding to compensate for thinner border
+    final adjustedHorizontal = baseHorizontal + (borderDelta / horizontalScale);
+    final adjustedVertical = baseVertical + borderDelta;
+
+    final contentPadding = EdgeInsets.symmetric(
+      horizontal: adjustedHorizontal,
+      vertical: adjustedVertical,
+    );
 
     // If we need to show a radio button, we can't just pass label/icon to ButtonEAE directly
     // because ButtonEAE centers content. We need a custom child content.

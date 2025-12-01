@@ -214,3 +214,38 @@ class BrandRadioButtonTheme extends ThemeExtension<BrandRadioButtonTheme> {
     );
   }
 }
+
+class BrandInputTheme extends ThemeExtension<BrandInputTheme> {
+  final Color? errorFillColor;
+  final EdgeInsetsGeometry? labelPadding;
+
+  const BrandInputTheme({
+    this.errorFillColor,
+    this.labelPadding,
+  });
+
+  @override
+  ThemeExtension<BrandInputTheme> copyWith({
+    Color? errorFillColor,
+    EdgeInsetsGeometry? labelPadding,
+  }) {
+    return BrandInputTheme(
+      errorFillColor: errorFillColor ?? this.errorFillColor,
+      labelPadding: labelPadding ?? this.labelPadding,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandInputTheme> lerp(
+    ThemeExtension<BrandInputTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandInputTheme) {
+      return this;
+    }
+    return BrandInputTheme(
+      errorFillColor: Color.lerp(errorFillColor, other.errorFillColor, t),
+      labelPadding: EdgeInsetsGeometry.lerp(labelPadding, other.labelPadding, t),
+    );
+  }
+}

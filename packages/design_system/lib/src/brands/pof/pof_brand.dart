@@ -54,4 +54,19 @@ class PofBrand implements BrandConfig {
         dotColor: Colors.black, // Black Dot
         borderWidth: 2.0, // Thick border
       );
+
+  @override
+  BrandInputConfig get inputConfig => const BrandInputConfig(
+        borderType: BrandInputBorderType.outline,
+        filled: true,
+        fillColor: Color(0xFFFFF5F0), // Light salmon/peach background
+        borderRadius: 999.0, // Full capsule shape
+        activeBorderColor: Color(0xFF555555), // Dark grey border
+        inactiveBorderColor: Color(0xFF555555), // Dark grey border
+        textColor: Color(0xFF000000), // Solid black text for input
+        textFontWeight: FontWeight.w600, // Semi-bold text for input
+        labelColor: Color(0xFF555555), // Dark grey label
+        hintColor: Color(0xFF555555), // Dark grey hint
+        contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+      );
 }

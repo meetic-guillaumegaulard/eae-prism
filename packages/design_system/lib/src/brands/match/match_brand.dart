@@ -46,4 +46,21 @@ class MatchBrand implements BrandConfig {
         selectedBackgroundColor: Color(0xFF11144C), // Filled
         dotColor: Colors.white, // White dot
       );
+
+  @override
+  BrandInputConfig get inputConfig => const BrandInputConfig(
+        borderType: BrandInputBorderType.underline,
+        filled: false,
+        activeBorderColor: Color(0xFF3850C4), // New blue color for focus
+        inactiveBorderColor: Color(0xFFC5C7D8),
+        errorBorderColor: Color(0xFFD6002F), // Match red for error
+        textColor: Color(0xFF11144C),
+        textFontWeight: FontWeight.w600,
+        labelColor: Color(0xFFC5C7D8),
+        contentPadding:
+            EdgeInsets.symmetric(vertical: 0.0), // Reduced from 12.0
+        errorFillColor: Color(0xFFFCE8E6), // Light red background on error
+        errorFontSize: 12.0, // Reset to standard size
+        errorFontWeight: FontWeight.bold, // Thicker font weight for errors
+      );
 }

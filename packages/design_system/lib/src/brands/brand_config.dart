@@ -12,6 +12,7 @@ abstract class BrandConfig {
   BrandSelectableButtonConfig get selectableButtonConfig;
   BrandCheckboxConfig get checkboxConfig;
   BrandRadioButtonConfig get radioButtonConfig;
+  BrandInputConfig get inputConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -128,5 +129,51 @@ class BrandRadioButtonConfig {
     required this.selectedBackgroundColor,
     required this.dotColor,
     this.borderWidth = 2.0,
+  });
+}
+
+enum BrandInputBorderType {
+  underline,
+  outline,
+  none,
+}
+
+class BrandInputConfig {
+  final BrandInputBorderType borderType;
+  final bool filled;
+  final Color? fillColor;
+  final double borderRadius;
+  final Color? activeBorderColor;
+  final Color? inactiveBorderColor;
+  final Color? errorBorderColor;
+  final Color? textColor;
+  final Color? labelColor;
+  final Color? hintColor;
+  final EdgeInsetsGeometry? contentPadding;
+  final Color? errorFillColor;
+  final double errorFontSize;
+  final FontWeight errorFontWeight;
+  final FontWeight? textFontWeight;
+  final bool floatingLabel;
+  final EdgeInsetsGeometry? labelPadding;
+
+  const BrandInputConfig({
+    this.borderType = BrandInputBorderType.outline,
+    this.filled = false,
+    this.fillColor,
+    this.borderRadius = 4.0,
+    this.activeBorderColor,
+    this.inactiveBorderColor,
+    this.errorBorderColor,
+    this.textColor,
+    this.labelColor,
+    this.hintColor,
+    this.contentPadding,
+    this.errorFillColor,
+    this.errorFontSize = 12.0,
+    this.errorFontWeight = FontWeight.normal,
+    this.textFontWeight,
+    this.floatingLabel = true,
+    this.labelPadding,
   });
 }

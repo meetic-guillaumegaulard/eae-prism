@@ -5,6 +5,7 @@ import 'usecases/brand_button_usecases.dart';
 import 'usecases/selectable_button_usecases.dart';
 import 'usecases/checkbox_usecases.dart';
 import 'usecases/radio_button_usecases.dart';
+import 'usecases/text_input_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -70,7 +71,8 @@ class WidgetbookApp extends StatelessWidget {
                 ),
                 WidgetbookUseCase(
                   name: 'Width Behavior',
-                  builder: (context) => buildSelectableButtonWidthBehavior(context),
+                  builder: (context) =>
+                      buildSelectableButtonWidthBehavior(context),
                 ),
               ],
             ),
@@ -89,6 +91,23 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Default',
                   builder: (context) => buildRadioButton(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'TextInputEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => buildDefaultTextInput(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'States',
+                  builder: (context) => buildTextInputStates(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'No Label',
+                  builder: (context) => buildTextInputNoLabel(context),
                 ),
               ],
             ),

@@ -56,4 +56,17 @@ class OkcBrand implements BrandConfig {
         dotColor: Color(0xFF0046D5),
         borderWidth: 2.0,
       );
+
+  @override
+  BrandInputConfig get inputConfig => const BrandInputConfig(
+        borderType: BrandInputBorderType.outline,
+        filled: true,
+        fillColor: Colors.white,
+        borderRadius: 8.0,
+        activeBorderColor: Color(0xFF0046D5),
+        inactiveBorderColor: Color(0xFFE0E0E0),
+        floatingLabel: false, // Label stays on top
+        labelPadding:
+            EdgeInsets.only(bottom: 8.0, left: 0), // External label positioning
+      );
 }

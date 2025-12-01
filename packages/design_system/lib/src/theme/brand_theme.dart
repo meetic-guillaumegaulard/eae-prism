@@ -11,6 +11,22 @@ class BrandTheme {
     final selectableButtonConfig = config.selectableButtonConfig;
     final checkboxConfig = config.checkboxConfig;
     final radioButtonConfig = config.radioButtonConfig;
+    final inputConfig = config.inputConfig;
+
+    InputBorder getBorder(Color color, {double width = 1.0}) {
+      switch (inputConfig.borderType) {
+        case BrandInputBorderType.underline:
+          return UnderlineInputBorder(
+              borderSide: BorderSide(color: color, width: width));
+        case BrandInputBorderType.outline:
+          return OutlineInputBorder(
+            borderRadius: BorderRadius.circular(inputConfig.borderRadius),
+            borderSide: BorderSide(color: color, width: width),
+          );
+        case BrandInputBorderType.none:
+          return InputBorder.none;
+      }
+    }
 
     return ThemeData(
       useMaterial3: true,
@@ -55,6 +71,10 @@ class BrandTheme {
           dotColor: radioButtonConfig.dotColor,
           borderWidth: radioButtonConfig.borderWidth,
         ),
+        BrandInputTheme(
+          errorFillColor: inputConfig.errorFillColor,
+          labelPadding: inputConfig.labelPadding,
+        ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -77,24 +97,56 @@ class BrandTheme {
           ),
         ),
       ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
+      textTheme: TextTheme(
+        displayLarge: const TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
         ),
-        displayMedium: TextStyle(
+        displayMedium: const TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
         ),
         bodyLarge: TextStyle(
           fontSize: 16,
-          color: Colors.black87,
+          fontWeight: inputConfig.textFontWeight ?? FontWeight.normal,
+          color: inputConfig.textColor ?? Colors.black87,
         ),
-        bodyMedium: TextStyle(
+        bodyMedium: const TextStyle(
           fontSize: 14,
           color: Colors.black87,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: inputConfig.filled,
+        fillColor: inputConfig.fillColor,
+        floatingLabelBehavior: inputConfig.floatingLabel
+            ? FloatingLabelBehavior.auto
+            : FloatingLabelBehavior.always,
+        contentPadding: inputConfig.contentPadding ??
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        labelStyle: TextStyle(
+          color: inputConfig.labelColor,
+          fontWeight: FontWeight.normal,
+        ),
+        hintStyle: TextStyle(
+          color: inputConfig.hintColor,
+          fontWeight: FontWeight.normal,
+        ),
+        enabledBorder:
+            getBorder(inputConfig.inactiveBorderColor ?? Colors.grey),
+        disabledBorder: getBorder(inputConfig.inactiveBorderColor ?? Colors.grey),
+        focusedBorder: getBorder(
+            inputConfig.activeBorderColor ?? colors.primary,
+            width: 2.0),
+        errorBorder: getBorder(inputConfig.errorBorderColor ?? Colors.red),
+        focusedErrorBorder:
+            getBorder(inputConfig.errorBorderColor ?? Colors.red, width: 2.0),
+        errorStyle: TextStyle(
+          color: inputConfig.errorBorderColor ?? Colors.red,
+          fontSize: inputConfig.errorFontSize,
+          fontWeight: inputConfig.errorFontWeight,
         ),
       ),
     );
