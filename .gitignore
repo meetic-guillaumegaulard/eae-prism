@@ -1,0 +1,32 @@
+# Nx
+.nx
+dist
+node_modules
+
+# Flutter
+**/android/
+**/ios/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/build/
+**/.pub-cache/
+**/.pub/
+*.iml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+apps/backend/node_modules
+apps/backend/dist
+

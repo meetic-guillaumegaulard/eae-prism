@@ -1,0 +1,32 @@
+{
+  "name": "eae-prism",
+  "version": "1.0.0",
+  "description": "Monorepo with Flutter app, design system, and Elysia backend",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "npx nx run eae-prism:install:all &&npm run setup:backend && npm run setup:flutter",
+    "setup:backend": "cd apps/backend && bun install",
+    "setup:flutter": "cd packages/design_system && flutter pub get && cd ../../apps/showroom && flutter pub get && cd ../client && flutter pub get",
+    "setup:platforms": "cd apps/client && flutter create . --platforms=web,ios,android && cd ../showroom && flutter create . --platforms=web",
+    "client": "npx nx run eae-prism:client:web",
+    "client:web": "npx nx run eae-prism:client:web",
+    "client:ios": "open -a Simulator && npx nx run eae-prism:client:ios",
+    "client:android": "bash scripts/launch-android.sh",
+    "client:macos": "npx nx run eae-prism:client:macos",
+    "devices": "cd apps/client && flutter devices",
+    "emulators": "cd apps/client && flutter emulators",
+    "showroom": "npx nx run eae-prism:showroom:run",
+    "backend": "npx nx run eae-prism:backend:dev",
+    "backend:dev": "npx nx run eae-prism:backend:dev",
+    "backend:start": "npx nx run eae-prism:backend:start"
+  },
+  "devDependencies": {
+    "nx": "^17.2.0",
+    "@nx/workspace": "^17.2.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "eae-prism",
+  "version": "1.0.0",
+  "projectType": "application",
+  "targets": {
+    "client:web": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/client && flutter run -d chrome"
+      }
+    },
+    "client:ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/client && flutter run"
+      }
+    },
+    "client:android": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/client && flutter run"
+      }
+    },
+    "client:macos": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/client && flutter run -d macos"
+      }
+    },
+    "showroom:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/showroom && flutter run -d chrome"
+      }
+    },
+    "backend:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/backend && bun run dev"
+      }
+    },
+    "backend:start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/backend && bun run start"
+      }
+    },
+    "install:all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "cd apps/backend && bun install",
+          "cd packages/design_system && flutter pub get",
+          "cd apps/showroom && flutter pub get",
+          "cd apps/client && flutter create . --platforms=web,ios,android && flutter pub get"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}
+
