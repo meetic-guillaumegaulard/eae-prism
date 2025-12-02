@@ -711,3 +711,55 @@ class BrandProgressBarTheme extends ThemeExtension<BrandProgressBarTheme> {
     );
   }
 }
+
+class BrandScreenLayoutTheme extends ThemeExtension<BrandScreenLayoutTheme> {
+  final Color? dividerColor;
+  final double dividerThickness;
+  final Color? scrollGradientColor;
+  final double scrollGradientHeight;
+  final Color? backgroundColor;
+
+  const BrandScreenLayoutTheme({
+    this.dividerColor,
+    this.dividerThickness = 1.0,
+    this.scrollGradientColor,
+    this.scrollGradientHeight = 16.0,
+    this.backgroundColor,
+  });
+
+  @override
+  ThemeExtension<BrandScreenLayoutTheme> copyWith({
+    Color? dividerColor,
+    double? dividerThickness,
+    Color? scrollGradientColor,
+    double? scrollGradientHeight,
+    Color? backgroundColor,
+  }) {
+    return BrandScreenLayoutTheme(
+      dividerColor: dividerColor ?? this.dividerColor,
+      dividerThickness: dividerThickness ?? this.dividerThickness,
+      scrollGradientColor: scrollGradientColor ?? this.scrollGradientColor,
+      scrollGradientHeight: scrollGradientHeight ?? this.scrollGradientHeight,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandScreenLayoutTheme> lerp(
+    ThemeExtension<BrandScreenLayoutTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandScreenLayoutTheme) {
+      return this;
+    }
+    return BrandScreenLayoutTheme(
+      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
+      dividerThickness: lerpDouble(dividerThickness, other.dividerThickness, t)!,
+      scrollGradientColor:
+          Color.lerp(scrollGradientColor, other.scrollGradientColor, t),
+      scrollGradientHeight:
+          lerpDouble(scrollGradientHeight, other.scrollGradientHeight, t)!,
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+    );
+  }
+}

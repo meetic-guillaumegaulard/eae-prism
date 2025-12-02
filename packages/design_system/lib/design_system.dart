@@ -20,3 +20,4 @@ export 'src/widgets/molecules/selectable_button_group_eae.dart';
 export 'src/widgets/molecules/labeled_control_eae.dart';
 export 'src/widgets/molecules/selection_group_eae.dart';
 export 'src/widgets/molecules/selectable_tag_group_eae.dart';
+export 'src/widgets/templates/screen_layout_eae.dart';

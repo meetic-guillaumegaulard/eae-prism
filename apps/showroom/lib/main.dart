@@ -17,6 +17,8 @@ import 'usecases/selection_group_usecases.dart';
 import 'usecases/tag_usecases.dart';
 import 'usecases/selectable_tag_group_usecases.dart';
 import 'usecases/progress_bar_usecases.dart';
+import 'usecases/screen_layout_usecases.dart';
+import 'usecases/screen_layout_interactive_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -392,6 +394,24 @@ class WidgetbookApp extends StatelessWidget {
                           buildLabeledControlDisabled(context),
                     ),
                   ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        WidgetbookCategory(
+          name: 'Templates',
+          children: [
+            WidgetbookComponent(
+              name: 'ScreenLayoutEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'All Examples',
+                  builder: (context) => const ScreenLayoutUsecases(),
+                ),
+                WidgetbookUseCase(
+                  name: 'Interactive Test',
+                  builder: (context) => const ScreenLayoutInteractiveUsecases(),
                 ),
               ],
             ),

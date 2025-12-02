@@ -166,4 +166,12 @@ class PofBrand implements BrandConfig {
         height: 8.0,
         borderRadius: 4.0,
       );
+
+  @override
+  BrandScreenLayoutConfig get screenLayoutConfig => const BrandScreenLayoutConfig(
+        dividerColor: Color(0xFFE0E0E0), // Gris clair pour la ligne de séparation
+        dividerThickness: 1.0,
+        scrollGradientColor: Color(0xFF000000), // Noir pour le dégradé
+        scrollGradientHeight: 16.0,
+      );
 }

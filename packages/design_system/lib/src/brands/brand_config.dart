@@ -21,6 +21,7 @@ abstract class BrandConfig {
   BrandSelectionGroupConfig get selectionGroupConfig;
   BrandTagConfig get tagConfig;
   BrandProgressBarConfig get progressBarConfig;
+  BrandScreenLayoutConfig get screenLayoutConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -383,5 +384,26 @@ class BrandProgressBarConfig {
     this.counterTextColor,
     this.height = 8.0,
     this.borderRadius = 4.0,
+  });
+}
+
+class BrandScreenLayoutConfig {
+  /// Couleur de la ligne de séparation entre le header/footer et le contenu
+  final Color? dividerColor;
+  
+  /// Épaisseur de la ligne de séparation
+  final double dividerThickness;
+  
+  /// Couleur du dégradé indiquant qu'il est possible de scroller
+  final Color? scrollGradientColor;
+  
+  /// Hauteur du dégradé de scroll
+  final double scrollGradientHeight;
+
+  const BrandScreenLayoutConfig({
+    this.dividerColor,
+    this.dividerThickness = 1.0,
+    this.scrollGradientColor,
+    this.scrollGradientHeight = 16.0,
   });
 }

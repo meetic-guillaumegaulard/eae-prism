@@ -21,6 +21,7 @@ class BrandTheme {
     final selectionGroupConfig = config.selectionGroupConfig;
     final tagConfig = config.tagConfig;
     final progressBarConfig = config.progressBarConfig;
+    final screenLayoutConfig = config.screenLayoutConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -146,6 +147,13 @@ class BrandTheme {
           counterTextColor: progressBarConfig.counterTextColor,
           height: progressBarConfig.height,
           borderRadius: progressBarConfig.borderRadius,
+        ),
+        BrandScreenLayoutTheme(
+          dividerColor: screenLayoutConfig.dividerColor,
+          dividerThickness: screenLayoutConfig.dividerThickness,
+          scrollGradientColor: screenLayoutConfig.scrollGradientColor,
+          scrollGradientHeight: screenLayoutConfig.scrollGradientHeight,
+          backgroundColor: colors.background,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(
