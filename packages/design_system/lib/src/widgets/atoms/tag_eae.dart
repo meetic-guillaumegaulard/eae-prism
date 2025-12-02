@@ -9,8 +9,6 @@ enum TagEAESize {
 
 enum TagEAEVariant {
   filled,
-  outline,
-  subtle,
 }
 
 class TagEAE extends StatefulWidget {
@@ -117,116 +115,36 @@ class _TagEAEState extends State<TagEAE> {
 
     if (isSelectableMode && selected) {
       // Mode sélectionnable - état sélectionné
-      switch (widget.variant) {
-        case TagEAEVariant.filled:
-          effectiveBackgroundColor = widget.selectedBackgroundColor ??
-              tagTheme?.selectedBackgroundColor ??
-              colorScheme.primary;
-          effectiveForegroundColor = widget.selectedForegroundColor ??
-              tagTheme?.selectedForegroundColor ??
-              colorScheme.onPrimary;
-          effectiveBorderColor =
-              widget.selectedBorderColor ?? tagTheme?.selectedBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-        case TagEAEVariant.outline:
-          effectiveBackgroundColor = widget.selectedBackgroundColor ??
-              tagTheme?.selectedBackgroundColor ??
-              colorScheme.primary;
-          effectiveForegroundColor = widget.selectedForegroundColor ??
-              tagTheme?.selectedForegroundColor ??
-              colorScheme.onPrimary;
-          effectiveBorderColor = widget.selectedBorderColor ??
-              tagTheme?.selectedBorderColor ??
-              colorScheme.primary;
-          borderWidth = 2;
-          break;
-        case TagEAEVariant.subtle:
-          effectiveBackgroundColor = widget.selectedBackgroundColor ??
-              tagTheme?.selectedBackgroundColor ??
-              colorScheme.primary;
-          effectiveForegroundColor = widget.selectedForegroundColor ??
-              tagTheme?.selectedForegroundColor ??
-              colorScheme.onPrimary;
-          effectiveBorderColor =
-              widget.selectedBorderColor ?? tagTheme?.selectedBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-      }
+      effectiveBackgroundColor = widget.selectedBackgroundColor ??
+          tagTheme?.selectedBackgroundColor ??
+          colorScheme.primary;
+      effectiveForegroundColor = widget.selectedForegroundColor ??
+          tagTheme?.selectedForegroundColor ??
+          colorScheme.onPrimary;
+      effectiveBorderColor =
+          widget.selectedBorderColor ?? tagTheme?.selectedBorderColor;
+      borderWidth = effectiveBorderColor != null ? 1 : 0;
     } else if (isSelectableMode && !selected) {
       // Mode sélectionnable - état non sélectionné
-      switch (widget.variant) {
-        case TagEAEVariant.filled:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.unselectedBackgroundColor ??
-              Colors.grey.shade200;
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.unselectedForegroundColor ??
-              Colors.grey.shade700;
-          effectiveBorderColor = tagTheme?.unselectedBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-        case TagEAEVariant.outline:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.unselectedBackgroundColor ??
-              Colors.transparent;
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.unselectedForegroundColor ??
-              Colors.grey.shade700;
-          effectiveBorderColor = widget.borderColor ??
-              tagTheme?.unselectedBorderColor ??
-              Colors.grey.shade400;
-          borderWidth = 1;
-          break;
-        case TagEAEVariant.subtle:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.unselectedBackgroundColor ??
-              Colors.grey.shade100;
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.unselectedForegroundColor ??
-              Colors.grey.shade700;
-          effectiveBorderColor = tagTheme?.unselectedBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-      }
+      effectiveBackgroundColor = widget.backgroundColor ??
+          tagTheme?.unselectedBackgroundColor ??
+          Colors.grey.shade200;
+      effectiveForegroundColor = widget.foregroundColor ??
+          tagTheme?.unselectedForegroundColor ??
+          Colors.grey.shade700;
+      effectiveBorderColor = tagTheme?.unselectedBorderColor;
+      borderWidth = effectiveBorderColor != null ? 1 : 0;
     } else {
       // Mode lecture seule
-      switch (widget.variant) {
-        case TagEAEVariant.filled:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.readOnlyBackgroundColor ??
-              colorScheme.primary;
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.readOnlyForegroundColor ??
-              colorScheme.onPrimary;
-          effectiveBorderColor =
-              widget.borderColor ?? tagTheme?.readOnlyBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-        case TagEAEVariant.outline:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.readOnlyBackgroundColor ??
-              Colors.transparent;
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.readOnlyForegroundColor ??
-              colorScheme.primary;
-          effectiveBorderColor = widget.borderColor ??
-              tagTheme?.readOnlyBorderColor ??
-              colorScheme.primary;
-          borderWidth = 1;
-          break;
-        case TagEAEVariant.subtle:
-          effectiveBackgroundColor = widget.backgroundColor ??
-              tagTheme?.readOnlyBackgroundColor ??
-              colorScheme.primary.withValues(alpha: 0.1);
-          effectiveForegroundColor = widget.foregroundColor ??
-              tagTheme?.readOnlyForegroundColor ??
-              colorScheme.primary;
-          effectiveBorderColor =
-              widget.borderColor ?? tagTheme?.readOnlyBorderColor;
-          borderWidth = effectiveBorderColor != null ? 1 : 0;
-          break;
-      }
+      effectiveBackgroundColor = widget.backgroundColor ??
+          tagTheme?.readOnlyBackgroundColor ??
+          colorScheme.primary;
+      effectiveForegroundColor = widget.foregroundColor ??
+          tagTheme?.readOnlyForegroundColor ??
+          colorScheme.onPrimary;
+      effectiveBorderColor =
+          widget.borderColor ?? tagTheme?.readOnlyBorderColor;
+      borderWidth = effectiveBorderColor != null ? 1 : 0;
     }
 
     final tagContent = Container(

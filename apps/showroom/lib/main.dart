@@ -15,6 +15,7 @@ import 'usecases/height_slider_usecases.dart';
 import 'usecases/text_usecases.dart';
 import 'usecases/selection_group_usecases.dart';
 import 'usecases/tag_usecases.dart';
+import 'usecases/selectable_tag_group_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -332,6 +333,15 @@ class WidgetbookApp extends StatelessWidget {
                     WidgetbookUseCase(
                       name: 'Max Selections (3)',
                       builder: (context) => buildMaxSelectionsDemo(context),
+                    ),
+                  ],
+                ),
+                WidgetbookComponent(
+                  name: 'SelectableTagGroupEAE',
+                  useCases: [
+                    WidgetbookUseCase(
+                      name: 'All Examples',
+                      builder: (context) => const SelectableTagGroupUseCases(),
                     ),
                   ],
                 ),

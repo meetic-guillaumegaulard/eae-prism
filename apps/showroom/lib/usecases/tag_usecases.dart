@@ -12,7 +12,11 @@ class _TagUsecasesState extends State<TagUsecases> {
   List<String> deletableTags = ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4'];
 
   // État pour les tags sélectionnables
-  Set<String> selectedInterests = {'🎗️ Mental health awareness', 'Sport', 'Musique'};
+  Set<String> selectedInterests = {
+    '🎗️ Mental health awareness',
+    'Sport',
+    'Musique'
+  };
   Set<String> selectedCategories = {'Technologie'};
   Set<String> selectedFilters = {};
 
@@ -151,44 +155,6 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Outline',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    TagEAE(
-                      label: 'Outline Tag',
-                      variant: TagEAEVariant.outline,
-                    ),
-                    TagEAE(
-                      label: 'With Icon',
-                      variant: TagEAEVariant.outline,
-                      icon: Icons.favorite,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text('Subtle',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    TagEAE(
-                      label: 'Subtle Tag',
-                      variant: TagEAEVariant.subtle,
-                    ),
-                    TagEAE(
-                      label: 'With Icon',
-                      variant: TagEAEVariant.subtle,
-                      icon: Icons.local_offer,
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -252,7 +218,7 @@ class _TagUsecasesState extends State<TagUsecases> {
                       .toList(),
                 ),
                 const SizedBox(height: 16),
-                const Text('Outline - Catégories',
+                const Text('Filled - Catégories',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Wrap(
@@ -261,7 +227,7 @@ class _TagUsecasesState extends State<TagUsecases> {
                   children: ['Technologie', 'Design', 'Marketing', 'Finance']
                       .map((category) => TagEAE(
                             label: category,
-                            variant: TagEAEVariant.outline,
+                            variant: TagEAEVariant.filled,
                             isSelected: selectedCategories.contains(category),
                             onSelectedChanged: (selected) {
                               setState(() {
@@ -269,30 +235,6 @@ class _TagUsecasesState extends State<TagUsecases> {
                                   selectedCategories.add(category);
                                 } else {
                                   selectedCategories.remove(category);
-                                }
-                              });
-                            },
-                          ))
-                      .toList(),
-                ),
-                const SizedBox(height: 16),
-                const Text('Subtle - Filtres',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: ['Nouveau', 'Populaire', 'Tendance', 'Recommandé']
-                      .map((filter) => TagEAE(
-                            label: filter,
-                            variant: TagEAEVariant.subtle,
-                            isSelected: selectedFilters.contains(filter),
-                            onSelectedChanged: (selected) {
-                              setState(() {
-                                if (selected) {
-                                  selectedFilters.add(filter);
-                                } else {
-                                  selectedFilters.remove(filter);
                                 }
                               });
                             },
@@ -417,12 +359,12 @@ class _TagUsecasesState extends State<TagUsecases> {
                 TagEAE(
                   label: 'Star',
                   icon: Icons.star,
-                  variant: TagEAEVariant.outline,
+                  variant: TagEAEVariant.filled,
                 ),
                 TagEAE(
                   label: 'Award',
                   icon: Icons.emoji_events,
-                  variant: TagEAEVariant.subtle,
+                  variant: TagEAEVariant.filled,
                 ),
                 TagEAE(
                   label: 'Trending',
@@ -462,7 +404,7 @@ class _TagUsecasesState extends State<TagUsecases> {
                 ),
                 TagEAE(
                   label: 'Custom',
-                  variant: TagEAEVariant.outline,
+                  variant: TagEAEVariant.filled,
                   borderColor: Colors.purple,
                   foregroundColor: Colors.purple,
                 ),
@@ -495,7 +437,7 @@ class _TagUsecasesState extends State<TagUsecases> {
                 TagEAE(
                   label: 'Star',
                   icon: Icons.star,
-                  variant: TagEAEVariant.outline,
+                  variant: TagEAEVariant.filled,
                   isSelected: selectedFilters.contains('Star'),
                   onSelectedChanged: (selected) {
                     setState(() {
@@ -510,7 +452,7 @@ class _TagUsecasesState extends State<TagUsecases> {
                 TagEAE(
                   label: 'Trending',
                   icon: Icons.trending_up,
-                  variant: TagEAEVariant.subtle,
+                  variant: TagEAEVariant.filled,
                   isSelected: selectedFilters.contains('Trending'),
                   onSelectedChanged: (selected) {
                     setState(() {
@@ -571,15 +513,15 @@ class _TagUsecasesState extends State<TagUsecases> {
                   children: [
                     TagEAE(
                       label: 'Technologie',
-                      variant: TagEAEVariant.outline,
+                      variant: TagEAEVariant.filled,
                     ),
                     TagEAE(
                       label: 'Design',
-                      variant: TagEAEVariant.outline,
+                      variant: TagEAEVariant.filled,
                     ),
                     TagEAE(
                       label: 'Marketing',
-                      variant: TagEAEVariant.outline,
+                      variant: TagEAEVariant.filled,
                     ),
                   ],
                 ),
