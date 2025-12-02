@@ -69,6 +69,9 @@ class MeeticBrand implements BrandConfig {
         inactiveTrackColor: Color(0xFFC5C0D0),
         activeKnobColor: Colors.white,
         inactiveKnobColor: Colors.white,
+        trackWidth: 40.0,
+        trackHeight: 24.0,
+        knobSize: 20.0,
       );
 
   @override
@@ -91,6 +94,6 @@ class MeeticBrand implements BrandConfig {
   BrandLabeledControlConfig get labeledControlConfig =>
       const BrandLabeledControlConfig(
         checkboxLabelPaddingTop: 4.0,
-        toggleLabelPaddingTop: 8.0,
+        toggleLabelPaddingTop: 4.0,
       );
 }

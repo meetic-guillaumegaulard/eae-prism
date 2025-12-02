@@ -70,6 +70,9 @@ class MatchBrand implements BrandConfig {
         inactiveTrackColor: Color(0xFFC5C7D8),
         activeKnobColor: Colors.white,
         inactiveKnobColor: Colors.white,
+        trackWidth: 40.0,
+        trackHeight: 24.0,
+        knobSize: 20.0,
       );
 
   @override
@@ -92,6 +95,6 @@ class MatchBrand implements BrandConfig {
   BrandLabeledControlConfig get labeledControlConfig =>
       const BrandLabeledControlConfig(
         checkboxLabelPaddingTop: 4.0,
-        toggleLabelPaddingTop: 8.0,
+        toggleLabelPaddingTop: 4.0,
       );
 }

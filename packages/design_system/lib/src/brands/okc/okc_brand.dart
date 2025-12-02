@@ -76,6 +76,9 @@ class OkcBrand implements BrandConfig {
         inactiveTrackColor: Color(0xFFE0E0E0),
         activeKnobColor: Colors.white,
         inactiveKnobColor: Colors.white,
+        trackWidth: 40.0,
+        trackHeight: 24.0,
+        knobSize: 18.0,
       );
 
   @override
@@ -98,6 +101,6 @@ class OkcBrand implements BrandConfig {
   BrandLabeledControlConfig get labeledControlConfig =>
       const BrandLabeledControlConfig(
         checkboxLabelPaddingTop: 4.0,
-        toggleLabelPaddingTop: 8.0,
+        toggleLabelPaddingTop: 4.0,
       );
 }
