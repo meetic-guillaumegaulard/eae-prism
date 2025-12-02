@@ -184,6 +184,7 @@ class _SelectableTagGroupEAEState<T> extends State<SelectableTagGroupEAE<T>> {
                     size: widget.tagSize,
                     variant: widget.tagVariant,
                     isSelected: isSelected,
+                    // Si désactivé, on passe null pour empêcher l'interaction
                     onSelectedChanged: isDisabled
                         ? null
                         : (_) => _handleTagTap(option.value, isSelected),

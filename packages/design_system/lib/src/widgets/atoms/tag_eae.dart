@@ -66,9 +66,9 @@ class _TagEAEState extends State<TagEAE> {
     final colorScheme = theme.colorScheme;
     final tagTheme = theme.extension<BrandTagTheme>();
 
-    // Détermine si le tag est en mode sélectionnable
-    final bool isSelectableMode =
-        widget.isSelected != null && widget.onSelectedChanged != null;
+    // Détermine si le tag est en mode sélectionnable ou lecture seule avec état
+    final bool hasSelectionState = widget.isSelected != null;
+    final bool isInteractive = widget.onSelectedChanged != null;
     final bool selected = widget.isSelected ?? false;
 
     // Size configuration
@@ -80,11 +80,11 @@ class _TagEAEState extends State<TagEAE> {
 
     // Hauteur fixe pour les tags sélectionnables si définie dans le thème
     final double? fixedSelectableHeight =
-        isSelectableMode ? tagTheme?.selectableHeight : null;
+        hasSelectionState ? tagTheme?.selectableHeight : null;
 
     // Padding vertical plus important en mode sélectionnable (sauf si hauteur fixe)
     final bool hasIncreasedPadding =
-        isSelectableMode && fixedSelectableHeight == null;
+        hasSelectionState && fixedSelectableHeight == null;
 
     switch (widget.size) {
       case TagEAESize.small:
@@ -113,8 +113,8 @@ class _TagEAEState extends State<TagEAE> {
     final Color? effectiveBorderColor;
     final double borderWidth;
 
-    if (isSelectableMode && selected) {
-      // Mode sélectionnable - état sélectionné
+    if (hasSelectionState && selected) {
+      // État sélectionné (interactif ou non)
       effectiveBackgroundColor = widget.selectedBackgroundColor ??
           tagTheme?.selectedBackgroundColor ??
           colorScheme.primary;
@@ -124,8 +124,8 @@ class _TagEAEState extends State<TagEAE> {
       effectiveBorderColor =
           widget.selectedBorderColor ?? tagTheme?.selectedBorderColor;
       borderWidth = effectiveBorderColor != null ? 1 : 0;
-    } else if (isSelectableMode && !selected) {
-      // Mode sélectionnable - état non sélectionné
+    } else if (hasSelectionState && !selected) {
+      // État non sélectionné (interactif ou non)
       effectiveBackgroundColor = widget.backgroundColor ??
           tagTheme?.unselectedBackgroundColor ??
           Colors.grey.shade200;
@@ -135,7 +135,7 @@ class _TagEAEState extends State<TagEAE> {
       effectiveBorderColor = tagTheme?.unselectedBorderColor;
       borderWidth = effectiveBorderColor != null ? 1 : 0;
     } else {
-      // Mode lecture seule
+      // Mode lecture seule sans état de sélection
       effectiveBackgroundColor = widget.backgroundColor ??
           tagTheme?.readOnlyBackgroundColor ??
           colorScheme.primary;
@@ -199,8 +199,8 @@ class _TagEAEState extends State<TagEAE> {
       ),
     );
 
-    // Si le tag est sélectionnable, on l'entoure d'un GestureDetector
-    if (isSelectableMode) {
+    // Si le tag est interactif, on l'entoure d'un GestureDetector
+    if (hasSelectionState && isInteractive) {
       return GestureDetector(
         onTap: () => widget.onSelectedChanged?.call(!selected),
         child: tagContent,
