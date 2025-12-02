@@ -378,3 +378,42 @@ class BrandLinkedTextTheme extends ThemeExtension<BrandLinkedTextTheme> {
     );
   }
 }
+
+class BrandLabeledControlTheme extends ThemeExtension<BrandLabeledControlTheme> {
+  final double? checkboxLabelPaddingTop;
+  final double? toggleLabelPaddingTop;
+
+  const BrandLabeledControlTheme({
+    this.checkboxLabelPaddingTop,
+    this.toggleLabelPaddingTop,
+  });
+
+  @override
+  ThemeExtension<BrandLabeledControlTheme> copyWith({
+    double? checkboxLabelPaddingTop,
+    double? toggleLabelPaddingTop,
+  }) {
+    return BrandLabeledControlTheme(
+      checkboxLabelPaddingTop:
+          checkboxLabelPaddingTop ?? this.checkboxLabelPaddingTop,
+      toggleLabelPaddingTop:
+          toggleLabelPaddingTop ?? this.toggleLabelPaddingTop,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandLabeledControlTheme> lerp(
+    ThemeExtension<BrandLabeledControlTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandLabeledControlTheme) {
+      return this;
+    }
+    return BrandLabeledControlTheme(
+      checkboxLabelPaddingTop: lerpDouble(
+          checkboxLabelPaddingTop, other.checkboxLabelPaddingTop, t),
+      toggleLabelPaddingTop:
+          lerpDouble(toggleLabelPaddingTop, other.toggleLabelPaddingTop, t),
+    );
+  }
+}

@@ -15,6 +15,7 @@ abstract class BrandConfig {
   BrandInputConfig get inputConfig;
   BrandToggleConfig get toggleConfig;
   BrandLinkedTextConfig get linkedTextConfig;
+  BrandLabeledControlConfig get labeledControlConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -217,5 +218,15 @@ class BrandLinkedTextConfig {
     required this.linkTextStyle,
     this.linkUnderlineThickness = 1.0,
     this.linkUnderlineOffset = 1.0,
+  });
+}
+
+class BrandLabeledControlConfig {
+  final double checkboxLabelPaddingTop;
+  final double toggleLabelPaddingTop;
+
+  const BrandLabeledControlConfig({
+    this.checkboxLabelPaddingTop = 0.0,
+    this.toggleLabelPaddingTop = 0.0,
   });
 }

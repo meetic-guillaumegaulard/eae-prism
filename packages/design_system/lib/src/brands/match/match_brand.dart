@@ -87,4 +87,11 @@ class MatchBrand implements BrandConfig {
         linkUnderlineThickness: 1.0,
         linkUnderlineOffset: 1.0,
       );
+
+  @override
+  BrandLabeledControlConfig get labeledControlConfig =>
+      const BrandLabeledControlConfig(
+        checkboxLabelPaddingTop: 4.0,
+        toggleLabelPaddingTop: 8.0,
+      );
 }

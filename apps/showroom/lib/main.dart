@@ -9,6 +9,7 @@ import 'usecases/radio_button_usecases.dart';
 import 'usecases/text_input_usecases.dart';
 import 'usecases/toggle_usecases.dart';
 import 'usecases/linked_text_usecases.dart';
+import 'usecases/labeled_control_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -191,6 +192,35 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'With Icons',
                   builder: (context) => buildSelectableButtonGroupWithIcons(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'LabeledControlEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Checkbox',
+                  builder: (context) => buildLabeledControlCheckbox(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Toggle',
+                  builder: (context) => buildLabeledControlToggle(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Control on Right',
+                  builder: (context) => buildLabeledControlRight(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Meetic Example',
+                  builder: (context) => buildLabeledControlMeetic(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Not Expanded',
+                  builder: (context) => buildLabeledControlNotExpanded(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Disabled',
+                  builder: (context) => buildLabeledControlDisabled(context),
                 ),
               ],
             ),

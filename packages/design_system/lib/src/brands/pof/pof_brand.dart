@@ -96,4 +96,11 @@ class PofBrand implements BrandConfig {
         linkUnderlineThickness: 1.0,
         linkUnderlineOffset: 3.0,
       );
+
+  @override
+  BrandLabeledControlConfig get labeledControlConfig =>
+      const BrandLabeledControlConfig(
+        checkboxLabelPaddingTop: 4.0,
+        toggleLabelPaddingTop: 6.0,
+      );
 }

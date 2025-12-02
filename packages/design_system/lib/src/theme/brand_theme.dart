@@ -14,6 +14,7 @@ class BrandTheme {
     final inputConfig = config.inputConfig;
     final toggleConfig = config.toggleConfig;
     final linkedTextConfig = config.linkedTextConfig;
+    final labeledControlConfig = config.labeledControlConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -94,6 +95,10 @@ class BrandTheme {
           linkTextStyle: linkedTextConfig.linkTextStyle,
           linkUnderlineThickness: linkedTextConfig.linkUnderlineThickness,
           linkUnderlineOffset: linkedTextConfig.linkUnderlineOffset,
+        ),
+        BrandLabeledControlTheme(
+          checkboxLabelPaddingTop: labeledControlConfig.checkboxLabelPaddingTop,
+          toggleLabelPaddingTop: labeledControlConfig.toggleLabelPaddingTop,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(
