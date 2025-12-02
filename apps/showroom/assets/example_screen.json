@@ -1,0 +1,255 @@
+{
+  "template": "screen_layout",
+  "props": {
+    "backgroundColor": "#FFFFFF"
+  },
+  "header": [
+    {
+      "type": "container",
+      "props": {
+        "padding": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        }
+      },
+      "children": [
+        {
+          "type": "text",
+          "props": {
+            "text": "Dynamic Screen Example",
+            "type": "headline_large",
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "type": "column",
+      "props": {
+        "mainAxisAlignment": "start",
+        "crossAxisAlignment": "stretch"
+      },
+      "children": [
+        {
+          "type": "padding",
+          "props": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "text": "Welcome to the dynamic screen system! This entire screen is built from a JSON configuration.",
+                "type": "body_large"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "text": "Form Example",
+                "type": "title_large",
+                "fontWeight": "bold"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 8
+            }
+          },
+          "children": [
+            {
+              "type": "text_input",
+              "props": {
+                "label": "Your Name",
+                "hintText": "Enter your name",
+                "field": "user.name"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "text_input",
+              "props": {
+                "label": "Email",
+                "hintText": "Enter your email",
+                "field": "user.email"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "text": "Preferences",
+                "type": "title_large",
+                "fontWeight": "bold"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 8
+            }
+          },
+          "children": [
+            {
+              "type": "labeled_control",
+              "props": {
+                "htmlLabel": "Receive notifications",
+                "field": "preferences.notifications",
+                "defaultValue": true,
+                "controlType": "checkbox"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "labeled_control",
+              "props": {
+                "htmlLabel": "Dark mode",
+                "field": "preferences.darkMode",
+                "defaultValue": false,
+                "controlType": "toggle"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "text": "Select Your Interests",
+                "type": "title_large",
+                "fontWeight": "bold"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "selectable_tag_group",
+              "props": {
+                "labels": ["Sports", "Music", "Travel", "Food", "Art", "Technology"],
+                "field": "interests",
+                "defaultValue": ["Sports", "Travel"]
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "progress_bar",
+              "props": {
+                "value": 65,
+                "min": 0,
+                "max": 100,
+                "showCounter": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "sizedbox",
+          "props": {
+            "height": 80
+          }
+        }
+      ]
+    }
+  ],
+  "footer": [
+    {
+      "type": "container",
+      "props": {
+        "padding": 16
+      },
+      "children": [
+        {
+          "type": "button",
+          "props": {
+            "label": "Submit",
+            "variant": "primary",
+            "isFullWidth": true,
+            "action": "submit"
+          }
+        }
+      ]
+    }
+  ]
+}

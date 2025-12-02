@@ -19,6 +19,7 @@ import 'usecases/selectable_tag_group_usecases.dart';
 import 'usecases/progress_bar_usecases.dart';
 import 'usecases/screen_layout_usecases.dart';
 import 'usecases/screen_layout_interactive_usecases.dart';
+import 'usecases/dynamic_screen_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -412,6 +413,20 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Interactive Test',
                   builder: (context) => const ScreenLayoutInteractiveUsecases(),
+                ),
+              ],
+            ),
+          ],
+        ),
+        WidgetbookCategory(
+          name: 'Pages',
+          children: [
+            WidgetbookComponent(
+              name: 'DynamicScreen',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'All Examples',
+                  builder: (context) => const DynamicScreenUsecases(),
                 ),
               ],
             ),

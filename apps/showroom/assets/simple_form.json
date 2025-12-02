@@ -1,0 +1,129 @@
+{
+  "template": "screen_layout",
+  "props": {
+    "backgroundColor": "#FFFFFF"
+  },
+  "header": [
+    {
+      "type": "container",
+      "props": {
+        "padding": 16
+      },
+      "children": [
+        {
+          "type": "text",
+          "props": {
+            "text": "Simple Form",
+            "type": "headline_medium",
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "type": "column",
+      "props": {
+        "crossAxisAlignment": "stretch"
+      },
+      "children": [
+        {
+          "type": "padding",
+          "props": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "text": "Enter your information",
+                "type": "body_large"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 12
+            }
+          },
+          "children": [
+            {
+              "type": "text_input",
+              "props": {
+                "label": "Name",
+                "hintText": "John Doe",
+                "field": "name"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 12
+            }
+          },
+          "children": [
+            {
+              "type": "text_input",
+              "props": {
+                "label": "Email",
+                "hintText": "john@example.com",
+                "field": "email"
+              }
+            }
+          ]
+        },
+        {
+          "type": "padding",
+          "props": {
+            "padding": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
+            }
+          },
+          "children": [
+            {
+              "type": "labeled_control",
+              "props": {
+                "htmlLabel": "I agree to the terms and conditions",
+                "field": "acceptTerms",
+                "defaultValue": false,
+                "controlType": "checkbox"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": [
+    {
+      "type": "container",
+      "props": {
+        "padding": 16
+      },
+      "children": [
+        {
+          "type": "button",
+          "props": {
+            "label": "Submit",
+            "variant": "primary",
+            "isFullWidth": true,
+            "action": "submit"
+          }
+        }
+      ]
+    }
+  ]
+}
