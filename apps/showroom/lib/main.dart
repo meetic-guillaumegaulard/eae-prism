@@ -11,6 +11,7 @@ import 'usecases/toggle_usecases.dart';
 import 'usecases/linked_text_usecases.dart';
 import 'usecases/labeled_control_usecases.dart';
 import 'usecases/slider_usecases.dart';
+import 'usecases/height_slider_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -164,6 +165,15 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'All Examples',
                   builder: (context) => const SliderUsecases(),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'HeightSliderEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'All Examples',
+                  builder: (context) => const HeightSliderUsecases(),
                 ),
               ],
             ),

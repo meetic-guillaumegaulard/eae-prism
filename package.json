@@ -19,7 +19,7 @@
     "client:macos": "npx nx run eae-prism:client:macos",
     "devices": "cd apps/client && flutter devices",
     "emulators": "cd apps/client && flutter emulators",
-    "showroom": "cd apps/showroom && flutter run -d chrome",
+    "showroom": "cd apps/showroom && flutter run -d chrome --debug",
     "backend": "npx nx run eae-prism:backend:dev",
     "backend:dev": "npx nx run eae-prism:backend:dev",
     "backend:start": "npx nx run eae-prism:backend:start"
