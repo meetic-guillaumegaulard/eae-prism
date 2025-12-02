@@ -16,6 +16,7 @@ import 'usecases/text_usecases.dart';
 import 'usecases/selection_group_usecases.dart';
 import 'usecases/tag_usecases.dart';
 import 'usecases/selectable_tag_group_usecases.dart';
+import 'usecases/progress_bar_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -180,6 +181,15 @@ class WidgetbookApp extends StatelessWidget {
                     WidgetbookUseCase(
                       name: 'All Examples',
                       builder: (context) => const TagUsecases(),
+                    ),
+                  ],
+                ),
+                WidgetbookComponent(
+                  name: 'ProgressBarEAE',
+                  useCases: [
+                    WidgetbookUseCase(
+                      name: 'All Examples',
+                      builder: (context) => const ProgressBarUsecases(),
                     ),
                   ],
                 ),

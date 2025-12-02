@@ -157,4 +157,13 @@ class PofBrand implements BrandConfig {
         selectedForegroundColor: Colors.white,
         selectedBorderColor: Colors.black,
       );
+
+  @override
+  BrandProgressBarConfig get progressBarConfig => const BrandProgressBarConfig(
+        activeColor: Colors.black, // Noir POF
+        inactiveColor: Color(0xFFE0E0E0), // Gris clair
+        counterTextColor: Colors.black, // Noir
+        height: 8.0,
+        borderRadius: 4.0,
+      );
 }

@@ -20,6 +20,7 @@ abstract class BrandConfig {
   BrandTypographyConfig get typographyConfig;
   BrandSelectionGroupConfig get selectionGroupConfig;
   BrandTagConfig get tagConfig;
+  BrandProgressBarConfig get progressBarConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -364,5 +365,23 @@ class BrandTagConfig {
     this.selectedForegroundColor,
     this.selectedBorderColor,
     this.selectableHeight,
+  });
+}
+
+class BrandProgressBarConfig {
+  final Color? activeColor;
+  final Gradient? activeGradient;
+  final Color? inactiveColor;
+  final Color? counterTextColor;
+  final double height;
+  final double borderRadius;
+
+  const BrandProgressBarConfig({
+    this.activeColor,
+    this.activeGradient,
+    this.inactiveColor,
+    this.counterTextColor,
+    this.height = 8.0,
+    this.borderRadius = 4.0,
   });
 }

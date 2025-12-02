@@ -156,4 +156,14 @@ class OkcBrand implements BrandConfig {
         selectedForegroundColor: Colors.white,
         selectedBorderColor: Color(0xFF0046D5),
       );
+
+  @override
+  BrandProgressBarConfig get progressBarConfig => const BrandProgressBarConfig(
+        activeColor:
+            Color(0xFFB794F6), // Violet/mauve OKC (couleur de la barre active)
+        inactiveColor: Color(0xFFF5F5F5), // Gris très clair presque blanc
+        counterTextColor: Colors.black, // Noir
+        height: 8.0,
+        borderRadius: 999.0, // Bords complètement arrondis (capsule)
+      );
 }

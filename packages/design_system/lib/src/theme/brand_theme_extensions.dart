@@ -656,3 +656,58 @@ class BrandTagTheme extends ThemeExtension<BrandTagTheme> {
     );
   }
 }
+
+class BrandProgressBarTheme extends ThemeExtension<BrandProgressBarTheme> {
+  final Color? activeColor;
+  final Gradient? activeGradient;
+  final Color? inactiveColor;
+  final Color? counterTextColor;
+  final double height;
+  final double borderRadius;
+
+  const BrandProgressBarTheme({
+    this.activeColor,
+    this.activeGradient,
+    this.inactiveColor,
+    this.counterTextColor,
+    this.height = 8.0,
+    this.borderRadius = 4.0,
+  });
+
+  @override
+  ThemeExtension<BrandProgressBarTheme> copyWith({
+    Color? activeColor,
+    Gradient? activeGradient,
+    Color? inactiveColor,
+    Color? counterTextColor,
+    double? height,
+    double? borderRadius,
+  }) {
+    return BrandProgressBarTheme(
+      activeColor: activeColor ?? this.activeColor,
+      activeGradient: activeGradient ?? this.activeGradient,
+      inactiveColor: inactiveColor ?? this.inactiveColor,
+      counterTextColor: counterTextColor ?? this.counterTextColor,
+      height: height ?? this.height,
+      borderRadius: borderRadius ?? this.borderRadius,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandProgressBarTheme> lerp(
+    ThemeExtension<BrandProgressBarTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandProgressBarTheme) {
+      return this;
+    }
+    return BrandProgressBarTheme(
+      activeColor: Color.lerp(activeColor, other.activeColor, t),
+      activeGradient: Gradient.lerp(activeGradient, other.activeGradient, t),
+      inactiveColor: Color.lerp(inactiveColor, other.inactiveColor, t),
+      counterTextColor: Color.lerp(counterTextColor, other.counterTextColor, t),
+      height: lerpDouble(height, other.height, t)!,
+      borderRadius: lerpDouble(borderRadius, other.borderRadius, t)!,
+    );
+  }
+}

@@ -150,4 +150,21 @@ class MeeticBrand implements BrandConfig {
         selectableHeight:
             40.0, // Hauteur fixe de 70px pour les tags sélectionnables
       );
+
+  @override
+  BrandProgressBarConfig get progressBarConfig => BrandProgressBarConfig(
+        activeGradient: LinearGradient(
+          colors: [
+            Color(0xFFFF4D9A), // Rose clair Meetic
+            Color(0xFFE9006D), // Rose foncé Meetic
+          ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        inactiveColor:
+            Colors.transparent, // Transparent pour la partie non faite
+        counterTextColor: Color(0xFF2B0A3D), // Violet foncé Meetic
+        height: 8.0,
+        borderRadius: 0.0, // Bords droits pour Meetic
+      );
 }

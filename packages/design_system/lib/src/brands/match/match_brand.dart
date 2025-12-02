@@ -152,4 +152,21 @@ class MatchBrand implements BrandConfig {
         selectableHeight:
             40.0, // Hauteur fixe de 70px pour les tags sélectionnables
       );
+
+  @override
+  BrandProgressBarConfig get progressBarConfig => BrandProgressBarConfig(
+        activeGradient: LinearGradient(
+          colors: [
+            Color(0xFF11144C), // Bleu foncé Match
+            Color(0xFF3850C4), // Bleu plus clair Match
+          ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        inactiveColor:
+            Colors.transparent, // Transparent pour la partie non faite
+        counterTextColor: Color(0xFF11144C), // Bleu foncé Match
+        height: 8.0,
+        borderRadius: 0.0, // Bords droits pour Match
+      );
 }

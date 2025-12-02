@@ -20,6 +20,7 @@ class BrandTheme {
     final typographyConfig = config.typographyConfig;
     final selectionGroupConfig = config.selectionGroupConfig;
     final tagConfig = config.tagConfig;
+    final progressBarConfig = config.progressBarConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -137,6 +138,14 @@ class BrandTheme {
           selectedForegroundColor: tagConfig.selectedForegroundColor,
           selectedBorderColor: tagConfig.selectedBorderColor,
           selectableHeight: tagConfig.selectableHeight,
+        ),
+        BrandProgressBarTheme(
+          activeColor: progressBarConfig.activeColor,
+          activeGradient: progressBarConfig.activeGradient,
+          inactiveColor: progressBarConfig.inactiveColor,
+          counterTextColor: progressBarConfig.counterTextColor,
+          height: progressBarConfig.height,
+          borderRadius: progressBarConfig.borderRadius,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(
