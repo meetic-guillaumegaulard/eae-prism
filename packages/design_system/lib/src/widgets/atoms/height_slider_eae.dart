@@ -151,7 +151,8 @@ class _HeightSliderEAEState extends State<HeightSliderEAE> {
             ),
             const SizedBox(width: 16),
             // Vertical slider
-            SizedBox(
+            Container(
+              padding: const EdgeInsets.only(top: 2.0),
               height: widget.sliderHeight,
               child: RotatedBox(
                 quarterTurns: 3,
@@ -189,14 +190,28 @@ class _HeightSliderEAEState extends State<HeightSliderEAE> {
   }
 
   SliderComponentShape _buildThumbShape(BrandSliderTheme sliderTheme) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    // Pour le HeightSlider, si une bordure est configurée (OKC, POF),
+    // utiliser la couleur de la bordure comme couleur du thumb entier (sans bordure)
+    // pour éviter une séparation visible entre le cercle et la ligne
+    final bool hasBorder = sliderTheme.thumbBorderWidth > 0 &&
+        sliderTheme.thumbBorderColor != null;
+
     return HeightSliderThumbShape(
       thumbRadius: sliderTheme.thumbRadius,
       elevation: sliderTheme.thumbElevation,
       shadowColor: sliderTheme.thumbShadowColor ?? Colors.black26,
-      borderWidth: sliderTheme.thumbBorderWidth,
-      borderColor: sliderTheme.thumbBorderColor,
+      thumbColor: hasBorder
+          ? sliderTheme.thumbBorderColor! // OKC/POF: gris uniforme
+          : (sliderTheme.thumbColor ??
+              colorScheme.primary), // Match/Meetic: blanc
       lineLength: 40.0,
       lineHeight: 6.0,
+      hasInnerCircle: hasBorder, // OKC/POF ont un cercle intérieur blanc
+      innerCircleColor: hasBorder ? Colors.white : null,
+      innerCircleBorderWidth: 2.0, // Bordure de 2px
     );
   }
 
@@ -263,19 +278,23 @@ class HeightSliderThumbShape extends SliderComponentShape {
   final double thumbRadius;
   final double elevation;
   final Color shadowColor;
-  final double? borderWidth;
-  final Color? borderColor;
+  final Color thumbColor;
   final double lineLength;
   final double lineHeight;
+  final bool hasInnerCircle;
+  final Color? innerCircleColor;
+  final double innerCircleBorderWidth;
 
   const HeightSliderThumbShape({
     required this.thumbRadius,
     this.elevation = 4.0,
     this.shadowColor = Colors.black26,
-    this.borderWidth,
-    this.borderColor,
+    required this.thumbColor,
     this.lineLength = 40.0,
     this.lineHeight = 6.0,
+    this.hasInnerCircle = false,
+    this.innerCircleColor,
+    this.innerCircleBorderWidth = 2.0,
   });
 
   @override
@@ -299,7 +318,6 @@ class HeightSliderThumbShape extends SliderComponentShape {
     required Size sizeWithOverflow,
   }) {
     final Canvas canvas = context.canvas;
-    final thumbColor = sliderTheme.thumbColor ?? Colors.white;
 
     // Create a combined path for shadow: circle + line
     if (elevation > 0) {
@@ -346,14 +364,14 @@ class HeightSliderThumbShape extends SliderComponentShape {
 
     canvas.drawCircle(center, thumbRadius, thumbPaint);
 
-    // Draw border on circle if specified
-    if (borderWidth != null && borderWidth! > 0 && borderColor != null) {
-      final borderPaint = Paint()
-        ..color = borderColor!
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidth!;
+    // Draw inner circle if specified (for OKC/POF border effect)
+    if (hasInnerCircle && innerCircleColor != null) {
+      final innerCirclePaint = Paint()
+        ..color = innerCircleColor!
+        ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(center, thumbRadius, borderPaint);
+      final innerRadius = thumbRadius - innerCircleBorderWidth;
+      canvas.drawCircle(center, innerRadius, innerCirclePaint);
     }
   }
 }
