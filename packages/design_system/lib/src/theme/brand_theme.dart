@@ -15,6 +15,7 @@ class BrandTheme {
     final toggleConfig = config.toggleConfig;
     final linkedTextConfig = config.linkedTextConfig;
     final labeledControlConfig = config.labeledControlConfig;
+    final sliderConfig = config.sliderConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -100,6 +101,19 @@ class BrandTheme {
           checkboxLabelPaddingTop: labeledControlConfig.checkboxLabelPaddingTop,
           toggleLabelPaddingTop: labeledControlConfig.toggleLabelPaddingTop,
         ),
+        BrandSliderTheme(
+          activeTrackColor: sliderConfig.activeTrackColor,
+          inactiveTrackColor: sliderConfig.inactiveTrackColor,
+          thumbColor: sliderConfig.thumbColor,
+          overlayColor: sliderConfig.overlayColor,
+          trackHeight: sliderConfig.trackHeight,
+          thumbRadius: sliderConfig.thumbRadius,
+          overlayRadius: sliderConfig.overlayRadius,
+          thumbElevation: sliderConfig.thumbElevation,
+          thumbShadowColor: sliderConfig.thumbShadowColor,
+          thumbBorderWidth: sliderConfig.thumbBorderWidth,
+          thumbBorderColor: sliderConfig.thumbBorderColor,
+        ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -161,7 +175,8 @@ class BrandTheme {
         ),
         enabledBorder:
             getBorder(inputConfig.inactiveBorderColor ?? Colors.grey),
-        disabledBorder: getBorder(inputConfig.inactiveBorderColor ?? Colors.grey),
+        disabledBorder:
+            getBorder(inputConfig.inactiveBorderColor ?? Colors.grey),
         focusedBorder: getBorder(
             inputConfig.activeBorderColor ?? colors.primary,
             width: 2.0),

@@ -16,6 +16,7 @@ abstract class BrandConfig {
   BrandToggleConfig get toggleConfig;
   BrandLinkedTextConfig get linkedTextConfig;
   BrandLabeledControlConfig get labeledControlConfig;
+  BrandSliderConfig get sliderConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -228,5 +229,33 @@ class BrandLabeledControlConfig {
   const BrandLabeledControlConfig({
     this.checkboxLabelPaddingTop = 0.0,
     this.toggleLabelPaddingTop = 0.0,
+  });
+}
+
+class BrandSliderConfig {
+  final Color? activeTrackColor;
+  final Color? inactiveTrackColor;
+  final Color? thumbColor;
+  final Color? overlayColor;
+  final double trackHeight;
+  final double thumbRadius;
+  final double overlayRadius;
+  final double thumbElevation;
+  final Color? thumbShadowColor;
+  final double thumbBorderWidth;
+  final Color? thumbBorderColor;
+
+  const BrandSliderConfig({
+    this.activeTrackColor,
+    this.inactiveTrackColor,
+    this.thumbColor,
+    this.overlayColor,
+    this.trackHeight = 4.0,
+    this.thumbRadius = 10.0,
+    this.overlayRadius = 20.0,
+    this.thumbElevation = 0.0,
+    this.thumbShadowColor,
+    this.thumbBorderWidth = 0.0,
+    this.thumbBorderColor,
   });
 }

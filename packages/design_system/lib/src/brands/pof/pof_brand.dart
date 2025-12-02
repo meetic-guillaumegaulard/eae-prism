@@ -103,4 +103,18 @@ class PofBrand implements BrandConfig {
         checkboxLabelPaddingTop: 4.0,
         toggleLabelPaddingTop: 6.0,
       );
+
+  @override
+  BrandSliderConfig get sliderConfig => const BrandSliderConfig(
+        activeTrackColor: Colors.black, // Piste active noire
+        inactiveTrackColor: Color(0xFFE0E0E0), // Piste inactive grise
+        thumbColor: Colors.white, // Curseur blanc
+        overlayColor: Color(0x1F000000), // Noir transparent pour l'effet
+        trackHeight: 2.0, // Piste fine pour POF
+        thumbRadius: 16.0, // Curseur plus grand
+        overlayRadius: 24.0,
+        thumbBorderWidth: 2.0, // Bordure fine comme la ligne
+        thumbBorderColor:
+            Color(0xFFE0E0E0), // Bordure grise comme la ligne inactive
+      );
 }

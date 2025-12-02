@@ -10,6 +10,7 @@ import 'usecases/text_input_usecases.dart';
 import 'usecases/toggle_usecases.dart';
 import 'usecases/linked_text_usecases.dart';
 import 'usecases/labeled_control_usecases.dart';
+import 'usecases/slider_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -154,6 +155,15 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Meetic Consent',
                   builder: (context) => buildLinkedTextMeeticConsent(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'SliderEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'All Examples',
+                  builder: (context) => const SliderUsecases(),
                 ),
               ],
             ),

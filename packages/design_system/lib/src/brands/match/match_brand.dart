@@ -97,4 +97,17 @@ class MatchBrand implements BrandConfig {
         checkboxLabelPaddingTop: 4.0,
         toggleLabelPaddingTop: 4.0,
       );
+
+  @override
+  BrandSliderConfig get sliderConfig => const BrandSliderConfig(
+        activeTrackColor: Color(0xFF11144C), // Bleu Match
+        inactiveTrackColor: Color(0xFFE0E0E0), // Gris clair
+        thumbColor: Colors.white, // Curseurs blancs
+        overlayColor: Color(0x1F11144C), // Bleu très transparent pour l'effet
+        trackHeight: 6.0,
+        thumbRadius: 16.0,
+        overlayRadius: 24.0,
+        thumbElevation: 4.0, // Ombre sur les curseurs
+        thumbShadowColor: Color(0x40000000), // Ombre grise semi-transparente
+      );
 }

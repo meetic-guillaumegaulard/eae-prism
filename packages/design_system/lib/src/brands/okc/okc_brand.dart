@@ -103,4 +103,18 @@ class OkcBrand implements BrandConfig {
         checkboxLabelPaddingTop: 4.0,
         toggleLabelPaddingTop: 4.0,
       );
+
+  @override
+  BrandSliderConfig get sliderConfig => const BrandSliderConfig(
+        activeTrackColor: Color(0xFF0046D5), // Bleu OKC
+        inactiveTrackColor: Color(0xFFE0E0E0), // Gris clair
+        thumbColor: Colors.white, // Curseur blanc
+        overlayColor: Color(0x1F0046D5), // Bleu transparent pour l'effet
+        trackHeight: 2.0, // Piste fine comme POF
+        thumbRadius: 16.0, // Curseur plus grand
+        overlayRadius: 24.0,
+        thumbBorderWidth: 2.0, // Bordure fine comme POF
+        thumbBorderColor:
+            Color(0xFFE0E0E0), // Bordure grise comme la ligne inactive
+      );
 }

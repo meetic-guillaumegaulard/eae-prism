@@ -245,7 +245,8 @@ class BrandInputTheme extends ThemeExtension<BrandInputTheme> {
     }
     return BrandInputTheme(
       errorFillColor: Color.lerp(errorFillColor, other.errorFillColor, t),
-      labelPadding: EdgeInsetsGeometry.lerp(labelPadding, other.labelPadding, t),
+      labelPadding:
+          EdgeInsetsGeometry.lerp(labelPadding, other.labelPadding, t),
     );
   }
 }
@@ -311,8 +312,7 @@ class BrandToggleTheme extends ThemeExtension<BrandToggleTheme> {
       return this;
     }
     return BrandToggleTheme(
-      activeTrackColor:
-          Color.lerp(activeTrackColor, other.activeTrackColor, t),
+      activeTrackColor: Color.lerp(activeTrackColor, other.activeTrackColor, t),
       inactiveTrackColor:
           Color.lerp(inactiveTrackColor, other.inactiveTrackColor, t),
       activeKnobColor: Color.lerp(activeKnobColor, other.activeKnobColor, t),
@@ -371,15 +371,16 @@ class BrandLinkedTextTheme extends ThemeExtension<BrandLinkedTextTheme> {
       normalTextStyle:
           TextStyle.lerp(normalTextStyle, other.normalTextStyle, t),
       linkTextStyle: TextStyle.lerp(linkTextStyle, other.linkTextStyle, t),
-      linkUnderlineThickness: lerpDouble(
-          linkUnderlineThickness, other.linkUnderlineThickness, t),
+      linkUnderlineThickness:
+          lerpDouble(linkUnderlineThickness, other.linkUnderlineThickness, t),
       linkUnderlineOffset:
           lerpDouble(linkUnderlineOffset, other.linkUnderlineOffset, t),
     );
   }
 }
 
-class BrandLabeledControlTheme extends ThemeExtension<BrandLabeledControlTheme> {
+class BrandLabeledControlTheme
+    extends ThemeExtension<BrandLabeledControlTheme> {
   final double? checkboxLabelPaddingTop;
   final double? toggleLabelPaddingTop;
 
@@ -410,10 +411,92 @@ class BrandLabeledControlTheme extends ThemeExtension<BrandLabeledControlTheme> 
       return this;
     }
     return BrandLabeledControlTheme(
-      checkboxLabelPaddingTop: lerpDouble(
-          checkboxLabelPaddingTop, other.checkboxLabelPaddingTop, t),
+      checkboxLabelPaddingTop:
+          lerpDouble(checkboxLabelPaddingTop, other.checkboxLabelPaddingTop, t),
       toggleLabelPaddingTop:
           lerpDouble(toggleLabelPaddingTop, other.toggleLabelPaddingTop, t),
+    );
+  }
+}
+
+class BrandSliderTheme extends ThemeExtension<BrandSliderTheme> {
+  final Color? activeTrackColor;
+  final Color? inactiveTrackColor;
+  final Color? thumbColor;
+  final Color? overlayColor;
+  final double trackHeight;
+  final double thumbRadius;
+  final double overlayRadius;
+  final double thumbElevation;
+  final Color? thumbShadowColor;
+  final double thumbBorderWidth;
+  final Color? thumbBorderColor;
+
+  const BrandSliderTheme({
+    this.activeTrackColor,
+    this.inactiveTrackColor,
+    this.thumbColor,
+    this.overlayColor,
+    this.trackHeight = 4.0,
+    this.thumbRadius = 10.0,
+    this.overlayRadius = 20.0,
+    this.thumbElevation = 0.0,
+    this.thumbShadowColor,
+    this.thumbBorderWidth = 0.0,
+    this.thumbBorderColor,
+  });
+
+  @override
+  ThemeExtension<BrandSliderTheme> copyWith({
+    Color? activeTrackColor,
+    Color? inactiveTrackColor,
+    Color? thumbColor,
+    Color? overlayColor,
+    double? trackHeight,
+    double? thumbRadius,
+    double? overlayRadius,
+    double? thumbElevation,
+    Color? thumbShadowColor,
+    double? thumbBorderWidth,
+    Color? thumbBorderColor,
+  }) {
+    return BrandSliderTheme(
+      activeTrackColor: activeTrackColor ?? this.activeTrackColor,
+      inactiveTrackColor: inactiveTrackColor ?? this.inactiveTrackColor,
+      thumbColor: thumbColor ?? this.thumbColor,
+      overlayColor: overlayColor ?? this.overlayColor,
+      trackHeight: trackHeight ?? this.trackHeight,
+      thumbRadius: thumbRadius ?? this.thumbRadius,
+      overlayRadius: overlayRadius ?? this.overlayRadius,
+      thumbElevation: thumbElevation ?? this.thumbElevation,
+      thumbShadowColor: thumbShadowColor ?? this.thumbShadowColor,
+      thumbBorderWidth: thumbBorderWidth ?? this.thumbBorderWidth,
+      thumbBorderColor: thumbBorderColor ?? this.thumbBorderColor,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandSliderTheme> lerp(
+    ThemeExtension<BrandSliderTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandSliderTheme) {
+      return this;
+    }
+    return BrandSliderTheme(
+      activeTrackColor: Color.lerp(activeTrackColor, other.activeTrackColor, t),
+      inactiveTrackColor:
+          Color.lerp(inactiveTrackColor, other.inactiveTrackColor, t),
+      thumbColor: Color.lerp(thumbColor, other.thumbColor, t),
+      overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
+      trackHeight: lerpDouble(trackHeight, other.trackHeight, t)!,
+      thumbRadius: lerpDouble(thumbRadius, other.thumbRadius, t)!,
+      overlayRadius: lerpDouble(overlayRadius, other.overlayRadius, t)!,
+      thumbElevation: lerpDouble(thumbElevation, other.thumbElevation, t)!,
+      thumbShadowColor: Color.lerp(thumbShadowColor, other.thumbShadowColor, t),
+      thumbBorderWidth:
+          lerpDouble(thumbBorderWidth, other.thumbBorderWidth, t)!,
+      thumbBorderColor: Color.lerp(thumbBorderColor, other.thumbBorderColor, t),
     );
   }
 }
