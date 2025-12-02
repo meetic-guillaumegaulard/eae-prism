@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../brands/brand_config.dart';
 import '../models/brand.dart';
 import 'brand_theme_extensions.dart';
@@ -16,6 +17,7 @@ class BrandTheme {
     final linkedTextConfig = config.linkedTextConfig;
     final labeledControlConfig = config.labeledControlConfig;
     final sliderConfig = config.sliderConfig;
+    final typographyConfig = config.typographyConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -136,27 +138,7 @@ class BrandTheme {
           ),
         ),
       ),
-      textTheme: TextTheme(
-        displayLarge: const TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-        ),
-        displayMedium: const TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-        ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          fontWeight: inputConfig.textFontWeight ?? FontWeight.normal,
-          color: inputConfig.textColor ?? Colors.black87,
-        ),
-        bodyMedium: const TextStyle(
-          fontSize: 14,
-          color: Colors.black87,
-        ),
-      ),
+      textTheme: _buildTextTheme(typographyConfig, inputConfig),
       inputDecorationTheme: InputDecorationTheme(
         filled: inputConfig.filled,
         fillColor: inputConfig.fillColor,
@@ -194,5 +176,149 @@ class BrandTheme {
 
   static String getBrandName(Brand brand) {
     return BrandConfig.fromBrand(brand).name;
+  }
+
+  /// Construit le TextTheme avec les polices personnalisées selon la configuration
+  static TextTheme _buildTextTheme(
+    BrandTypographyConfig typographyConfig,
+    BrandInputConfig inputConfig,
+  ) {
+    // Couleurs par défaut
+    final defaultHeadlineColor =
+        typographyConfig.headlineColor ?? Colors.black87;
+    final defaultTitleColor = typographyConfig.titleColor ?? Colors.black87;
+
+    // Poids de police par défaut
+    final defaultHeadlineFontWeight =
+        typographyConfig.headlineFontWeight ?? FontWeight.w400;
+    final defaultTitleFontWeight =
+        typographyConfig.titleFontWeight ?? FontWeight.w500;
+
+    // Fonction helper pour obtenir un TextStyle avec la police Google Fonts
+    TextStyle getTextStyle({
+      required double fontSize,
+      required FontWeight fontWeight,
+      required Color color,
+      String? fontFamily,
+    }) {
+      if (fontFamily != null && fontFamily.isNotEmpty) {
+        return GoogleFonts.getFont(
+          fontFamily,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: color,
+        );
+      }
+      return TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+      );
+    }
+
+    return TextTheme(
+      // Display styles - très grands titres
+      displayLarge: getTextStyle(
+        fontSize: 57,
+        fontWeight: defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineFontFamily,
+      ),
+      displayMedium: getTextStyle(
+        fontSize: 45,
+        fontWeight: defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineFontFamily,
+      ),
+      displaySmall: getTextStyle(
+        fontSize: 36,
+        fontWeight: defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineFontFamily,
+      ),
+
+      // Headline styles - titres principaux (h1, h2, h3)
+      headlineLarge: getTextStyle(
+        fontSize: 32,
+        fontWeight: defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineFontFamily,
+      ),
+      headlineMedium: getTextStyle(
+        fontSize: 28,
+        fontWeight: typographyConfig.headlineMediumFontWeight ??
+            defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineFontFamily,
+      ),
+      headlineSmall: getTextStyle(
+        fontSize: typographyConfig.headlineSmallFontSize ?? 24,
+        fontWeight: typographyConfig.headlineSmallFontWeight ??
+            defaultHeadlineFontWeight,
+        color: defaultHeadlineColor,
+        fontFamily: typographyConfig.headlineSmallFontFamily ??
+            typographyConfig.headlineFontFamily,
+      ),
+
+      // Title styles - titres secondaires (h4, h5, h6)
+      titleLarge: getTextStyle(
+        fontSize: 22,
+        fontWeight: defaultTitleFontWeight,
+        color: defaultTitleColor,
+        fontFamily: typographyConfig.titleFontFamily,
+      ),
+      titleMedium: getTextStyle(
+        fontSize: 16,
+        fontWeight: defaultTitleFontWeight,
+        color: defaultTitleColor,
+        fontFamily: typographyConfig.titleFontFamily,
+      ),
+      titleSmall: getTextStyle(
+        fontSize: 14,
+        fontWeight: defaultTitleFontWeight,
+        color: defaultTitleColor,
+        fontFamily: typographyConfig.titleFontFamily,
+      ),
+
+      // Body styles - corps de texte
+      bodyLarge: getTextStyle(
+        fontSize: 16,
+        fontWeight: inputConfig.textFontWeight ?? FontWeight.normal,
+        color: inputConfig.textColor ?? Colors.black87,
+        fontFamily: typographyConfig.bodyFontFamily,
+      ),
+      bodyMedium: getTextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: Colors.black87,
+        fontFamily: typographyConfig.bodyFontFamily,
+      ),
+      bodySmall: getTextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        color: Colors.black87,
+        fontFamily: typographyConfig.bodyFontFamily,
+      ),
+
+      // Label styles - labels et petits textes
+      labelLarge: getTextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.black87,
+        fontFamily: typographyConfig.labelFontFamily,
+      ),
+      labelMedium: getTextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: Colors.black87,
+        fontFamily: typographyConfig.labelFontFamily,
+      ),
+      labelSmall: getTextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: Colors.black87,
+        fontFamily: typographyConfig.labelFontFamily,
+      ),
+    );
   }
 }

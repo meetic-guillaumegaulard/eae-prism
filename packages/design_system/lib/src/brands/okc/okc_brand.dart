@@ -117,4 +117,14 @@ class OkcBrand implements BrandConfig {
         thumbBorderColor:
             Color(0xFFE0E0E0), // Bordure grise comme la ligne inactive
       );
+
+  @override
+  BrandTypographyConfig get typographyConfig => const BrandTypographyConfig(
+        headlineFontFamily: 'Montserrat', // Police sans-serif moderne
+        titleFontFamily: 'Montserrat',
+        headlineFontWeight: FontWeight.w700, // Bold
+        titleFontWeight: FontWeight.w700,
+        headlineColor: Colors.black, // Noir comme dans l'image
+        titleColor: Colors.black,
+      );
 }

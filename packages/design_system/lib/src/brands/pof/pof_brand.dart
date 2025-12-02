@@ -117,4 +117,18 @@ class PofBrand implements BrandConfig {
         thumbBorderColor:
             Color(0xFFE0E0E0), // Bordure grise comme la ligne inactive
       );
+
+  @override
+  BrandTypographyConfig get typographyConfig => const BrandTypographyConfig(
+        headlineFontFamily: 'Spectral', // Serif moderne pour h1, h2
+        headlineSmallFontFamily: 'DM Sans', // Sans-serif pour h3
+        titleFontFamily: 'Spectral',
+        headlineFontWeight: FontWeight.w500, // Medium pour h1
+        headlineMediumFontWeight: FontWeight.w300, // Light pour h2
+        headlineSmallFontWeight: FontWeight.w400, // Regular pour h3
+        headlineSmallFontSize: 20, // Taille plus petite pour h3
+        titleFontWeight: FontWeight.w400,
+        headlineColor: Colors.black, // Noir
+        titleColor: Colors.black,
+      );
 }

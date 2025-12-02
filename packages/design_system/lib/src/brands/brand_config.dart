@@ -17,6 +17,7 @@ abstract class BrandConfig {
   BrandLinkedTextConfig get linkedTextConfig;
   BrandLabeledControlConfig get labeledControlConfig;
   BrandSliderConfig get sliderConfig;
+  BrandTypographyConfig get typographyConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -257,5 +258,58 @@ class BrandSliderConfig {
     this.thumbShadowColor,
     this.thumbBorderWidth = 0.0,
     this.thumbBorderColor,
+  });
+}
+
+class BrandTypographyConfig {
+  /// Font family for headlines (h1, h2, h3)
+  final String? headlineFontFamily;
+  
+  /// Font family specifically for h3 (headlineSmall) - overrides headlineFontFamily if set
+  final String? headlineSmallFontFamily;
+  
+  /// Font family for titles (h4, h5, h6)
+  final String? titleFontFamily;
+  
+  /// Font family for body text
+  final String? bodyFontFamily;
+  
+  /// Font family for labels
+  final String? labelFontFamily;
+
+  /// Font weight for headlines (h1, h2, h3)
+  final FontWeight? headlineFontWeight;
+  
+  /// Font weight specifically for h2 (headlineMedium) - overrides headlineFontWeight if set
+  final FontWeight? headlineMediumFontWeight;
+  
+  /// Font weight specifically for h3 (headlineSmall) - overrides headlineFontWeight if set
+  final FontWeight? headlineSmallFontWeight;
+  
+  /// Font weight for titles (h4, h5, h6)
+  final FontWeight? titleFontWeight;
+
+  /// Font size specifically for h3 (headlineSmall) - overrides default if set
+  final double? headlineSmallFontSize;
+
+  /// Color for headlines (h1, h2, h3)
+  final Color? headlineColor;
+  
+  /// Color for titles (h4, h5, h6)
+  final Color? titleColor;
+
+  const BrandTypographyConfig({
+    this.headlineFontFamily,
+    this.headlineSmallFontFamily,
+    this.titleFontFamily,
+    this.bodyFontFamily,
+    this.labelFontFamily,
+    this.headlineFontWeight,
+    this.headlineMediumFontWeight,
+    this.headlineSmallFontWeight,
+    this.headlineSmallFontSize,
+    this.titleFontWeight,
+    this.headlineColor,
+    this.titleColor,
   });
 }

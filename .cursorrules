@@ -1,0 +1,36 @@
+# Règles de développement EAE Prism
+
+## Préférences générales
+
+- ❌ **NE PAS créer de fichiers .md pour documenter chaque changement**
+- ✅ Expliquer les changements directement dans la réponse
+- ✅ Faire les modifications de code nécessaires
+- ✅ Tester la compilation
+- ✅ Garder UNIQUEMENT les fichiers de référence technique permanents
+
+## Structure du projet
+
+- Design system : `packages/design_system/`
+- Showroom : `apps/showroom/`
+- Client app : `apps/client/`
+- Backend : `apps/backend/`
+
+## Brands
+
+- Match (Bleu #11144C)
+- Meetic (Violet #2B0A3D)
+- OKCupid (Bleu #0046D5)
+- Plenty of Fish / POF (Noir)
+
+## Convention de nommage
+
+- Composants atoms : `*_eae.dart`
+- Usecases showroom : `*_usecases.dart`
+- Brands : `*_brand.dart`
+
+## Workflow
+
+1. Modifier le code
+2. Compiler et vérifier
+3. Expliquer directement dans la réponse
+4. Pas de fichiers .md de récapitulatif

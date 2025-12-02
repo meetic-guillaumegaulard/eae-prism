@@ -110,4 +110,15 @@ class MatchBrand implements BrandConfig {
         thumbElevation: 4.0, // Ombre sur les curseurs
         thumbShadowColor: Color(0x40000000), // Ombre grise semi-transparente
       );
+
+  @override
+  BrandTypographyConfig get typographyConfig => const BrandTypographyConfig(
+        headlineFontFamily:
+            'Lora', // Police serif élégante pour les grands titres
+        titleFontFamily: 'Lora', // Également pour les titres moyens
+        headlineFontWeight: FontWeight.w600, // Semi-bold pour les grands titres
+        titleFontWeight: FontWeight.w600, // Semi-bold pour les sous-titres
+        headlineColor: Color(0xFF11144C), // Bleu foncé Match pour les titres
+        titleColor: Color(0xFF11144C), // Bleu foncé Match pour les sous-titres
+      );
 }

@@ -12,6 +12,7 @@ import 'usecases/linked_text_usecases.dart';
 import 'usecases/labeled_control_usecases.dart';
 import 'usecases/slider_usecases.dart';
 import 'usecases/height_slider_usecases.dart';
+import 'usecases/text_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -174,6 +175,35 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'All Examples',
                   builder: (context) => const HeightSliderUsecases(),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'TextEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Typography (All Brands)',
+                  builder: (context) => buildTypographyComparison(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'All Text Types',
+                  builder: (context) => buildAllTextTypes(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Shorthand Constructors',
+                  builder: (context) => buildShorthandConstructors(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Customization',
+                  builder: (context) => buildTextCustomization(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Overflow',
+                  builder: (context) => buildTextOverflow(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Real World Example',
+                  builder: (context) => buildRealWorldExample(context),
                 ),
               ],
             ),

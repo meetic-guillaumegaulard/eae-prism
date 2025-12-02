@@ -109,4 +109,14 @@ class MeeticBrand implements BrandConfig {
         thumbElevation: 4.0, // Ombre sur les curseurs
         thumbShadowColor: Color(0x40000000), // Ombre grise semi-transparente
       );
+
+  @override
+  BrandTypographyConfig get typographyConfig => const BrandTypographyConfig(
+        headlineFontFamily: 'Lora', // Police serif élégante comme Match
+        titleFontFamily: 'Lora',
+        headlineFontWeight: FontWeight.w600, // Semi-bold
+        titleFontWeight: FontWeight.w600,
+        headlineColor: Color(0xFF2B0A3D), // Violet foncé Meetic
+        titleColor: Color(0xFF2B0A3D),
+      );
 }
