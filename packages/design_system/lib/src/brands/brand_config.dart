@@ -19,6 +19,7 @@ abstract class BrandConfig {
   BrandSliderConfig get sliderConfig;
   BrandTypographyConfig get typographyConfig;
   BrandSelectionGroupConfig get selectionGroupConfig;
+  BrandTagConfig get tagConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -265,28 +266,28 @@ class BrandSliderConfig {
 class BrandTypographyConfig {
   /// Font family for headlines (h1, h2, h3)
   final String? headlineFontFamily;
-  
+
   /// Font family specifically for h3 (headlineSmall) - overrides headlineFontFamily if set
   final String? headlineSmallFontFamily;
-  
+
   /// Font family for titles (h4, h5, h6)
   final String? titleFontFamily;
-  
+
   /// Font family for body text
   final String? bodyFontFamily;
-  
+
   /// Font family for labels
   final String? labelFontFamily;
 
   /// Font weight for headlines (h1, h2, h3)
   final FontWeight? headlineFontWeight;
-  
+
   /// Font weight specifically for h2 (headlineMedium) - overrides headlineFontWeight if set
   final FontWeight? headlineMediumFontWeight;
-  
+
   /// Font weight specifically for h3 (headlineSmall) - overrides headlineFontWeight if set
   final FontWeight? headlineSmallFontWeight;
-  
+
   /// Font weight for titles (h4, h5, h6)
   final FontWeight? titleFontWeight;
 
@@ -295,7 +296,7 @@ class BrandTypographyConfig {
 
   /// Color for headlines (h1, h2, h3)
   final Color? headlineColor;
-  
+
   /// Color for titles (h4, h5, h6)
   final Color? titleColor;
 
@@ -330,5 +331,38 @@ class BrandSelectionGroupConfig {
     this.dividerIndent = 0.0,
     this.showCard = false,
     this.cardBackgroundColor,
+  });
+}
+
+class BrandTagConfig {
+  // Couleurs pour le mode lecture seule
+  final Color? readOnlyBackgroundColor;
+  final Color? readOnlyForegroundColor;
+  final Color? readOnlyBorderColor;
+
+  // Couleurs pour le mode sélectionnable - état non sélectionné
+  final Color? unselectedBackgroundColor;
+  final Color? unselectedForegroundColor;
+  final Color? unselectedBorderColor;
+
+  // Couleurs pour le mode sélectionnable - état sélectionné
+  final Color? selectedBackgroundColor;
+  final Color? selectedForegroundColor;
+  final Color? selectedBorderColor;
+
+  // Hauteur fixe pour les tags sélectionnables (si null, utilise le padding par défaut)
+  final double? selectableHeight;
+
+  const BrandTagConfig({
+    this.readOnlyBackgroundColor,
+    this.readOnlyForegroundColor,
+    this.readOnlyBorderColor,
+    this.unselectedBackgroundColor,
+    this.unselectedForegroundColor,
+    this.unselectedBorderColor,
+    this.selectedBackgroundColor,
+    this.selectedForegroundColor,
+    this.selectedBorderColor,
+    this.selectableHeight,
   });
 }

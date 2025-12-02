@@ -138,4 +138,22 @@ class OkcBrand implements BrandConfig {
         showCard: true, // Carte visible pour OKC
         cardBackgroundColor: Colors.white, // Fond blanc
       );
+
+  @override
+  BrandTagConfig get tagConfig => const BrandTagConfig(
+        // Mode lecture seule : fond blanc avec bordure grise (similaire à POF)
+        readOnlyBackgroundColor: Colors.white,
+        readOnlyForegroundColor: Colors.black,
+        readOnlyBorderColor: Color(0xFFD1D1D6), // Bordure grise
+
+        // Mode sélectionnable - état non sélectionné
+        unselectedBackgroundColor: Colors.white,
+        unselectedForegroundColor: Color(0xFF8E8E93), // Gris moyen
+        unselectedBorderColor: Color(0xFFD1D1D6), // Bordure grise
+
+        // Mode sélectionnable - état sélectionné
+        selectedBackgroundColor: Color(0xFF0046D5), // Bleu OKC
+        selectedForegroundColor: Colors.white,
+        selectedBorderColor: Color(0xFF0046D5),
+      );
 }

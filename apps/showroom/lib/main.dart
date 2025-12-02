@@ -14,6 +14,7 @@ import 'usecases/slider_usecases.dart';
 import 'usecases/height_slider_usecases.dart';
 import 'usecases/text_usecases.dart';
 import 'usecases/selection_group_usecases.dart';
+import 'usecases/tag_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -163,6 +164,21 @@ class WidgetbookApp extends StatelessWidget {
                     WidgetbookUseCase(
                       name: 'All Examples',
                       builder: (context) => const HeightSliderUsecases(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Display folder
+            WidgetbookFolder(
+              name: 'Display',
+              children: [
+                WidgetbookComponent(
+                  name: 'TagEAE',
+                  useCases: [
+                    WidgetbookUseCase(
+                      name: 'All Examples',
+                      builder: (context) => const TagUsecases(),
                     ),
                   ],
                 ),

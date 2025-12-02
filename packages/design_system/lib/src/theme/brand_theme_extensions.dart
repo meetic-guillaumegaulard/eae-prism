@@ -501,7 +501,8 @@ class BrandSliderTheme extends ThemeExtension<BrandSliderTheme> {
   }
 }
 
-class BrandSelectionGroupTheme extends ThemeExtension<BrandSelectionGroupTheme> {
+class BrandSelectionGroupTheme
+    extends ThemeExtension<BrandSelectionGroupTheme> {
   final bool showDividers;
   final Color? dividerColor;
   final double dividerThickness;
@@ -552,7 +553,106 @@ class BrandSelectionGroupTheme extends ThemeExtension<BrandSelectionGroupTheme> 
           lerpDouble(dividerThickness, other.dividerThickness, t)!,
       dividerIndent: lerpDouble(dividerIndent, other.dividerIndent, t)!,
       showCard: t < 0.5 ? showCard : other.showCard,
-      cardBackgroundColor: Color.lerp(cardBackgroundColor, other.cardBackgroundColor, t),
+      cardBackgroundColor:
+          Color.lerp(cardBackgroundColor, other.cardBackgroundColor, t),
+    );
+  }
+}
+
+class BrandTagTheme extends ThemeExtension<BrandTagTheme> {
+  // Couleurs pour le mode lecture seule
+  final Color? readOnlyBackgroundColor;
+  final Color? readOnlyForegroundColor;
+  final Color? readOnlyBorderColor;
+
+  // Couleurs pour le mode sélectionnable - état non sélectionné
+  final Color? unselectedBackgroundColor;
+  final Color? unselectedForegroundColor;
+  final Color? unselectedBorderColor;
+
+  // Couleurs pour le mode sélectionnable - état sélectionné
+  final Color? selectedBackgroundColor;
+  final Color? selectedForegroundColor;
+  final Color? selectedBorderColor;
+
+  // Hauteur fixe pour les tags sélectionnables
+  final double? selectableHeight;
+
+  const BrandTagTheme({
+    this.readOnlyBackgroundColor,
+    this.readOnlyForegroundColor,
+    this.readOnlyBorderColor,
+    this.unselectedBackgroundColor,
+    this.unselectedForegroundColor,
+    this.unselectedBorderColor,
+    this.selectedBackgroundColor,
+    this.selectedForegroundColor,
+    this.selectedBorderColor,
+    this.selectableHeight,
+  });
+
+  @override
+  ThemeExtension<BrandTagTheme> copyWith({
+    Color? readOnlyBackgroundColor,
+    Color? readOnlyForegroundColor,
+    Color? readOnlyBorderColor,
+    Color? unselectedBackgroundColor,
+    Color? unselectedForegroundColor,
+    Color? unselectedBorderColor,
+    Color? selectedBackgroundColor,
+    Color? selectedForegroundColor,
+    Color? selectedBorderColor,
+    double? selectableHeight,
+  }) {
+    return BrandTagTheme(
+      readOnlyBackgroundColor:
+          readOnlyBackgroundColor ?? this.readOnlyBackgroundColor,
+      readOnlyForegroundColor:
+          readOnlyForegroundColor ?? this.readOnlyForegroundColor,
+      readOnlyBorderColor: readOnlyBorderColor ?? this.readOnlyBorderColor,
+      unselectedBackgroundColor:
+          unselectedBackgroundColor ?? this.unselectedBackgroundColor,
+      unselectedForegroundColor:
+          unselectedForegroundColor ?? this.unselectedForegroundColor,
+      unselectedBorderColor:
+          unselectedBorderColor ?? this.unselectedBorderColor,
+      selectedBackgroundColor:
+          selectedBackgroundColor ?? this.selectedBackgroundColor,
+      selectedForegroundColor:
+          selectedForegroundColor ?? this.selectedForegroundColor,
+      selectedBorderColor: selectedBorderColor ?? this.selectedBorderColor,
+      selectableHeight: selectableHeight ?? this.selectableHeight,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandTagTheme> lerp(
+    ThemeExtension<BrandTagTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandTagTheme) {
+      return this;
+    }
+    return BrandTagTheme(
+      readOnlyBackgroundColor:
+          Color.lerp(readOnlyBackgroundColor, other.readOnlyBackgroundColor, t),
+      readOnlyForegroundColor:
+          Color.lerp(readOnlyForegroundColor, other.readOnlyForegroundColor, t),
+      readOnlyBorderColor:
+          Color.lerp(readOnlyBorderColor, other.readOnlyBorderColor, t),
+      unselectedBackgroundColor: Color.lerp(
+          unselectedBackgroundColor, other.unselectedBackgroundColor, t),
+      unselectedForegroundColor: Color.lerp(
+          unselectedForegroundColor, other.unselectedForegroundColor, t),
+      unselectedBorderColor:
+          Color.lerp(unselectedBorderColor, other.unselectedBorderColor, t),
+      selectedBackgroundColor:
+          Color.lerp(selectedBackgroundColor, other.selectedBackgroundColor, t),
+      selectedForegroundColor:
+          Color.lerp(selectedForegroundColor, other.selectedForegroundColor, t),
+      selectedBorderColor:
+          Color.lerp(selectedBorderColor, other.selectedBorderColor, t),
+      selectableHeight: lerpDouble(selectableHeight, other.selectableHeight, t),
     );
   }
 }

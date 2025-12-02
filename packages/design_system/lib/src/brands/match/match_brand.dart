@@ -129,4 +129,27 @@ class MatchBrand implements BrandConfig {
         showCard: false, // Pas de carte pour Match
         cardBackgroundColor: Colors.transparent,
       );
+
+  @override
+  BrandTagConfig get tagConfig => const BrandTagConfig(
+        // Mode lecture seule : fond gris clair, texte foncé (comme dans l'image)
+        readOnlyBackgroundColor: Color(0xFFF2F2F7), // Gris très clair
+        readOnlyForegroundColor: Color(0xFF000000), // Noir
+        readOnlyBorderColor: null, // Pas de bordure
+
+        // Mode sélectionnable - état non sélectionné : fond beige/crème avec bordure gris-bleu clair
+        unselectedBackgroundColor: Color(0xFFFFFBF5), // Fond beige/crème clair
+        unselectedForegroundColor: Color(0xFF11144C), // Bleu foncé Match
+        unselectedBorderColor: Color(
+            0xFFC5C7D8), // Bordure gris-bleu clair (comme dans la maquette)
+
+        // Mode sélectionnable - état sélectionné : fond bleu avec opacité (gris bleuté)
+        selectedBackgroundColor:
+            Color(0x1A11144C), // Bleu Match avec 10% d'opacité
+        selectedForegroundColor: Color(0xFF11144C), // Texte bleu foncé Match
+        selectedBorderColor:
+            Color(0x33000000), // Bordure grise avec opacité (20% noir)
+        selectableHeight:
+            40.0, // Hauteur fixe de 70px pour les tags sélectionnables
+      );
 }

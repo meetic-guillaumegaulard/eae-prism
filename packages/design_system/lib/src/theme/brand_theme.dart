@@ -19,6 +19,7 @@ class BrandTheme {
     final sliderConfig = config.sliderConfig;
     final typographyConfig = config.typographyConfig;
     final selectionGroupConfig = config.selectionGroupConfig;
+    final tagConfig = config.tagConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -124,6 +125,18 @@ class BrandTheme {
           dividerIndent: selectionGroupConfig.dividerIndent,
           showCard: selectionGroupConfig.showCard,
           cardBackgroundColor: selectionGroupConfig.cardBackgroundColor,
+        ),
+        BrandTagTheme(
+          readOnlyBackgroundColor: tagConfig.readOnlyBackgroundColor,
+          readOnlyForegroundColor: tagConfig.readOnlyForegroundColor,
+          readOnlyBorderColor: tagConfig.readOnlyBorderColor,
+          unselectedBackgroundColor: tagConfig.unselectedBackgroundColor,
+          unselectedForegroundColor: tagConfig.unselectedForegroundColor,
+          unselectedBorderColor: tagConfig.unselectedBorderColor,
+          selectedBackgroundColor: tagConfig.selectedBackgroundColor,
+          selectedForegroundColor: tagConfig.selectedForegroundColor,
+          selectedBorderColor: tagConfig.selectedBorderColor,
+          selectableHeight: tagConfig.selectableHeight,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

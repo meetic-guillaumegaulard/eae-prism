@@ -14,6 +14,7 @@ export 'src/widgets/atoms/linked_text_eae.dart';
 export 'src/widgets/atoms/slider_eae.dart';
 export 'src/widgets/atoms/height_slider_eae.dart';
 export 'src/widgets/atoms/text_eae.dart';
+export 'src/widgets/atoms/tag_eae.dart';
 export 'src/widgets/molecules/selectable_button_group_eae.dart';
 export 'src/widgets/molecules/labeled_control_eae.dart';
 export 'src/widgets/molecules/selection_group_eae.dart';

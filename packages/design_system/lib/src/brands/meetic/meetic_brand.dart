@@ -127,4 +127,27 @@ class MeeticBrand implements BrandConfig {
         showCard: false, // Pas de carte pour Meetic
         cardBackgroundColor: Colors.transparent,
       );
+
+  @override
+  BrandTagConfig get tagConfig => const BrandTagConfig(
+        // Mode lecture seule : fond gris-bleu clair, texte foncé (comme dans l'image)
+        readOnlyBackgroundColor: Color(0xFFEBECF5), // Gris-bleu très clair
+        readOnlyForegroundColor: Color(0xFF2B0A3D), // Violet foncé Meetic
+        readOnlyBorderColor: null, // Pas de bordure
+
+        // Mode sélectionnable - état non sélectionné : fond beige/crème avec bordure gris-violet clair
+        unselectedBackgroundColor: Color(0xFFFFFBF5), // Fond beige/crème clair
+        unselectedForegroundColor: Color(0xFF2B0A3D), // Violet foncé Meetic
+        unselectedBorderColor: Color(
+            0xFFD8C7E0), // Bordure gris-violet clair (comme dans la maquette)
+
+        // Mode sélectionnable - état sélectionné : fond violet avec opacité (gris violacé)
+        selectedBackgroundColor:
+            Color(0x1A2B0A3D), // Violet Meetic avec 10% d'opacité
+        selectedForegroundColor: Color(0xFF2B0A3D), // Texte violet foncé Meetic
+        selectedBorderColor:
+            Color(0x33000000), // Bordure grise avec opacité (20% noir)
+        selectableHeight:
+            40.0, // Hauteur fixe de 70px pour les tags sélectionnables
+      );
 }
