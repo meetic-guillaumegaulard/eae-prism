@@ -500,3 +500,59 @@ class BrandSliderTheme extends ThemeExtension<BrandSliderTheme> {
     );
   }
 }
+
+class BrandSelectionGroupTheme extends ThemeExtension<BrandSelectionGroupTheme> {
+  final bool showDividers;
+  final Color? dividerColor;
+  final double dividerThickness;
+  final double dividerIndent;
+  final bool showCard;
+  final Color? cardBackgroundColor;
+
+  const BrandSelectionGroupTheme({
+    this.showDividers = false,
+    this.dividerColor,
+    this.dividerThickness = 1.0,
+    this.dividerIndent = 0.0,
+    this.showCard = false,
+    this.cardBackgroundColor,
+  });
+
+  @override
+  ThemeExtension<BrandSelectionGroupTheme> copyWith({
+    bool? showDividers,
+    Color? dividerColor,
+    double? dividerThickness,
+    double? dividerIndent,
+    bool? showCard,
+    Color? cardBackgroundColor,
+  }) {
+    return BrandSelectionGroupTheme(
+      showDividers: showDividers ?? this.showDividers,
+      dividerColor: dividerColor ?? this.dividerColor,
+      dividerThickness: dividerThickness ?? this.dividerThickness,
+      dividerIndent: dividerIndent ?? this.dividerIndent,
+      showCard: showCard ?? this.showCard,
+      cardBackgroundColor: cardBackgroundColor ?? this.cardBackgroundColor,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandSelectionGroupTheme> lerp(
+    ThemeExtension<BrandSelectionGroupTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandSelectionGroupTheme) {
+      return this;
+    }
+    return BrandSelectionGroupTheme(
+      showDividers: t < 0.5 ? showDividers : other.showDividers,
+      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
+      dividerThickness:
+          lerpDouble(dividerThickness, other.dividerThickness, t)!,
+      dividerIndent: lerpDouble(dividerIndent, other.dividerIndent, t)!,
+      showCard: t < 0.5 ? showCard : other.showCard,
+      cardBackgroundColor: Color.lerp(cardBackgroundColor, other.cardBackgroundColor, t),
+    );
+  }
+}

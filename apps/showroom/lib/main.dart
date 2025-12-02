@@ -13,6 +13,7 @@ import 'usecases/labeled_control_usecases.dart';
 import 'usecases/slider_usecases.dart';
 import 'usecases/height_slider_usecases.dart';
 import 'usecases/text_usecases.dart';
+import 'usecases/selection_group_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -225,7 +226,8 @@ class WidgetbookApp extends StatelessWidget {
                     ),
                     WidgetbookUseCase(
                       name: 'Meetic Consent',
-                      builder: (context) => buildLinkedTextMeeticConsent(context),
+                      builder: (context) =>
+                          buildLinkedTextMeeticConsent(context),
                     ),
                   ],
                 ),
@@ -245,31 +247,75 @@ class WidgetbookApp extends StatelessWidget {
                   useCases: [
                     WidgetbookUseCase(
                       name: 'Vertical - Start',
-                      builder: (context) => buildSelectableButtonGroupVerticalStart(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupVerticalStart(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Vertical - End',
-                      builder: (context) => buildSelectableButtonGroupVerticalEnd(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupVerticalEnd(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Vertical - Stretch',
-                      builder: (context) => buildSelectableButtonGroupVerticalStretch(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupVerticalStretch(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Horizontal',
-                      builder: (context) => buildSelectableButtonGroupHorizontal(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupHorizontal(context),
                     ),
                     WidgetbookUseCase(
                       name: 'With Additional Options',
-                      builder: (context) => buildSelectableButtonGroupWithAdditional(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupWithAdditional(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Sizes',
-                      builder: (context) => buildSelectableButtonGroupSizes(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupSizes(context),
                     ),
                     WidgetbookUseCase(
                       name: 'With Icons',
-                      builder: (context) => buildSelectableButtonGroupWithIcons(context),
+                      builder: (context) =>
+                          buildSelectableButtonGroupWithIcons(context),
+                    ),
+                  ],
+                ),
+                WidgetbookComponent(
+                  name: 'SelectionGroupEAE',
+                  useCases: [
+                    WidgetbookUseCase(
+                      name: 'Radio - OKCupid Gender',
+                      builder: (context) => buildRadioGroupOKC(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Radio - Simple',
+                      builder: (context) => buildSimpleRadioGroup(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Checkbox - With Action',
+                      builder: (context) => buildCheckboxGroup(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Checkbox - Simple',
+                      builder: (context) => buildSimpleCheckboxGroup(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Compact Spacing',
+                      builder: (context) => buildCompactSelection(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Without Chevron',
+                      builder: (context) => buildNoChevronSelection(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Without Card',
+                      builder: (context) => buildNoCardSelection(context),
+                    ),
+                    WidgetbookUseCase(
+                      name: 'Max Selections (3)',
+                      builder: (context) => buildMaxSelectionsDemo(context),
                     ),
                   ],
                 ),
@@ -284,7 +330,8 @@ class WidgetbookApp extends StatelessWidget {
                   useCases: [
                     WidgetbookUseCase(
                       name: 'Checkbox',
-                      builder: (context) => buildLabeledControlCheckbox(context),
+                      builder: (context) =>
+                          buildLabeledControlCheckbox(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Toggle',
@@ -300,11 +347,13 @@ class WidgetbookApp extends StatelessWidget {
                     ),
                     WidgetbookUseCase(
                       name: 'Not Expanded',
-                      builder: (context) => buildLabeledControlNotExpanded(context),
+                      builder: (context) =>
+                          buildLabeledControlNotExpanded(context),
                     ),
                     WidgetbookUseCase(
                       name: 'Disabled',
-                      builder: (context) => buildLabeledControlDisabled(context),
+                      builder: (context) =>
+                          buildLabeledControlDisabled(context),
                     ),
                   ],
                 ),

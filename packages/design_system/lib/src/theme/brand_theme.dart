@@ -18,6 +18,7 @@ class BrandTheme {
     final labeledControlConfig = config.labeledControlConfig;
     final sliderConfig = config.sliderConfig;
     final typographyConfig = config.typographyConfig;
+    final selectionGroupConfig = config.selectionGroupConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -115,6 +116,14 @@ class BrandTheme {
           thumbShadowColor: sliderConfig.thumbShadowColor,
           thumbBorderWidth: sliderConfig.thumbBorderWidth,
           thumbBorderColor: sliderConfig.thumbBorderColor,
+        ),
+        BrandSelectionGroupTheme(
+          showDividers: selectionGroupConfig.showDividers,
+          dividerColor: selectionGroupConfig.dividerColor,
+          dividerThickness: selectionGroupConfig.dividerThickness,
+          dividerIndent: selectionGroupConfig.dividerIndent,
+          showCard: selectionGroupConfig.showCard,
+          cardBackgroundColor: selectionGroupConfig.cardBackgroundColor,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

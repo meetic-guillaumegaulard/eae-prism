@@ -18,6 +18,7 @@ abstract class BrandConfig {
   BrandLabeledControlConfig get labeledControlConfig;
   BrandSliderConfig get sliderConfig;
   BrandTypographyConfig get typographyConfig;
+  BrandSelectionGroupConfig get selectionGroupConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -311,5 +312,23 @@ class BrandTypographyConfig {
     this.titleFontWeight,
     this.headlineColor,
     this.titleColor,
+  });
+}
+
+class BrandSelectionGroupConfig {
+  final bool showDividers;
+  final Color? dividerColor;
+  final double dividerThickness;
+  final double dividerIndent;
+  final bool showCard;
+  final Color? cardBackgroundColor;
+
+  const BrandSelectionGroupConfig({
+    this.showDividers = false,
+    this.dividerColor,
+    this.dividerThickness = 1.0,
+    this.dividerIndent = 0.0,
+    this.showCard = false,
+    this.cardBackgroundColor,
   });
 }

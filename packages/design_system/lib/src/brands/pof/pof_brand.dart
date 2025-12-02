@@ -131,4 +131,12 @@ class PofBrand implements BrandConfig {
         headlineColor: Colors.black, // Noir
         titleColor: Colors.black,
       );
+
+  @override
+  BrandSelectionGroupConfig get selectionGroupConfig =>
+      const BrandSelectionGroupConfig(
+        showDividers: false,
+        showCard: false, // Pas de carte pour POF
+        cardBackgroundColor: Colors.transparent,
+      );
 }

@@ -127,4 +127,15 @@ class OkcBrand implements BrandConfig {
         headlineColor: Colors.black, // Noir comme dans l'image
         titleColor: Colors.black,
       );
+
+  @override
+  BrandSelectionGroupConfig get selectionGroupConfig =>
+      const BrandSelectionGroupConfig(
+        showDividers: true,
+        dividerColor: Color(0xFFE0E0E0), // Gris clair
+        dividerThickness: 1.0,
+        dividerIndent: 36.0, // Indent to align with text
+        showCard: true, // Carte visible pour OKC
+        cardBackgroundColor: Colors.white, // Fond blanc
+      );
 }

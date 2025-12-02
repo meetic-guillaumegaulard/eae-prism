@@ -119,4 +119,12 @@ class MeeticBrand implements BrandConfig {
         headlineColor: Color(0xFF2B0A3D), // Violet foncé Meetic
         titleColor: Color(0xFF2B0A3D),
       );
+
+  @override
+  BrandSelectionGroupConfig get selectionGroupConfig =>
+      const BrandSelectionGroupConfig(
+        showDividers: false,
+        showCard: false, // Pas de carte pour Meetic
+        cardBackgroundColor: Colors.transparent,
+      );
 }

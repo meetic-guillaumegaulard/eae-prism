@@ -121,4 +121,12 @@ class MatchBrand implements BrandConfig {
         headlineColor: Color(0xFF11144C), // Bleu foncé Match pour les titres
         titleColor: Color(0xFF11144C), // Bleu foncé Match pour les sous-titres
       );
+
+  @override
+  BrandSelectionGroupConfig get selectionGroupConfig =>
+      const BrandSelectionGroupConfig(
+        showDividers: false,
+        showCard: false, // Pas de carte pour Match
+        cardBackgroundColor: Colors.transparent,
+      );
 }
