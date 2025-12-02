@@ -62,4 +62,28 @@ class MeeticBrand implements BrandConfig {
         errorFontSize: 12.0,
         errorFontWeight: FontWeight.bold,
       );
+
+  @override
+  BrandToggleConfig get toggleConfig => const BrandToggleConfig(
+        activeTrackColor: Color(0xFFE9006D),
+        inactiveTrackColor: Color(0xFFC5C0D0),
+        activeKnobColor: Colors.white,
+        inactiveKnobColor: Colors.white,
+      );
+
+  @override
+  BrandLinkedTextConfig get linkedTextConfig => const BrandLinkedTextConfig(
+        normalTextStyle: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF2B0A3D),
+          fontWeight: FontWeight.normal,
+        ),
+        linkTextStyle: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF0000FF), // Bleu pour les liens
+          fontWeight: FontWeight.normal,
+        ),
+        linkUnderlineThickness: 1.0,
+        linkUnderlineOffset: 1.0,
+      );
 }

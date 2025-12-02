@@ -13,6 +13,8 @@ abstract class BrandConfig {
   BrandCheckboxConfig get checkboxConfig;
   BrandRadioButtonConfig get radioButtonConfig;
   BrandInputConfig get inputConfig;
+  BrandToggleConfig get toggleConfig;
+  BrandLinkedTextConfig get linkedTextConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -175,5 +177,45 @@ class BrandInputConfig {
     this.textFontWeight,
     this.floatingLabel = true,
     this.labelPadding,
+  });
+}
+
+class BrandToggleConfig {
+  final Color activeTrackColor;
+  final Color inactiveTrackColor;
+  final Color activeKnobColor;
+  final Color inactiveKnobColor;
+  final double trackWidth;
+  final double trackHeight;
+  final double knobSize;
+  final double borderWidth;
+  final Color? activeBorderColor;
+  final Color? inactiveBorderColor;
+
+  const BrandToggleConfig({
+    required this.activeTrackColor,
+    this.inactiveTrackColor = const Color(0xFFE0E0E0),
+    this.activeKnobColor = const Color(0xFFFFFFFF),
+    this.inactiveKnobColor = const Color(0xFFFFFFFF),
+    this.trackWidth = 52.0,
+    this.trackHeight = 32.0,
+    this.knobSize = 28.0,
+    this.borderWidth = 0.0,
+    this.activeBorderColor,
+    this.inactiveBorderColor,
+  });
+}
+
+class BrandLinkedTextConfig {
+  final TextStyle normalTextStyle;
+  final TextStyle linkTextStyle;
+  final double linkUnderlineThickness;
+  final double linkUnderlineOffset;
+
+  const BrandLinkedTextConfig({
+    required this.normalTextStyle,
+    required this.linkTextStyle,
+    this.linkUnderlineThickness = 1.0,
+    this.linkUnderlineOffset = 1.0,
   });
 }

@@ -69,4 +69,28 @@ class OkcBrand implements BrandConfig {
         labelPadding:
             EdgeInsets.only(bottom: 8.0, left: 0), // External label positioning
       );
+
+  @override
+  BrandToggleConfig get toggleConfig => const BrandToggleConfig(
+        activeTrackColor: Color(0xFF0046D5),
+        inactiveTrackColor: Color(0xFFE0E0E0),
+        activeKnobColor: Colors.white,
+        inactiveKnobColor: Colors.white,
+      );
+
+  @override
+  BrandLinkedTextConfig get linkedTextConfig => const BrandLinkedTextConfig(
+        normalTextStyle: TextStyle(
+          fontSize: 14,
+          color: Colors.black87,
+          fontWeight: FontWeight.normal,
+        ),
+        linkTextStyle: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF0046D5),
+          fontWeight: FontWeight.w600,
+        ),
+        linkUnderlineThickness: 1.0,
+        linkUnderlineOffset: 1.0,
+      );
 }

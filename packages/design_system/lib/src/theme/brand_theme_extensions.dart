@@ -249,3 +249,132 @@ class BrandInputTheme extends ThemeExtension<BrandInputTheme> {
     );
   }
 }
+
+class BrandToggleTheme extends ThemeExtension<BrandToggleTheme> {
+  final Color? activeTrackColor;
+  final Color? inactiveTrackColor;
+  final Color? activeKnobColor;
+  final Color? inactiveKnobColor;
+  final double trackWidth;
+  final double trackHeight;
+  final double knobSize;
+  final double borderWidth;
+  final Color? activeBorderColor;
+  final Color? inactiveBorderColor;
+
+  const BrandToggleTheme({
+    this.activeTrackColor,
+    this.inactiveTrackColor,
+    this.activeKnobColor,
+    this.inactiveKnobColor,
+    this.trackWidth = 52.0,
+    this.trackHeight = 32.0,
+    this.knobSize = 28.0,
+    this.borderWidth = 0.0,
+    this.activeBorderColor,
+    this.inactiveBorderColor,
+  });
+
+  @override
+  ThemeExtension<BrandToggleTheme> copyWith({
+    Color? activeTrackColor,
+    Color? inactiveTrackColor,
+    Color? activeKnobColor,
+    Color? inactiveKnobColor,
+    double? trackWidth,
+    double? trackHeight,
+    double? knobSize,
+    double? borderWidth,
+    Color? activeBorderColor,
+    Color? inactiveBorderColor,
+  }) {
+    return BrandToggleTheme(
+      activeTrackColor: activeTrackColor ?? this.activeTrackColor,
+      inactiveTrackColor: inactiveTrackColor ?? this.inactiveTrackColor,
+      activeKnobColor: activeKnobColor ?? this.activeKnobColor,
+      inactiveKnobColor: inactiveKnobColor ?? this.inactiveKnobColor,
+      trackWidth: trackWidth ?? this.trackWidth,
+      trackHeight: trackHeight ?? this.trackHeight,
+      knobSize: knobSize ?? this.knobSize,
+      borderWidth: borderWidth ?? this.borderWidth,
+      activeBorderColor: activeBorderColor ?? this.activeBorderColor,
+      inactiveBorderColor: inactiveBorderColor ?? this.inactiveBorderColor,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandToggleTheme> lerp(
+    ThemeExtension<BrandToggleTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandToggleTheme) {
+      return this;
+    }
+    return BrandToggleTheme(
+      activeTrackColor:
+          Color.lerp(activeTrackColor, other.activeTrackColor, t),
+      inactiveTrackColor:
+          Color.lerp(inactiveTrackColor, other.inactiveTrackColor, t),
+      activeKnobColor: Color.lerp(activeKnobColor, other.activeKnobColor, t),
+      inactiveKnobColor:
+          Color.lerp(inactiveKnobColor, other.inactiveKnobColor, t),
+      trackWidth: lerpDouble(trackWidth, other.trackWidth, t)!,
+      trackHeight: lerpDouble(trackHeight, other.trackHeight, t)!,
+      knobSize: lerpDouble(knobSize, other.knobSize, t)!,
+      borderWidth: lerpDouble(borderWidth, other.borderWidth, t)!,
+      activeBorderColor:
+          Color.lerp(activeBorderColor, other.activeBorderColor, t),
+      inactiveBorderColor:
+          Color.lerp(inactiveBorderColor, other.inactiveBorderColor, t),
+    );
+  }
+}
+
+class BrandLinkedTextTheme extends ThemeExtension<BrandLinkedTextTheme> {
+  final TextStyle? normalTextStyle;
+  final TextStyle? linkTextStyle;
+  final double? linkUnderlineThickness;
+  final double? linkUnderlineOffset;
+
+  const BrandLinkedTextTheme({
+    this.normalTextStyle,
+    this.linkTextStyle,
+    this.linkUnderlineThickness,
+    this.linkUnderlineOffset,
+  });
+
+  @override
+  ThemeExtension<BrandLinkedTextTheme> copyWith({
+    TextStyle? normalTextStyle,
+    TextStyle? linkTextStyle,
+    double? linkUnderlineThickness,
+    double? linkUnderlineOffset,
+  }) {
+    return BrandLinkedTextTheme(
+      normalTextStyle: normalTextStyle ?? this.normalTextStyle,
+      linkTextStyle: linkTextStyle ?? this.linkTextStyle,
+      linkUnderlineThickness:
+          linkUnderlineThickness ?? this.linkUnderlineThickness,
+      linkUnderlineOffset: linkUnderlineOffset ?? this.linkUnderlineOffset,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandLinkedTextTheme> lerp(
+    ThemeExtension<BrandLinkedTextTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandLinkedTextTheme) {
+      return this;
+    }
+    return BrandLinkedTextTheme(
+      normalTextStyle:
+          TextStyle.lerp(normalTextStyle, other.normalTextStyle, t),
+      linkTextStyle: TextStyle.lerp(linkTextStyle, other.linkTextStyle, t),
+      linkUnderlineThickness: lerpDouble(
+          linkUnderlineThickness, other.linkUnderlineThickness, t),
+      linkUnderlineOffset:
+          lerpDouble(linkUnderlineOffset, other.linkUnderlineOffset, t),
+    );
+  }
+}

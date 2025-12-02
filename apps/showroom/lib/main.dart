@@ -7,6 +7,8 @@ import 'usecases/selectable_button_group_usecases.dart';
 import 'usecases/checkbox_usecases.dart';
 import 'usecases/radio_button_usecases.dart';
 import 'usecases/text_input_usecases.dart';
+import 'usecases/toggle_usecases.dart';
+import 'usecases/linked_text_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -109,6 +111,48 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'No Label',
                   builder: (context) => buildTextInputNoLabel(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'ToggleEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Default',
+                  builder: (context) => buildToggle(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'States',
+                  builder: (context) => buildToggleStates(context),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'LinkedTextEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Simple',
+                  builder: (context) => buildLinkedTextSimple(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Multiple Links',
+                  builder: (context) => buildLinkedTextMultiple(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Long Text',
+                  builder: (context) => buildLinkedTextLong(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'No Links',
+                  builder: (context) => buildLinkedTextNoLinks(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Centered',
+                  builder: (context) => buildLinkedTextCenter(context),
+                ),
+                WidgetbookUseCase(
+                  name: 'Meetic Consent',
+                  builder: (context) => buildLinkedTextMeeticConsent(context),
                 ),
               ],
             ),

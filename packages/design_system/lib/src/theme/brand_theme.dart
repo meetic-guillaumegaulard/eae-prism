@@ -12,6 +12,8 @@ class BrandTheme {
     final checkboxConfig = config.checkboxConfig;
     final radioButtonConfig = config.radioButtonConfig;
     final inputConfig = config.inputConfig;
+    final toggleConfig = config.toggleConfig;
+    final linkedTextConfig = config.linkedTextConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -74,6 +76,24 @@ class BrandTheme {
         BrandInputTheme(
           errorFillColor: inputConfig.errorFillColor,
           labelPadding: inputConfig.labelPadding,
+        ),
+        BrandToggleTheme(
+          activeTrackColor: toggleConfig.activeTrackColor,
+          inactiveTrackColor: toggleConfig.inactiveTrackColor,
+          activeKnobColor: toggleConfig.activeKnobColor,
+          inactiveKnobColor: toggleConfig.inactiveKnobColor,
+          trackWidth: toggleConfig.trackWidth,
+          trackHeight: toggleConfig.trackHeight,
+          knobSize: toggleConfig.knobSize,
+          borderWidth: toggleConfig.borderWidth,
+          activeBorderColor: toggleConfig.activeBorderColor,
+          inactiveBorderColor: toggleConfig.inactiveBorderColor,
+        ),
+        BrandLinkedTextTheme(
+          normalTextStyle: linkedTextConfig.normalTextStyle,
+          linkTextStyle: linkedTextConfig.linkTextStyle,
+          linkUnderlineThickness: linkedTextConfig.linkUnderlineThickness,
+          linkUnderlineOffset: linkedTextConfig.linkUnderlineOffset,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

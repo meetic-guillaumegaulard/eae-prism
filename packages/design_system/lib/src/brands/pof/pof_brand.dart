@@ -69,4 +69,31 @@ class PofBrand implements BrandConfig {
         hintColor: Color(0xFF555555), // Dark grey hint
         contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       );
+
+  @override
+  BrandToggleConfig get toggleConfig => const BrandToggleConfig(
+        activeTrackColor: Colors.black,
+        inactiveTrackColor: Colors.black,
+        activeKnobColor: Colors.white,
+        inactiveKnobColor: Colors.white,
+        trackWidth: 50.0,
+        trackHeight: 28.0,
+        knobSize: 22.0,
+      );
+
+  @override
+  BrandLinkedTextConfig get linkedTextConfig => const BrandLinkedTextConfig(
+        normalTextStyle: TextStyle(
+          fontSize: 14,
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),
+        linkTextStyle: TextStyle(
+          fontSize: 14,
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),
+        linkUnderlineThickness: 1.0,
+        linkUnderlineOffset: 3.0,
+      );
 }

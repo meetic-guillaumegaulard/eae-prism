@@ -63,4 +63,28 @@ class MatchBrand implements BrandConfig {
         errorFontSize: 12.0, // Reset to standard size
         errorFontWeight: FontWeight.bold, // Thicker font weight for errors
       );
+
+  @override
+  BrandToggleConfig get toggleConfig => const BrandToggleConfig(
+        activeTrackColor: Color(0xFF11144C),
+        inactiveTrackColor: Color(0xFFC5C7D8),
+        activeKnobColor: Colors.white,
+        inactiveKnobColor: Colors.white,
+      );
+
+  @override
+  BrandLinkedTextConfig get linkedTextConfig => const BrandLinkedTextConfig(
+        normalTextStyle: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF11144C),
+          fontWeight: FontWeight.normal,
+        ),
+        linkTextStyle: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF3850C4),
+          fontWeight: FontWeight.w600,
+        ),
+        linkUnderlineThickness: 1.0,
+        linkUnderlineOffset: 1.0,
+      );
 }
