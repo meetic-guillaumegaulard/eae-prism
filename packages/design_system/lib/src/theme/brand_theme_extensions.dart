@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../brands/brand_config.dart' show LandingLogoAlignment;
 
 class BrandSelectableButtonTheme
     extends ThemeExtension<BrandSelectableButtonTheme> {
@@ -760,6 +761,142 @@ class BrandScreenLayoutTheme extends ThemeExtension<BrandScreenLayoutTheme> {
       scrollGradientHeight:
           lerpDouble(scrollGradientHeight, other.scrollGradientHeight, t)!,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+    );
+  }
+}
+
+class BrandLandingScreenTheme extends ThemeExtension<BrandLandingScreenTheme> {
+  /// Alignement du logo large en mode mobile
+  final LandingLogoAlignment mobileLogoAlignment;
+  
+  /// Padding en haut du logo en mode mobile
+  final double mobileLogoPaddingTop;
+  
+  /// Padding en bas du logo en mode mobile
+  final double mobileLogoPaddingBottom;
+  
+  /// Padding horizontal du logo en mode mobile
+  final double mobileLogoPaddingHorizontal;
+  
+  /// Couleur de fond en mode mobile (utilisée si pas d'image de fond)
+  final Color? mobileBackgroundColor;
+  
+  /// Largeur maximale de la carte en mode desktop
+  final double desktopCardMaxWidth;
+  
+  /// Hauteur du bandeau en mode desktop
+  final double desktopTopBarHeight;
+  
+  /// Padding horizontal du bandeau desktop
+  final double desktopTopBarPaddingHorizontal;
+  
+  /// Padding vertical du bandeau desktop
+  final double desktopTopBarPaddingVertical;
+  
+  /// Couleur de fond du bandeau desktop (null = transparent)
+  final Color? desktopTopBarBackgroundColor;
+  
+  /// Ombre du bandeau desktop (null = pas d'ombre)
+  final BoxShadow? desktopTopBarBoxShadow;
+  
+  /// Couleur de fond de la carte desktop
+  final Color? desktopCardBackgroundColor;
+  
+  /// Rayon des coins de la carte desktop
+  final double desktopCardBorderRadius;
+  
+  /// Élévation (ombre) de la carte desktop
+  final double desktopCardElevation;
+  
+  /// Padding intérieur de la carte desktop
+  final EdgeInsets desktopCardPadding;
+  
+  /// Breakpoint pour passer du mode mobile au desktop
+  final double mobileBreakpoint;
+
+  const BrandLandingScreenTheme({
+    this.mobileLogoAlignment = LandingLogoAlignment.center,
+    this.mobileLogoPaddingTop = 60.0,
+    this.mobileLogoPaddingBottom = 32.0,
+    this.mobileLogoPaddingHorizontal = 24.0,
+    this.mobileBackgroundColor,
+    this.desktopCardMaxWidth = 480.0,
+    this.desktopTopBarHeight = 64.0,
+    this.desktopTopBarPaddingHorizontal = 24.0,
+    this.desktopTopBarPaddingVertical = 12.0,
+    this.desktopTopBarBackgroundColor,
+    this.desktopTopBarBoxShadow,
+    this.desktopCardBackgroundColor,
+    this.desktopCardBorderRadius = 16.0,
+    this.desktopCardElevation = 8.0,
+    this.desktopCardPadding = const EdgeInsets.all(32.0),
+    this.mobileBreakpoint = 600.0,
+  });
+
+  @override
+  ThemeExtension<BrandLandingScreenTheme> copyWith({
+    LandingLogoAlignment? mobileLogoAlignment,
+    double? mobileLogoPaddingTop,
+    double? mobileLogoPaddingBottom,
+    double? mobileLogoPaddingHorizontal,
+    Color? mobileBackgroundColor,
+    double? desktopCardMaxWidth,
+    double? desktopTopBarHeight,
+    double? desktopTopBarPaddingHorizontal,
+    double? desktopTopBarPaddingVertical,
+    Color? desktopTopBarBackgroundColor,
+    BoxShadow? desktopTopBarBoxShadow,
+    Color? desktopCardBackgroundColor,
+    double? desktopCardBorderRadius,
+    double? desktopCardElevation,
+    EdgeInsets? desktopCardPadding,
+    double? mobileBreakpoint,
+  }) {
+    return BrandLandingScreenTheme(
+      mobileLogoAlignment: mobileLogoAlignment ?? this.mobileLogoAlignment,
+      mobileLogoPaddingTop: mobileLogoPaddingTop ?? this.mobileLogoPaddingTop,
+      mobileLogoPaddingBottom: mobileLogoPaddingBottom ?? this.mobileLogoPaddingBottom,
+      mobileLogoPaddingHorizontal: mobileLogoPaddingHorizontal ?? this.mobileLogoPaddingHorizontal,
+      mobileBackgroundColor: mobileBackgroundColor ?? this.mobileBackgroundColor,
+      desktopCardMaxWidth: desktopCardMaxWidth ?? this.desktopCardMaxWidth,
+      desktopTopBarHeight: desktopTopBarHeight ?? this.desktopTopBarHeight,
+      desktopTopBarPaddingHorizontal: desktopTopBarPaddingHorizontal ?? this.desktopTopBarPaddingHorizontal,
+      desktopTopBarPaddingVertical: desktopTopBarPaddingVertical ?? this.desktopTopBarPaddingVertical,
+      desktopTopBarBackgroundColor: desktopTopBarBackgroundColor ?? this.desktopTopBarBackgroundColor,
+      desktopTopBarBoxShadow: desktopTopBarBoxShadow ?? this.desktopTopBarBoxShadow,
+      desktopCardBackgroundColor: desktopCardBackgroundColor ?? this.desktopCardBackgroundColor,
+      desktopCardBorderRadius: desktopCardBorderRadius ?? this.desktopCardBorderRadius,
+      desktopCardElevation: desktopCardElevation ?? this.desktopCardElevation,
+      desktopCardPadding: desktopCardPadding ?? this.desktopCardPadding,
+      mobileBreakpoint: mobileBreakpoint ?? this.mobileBreakpoint,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandLandingScreenTheme> lerp(
+    ThemeExtension<BrandLandingScreenTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandLandingScreenTheme) {
+      return this;
+    }
+    return BrandLandingScreenTheme(
+      mobileLogoAlignment: t < 0.5 ? mobileLogoAlignment : other.mobileLogoAlignment,
+      mobileLogoPaddingTop: lerpDouble(mobileLogoPaddingTop, other.mobileLogoPaddingTop, t)!,
+      mobileLogoPaddingBottom: lerpDouble(mobileLogoPaddingBottom, other.mobileLogoPaddingBottom, t)!,
+      mobileLogoPaddingHorizontal: lerpDouble(mobileLogoPaddingHorizontal, other.mobileLogoPaddingHorizontal, t)!,
+      mobileBackgroundColor: Color.lerp(mobileBackgroundColor, other.mobileBackgroundColor, t),
+      desktopCardMaxWidth: lerpDouble(desktopCardMaxWidth, other.desktopCardMaxWidth, t)!,
+      desktopTopBarHeight: lerpDouble(desktopTopBarHeight, other.desktopTopBarHeight, t)!,
+      desktopTopBarPaddingHorizontal: lerpDouble(desktopTopBarPaddingHorizontal, other.desktopTopBarPaddingHorizontal, t)!,
+      desktopTopBarPaddingVertical: lerpDouble(desktopTopBarPaddingVertical, other.desktopTopBarPaddingVertical, t)!,
+      desktopTopBarBackgroundColor: Color.lerp(desktopTopBarBackgroundColor, other.desktopTopBarBackgroundColor, t),
+      desktopTopBarBoxShadow: BoxShadow.lerp(desktopTopBarBoxShadow, other.desktopTopBarBoxShadow, t),
+      desktopCardBackgroundColor: Color.lerp(desktopCardBackgroundColor, other.desktopCardBackgroundColor, t),
+      desktopCardBorderRadius: lerpDouble(desktopCardBorderRadius, other.desktopCardBorderRadius, t)!,
+      desktopCardElevation: lerpDouble(desktopCardElevation, other.desktopCardElevation, t)!,
+      desktopCardPadding: EdgeInsets.lerp(desktopCardPadding, other.desktopCardPadding, t)!,
+      mobileBreakpoint: lerpDouble(mobileBreakpoint, other.mobileBreakpoint, t)!,
     );
   }
 }

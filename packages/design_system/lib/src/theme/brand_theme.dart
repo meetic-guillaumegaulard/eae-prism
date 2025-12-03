@@ -22,6 +22,7 @@ class BrandTheme {
     final tagConfig = config.tagConfig;
     final progressBarConfig = config.progressBarConfig;
     final screenLayoutConfig = config.screenLayoutConfig;
+    final landingScreenConfig = config.landingScreenConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -154,6 +155,24 @@ class BrandTheme {
           scrollGradientColor: screenLayoutConfig.scrollGradientColor,
           scrollGradientHeight: screenLayoutConfig.scrollGradientHeight,
           backgroundColor: colors.background,
+        ),
+        BrandLandingScreenTheme(
+          mobileLogoAlignment: landingScreenConfig.mobileLogoAlignment,
+          mobileLogoPaddingTop: landingScreenConfig.mobileLogoPaddingTop,
+          mobileLogoPaddingBottom: landingScreenConfig.mobileLogoPaddingBottom,
+          mobileLogoPaddingHorizontal: landingScreenConfig.mobileLogoPaddingHorizontal,
+          mobileBackgroundColor: landingScreenConfig.mobileBackgroundColor,
+          desktopCardMaxWidth: landingScreenConfig.desktopCardMaxWidth,
+          desktopTopBarHeight: landingScreenConfig.desktopTopBarHeight,
+          desktopTopBarPaddingHorizontal: landingScreenConfig.desktopTopBarPaddingHorizontal,
+          desktopTopBarPaddingVertical: landingScreenConfig.desktopTopBarPaddingVertical,
+          desktopTopBarBackgroundColor: landingScreenConfig.desktopTopBarBackgroundColor,
+          desktopTopBarBoxShadow: landingScreenConfig.desktopTopBarBoxShadow,
+          desktopCardBackgroundColor: landingScreenConfig.desktopCardBackgroundColor,
+          desktopCardBorderRadius: landingScreenConfig.desktopCardBorderRadius,
+          desktopCardElevation: landingScreenConfig.desktopCardElevation,
+          desktopCardPadding: landingScreenConfig.desktopCardPadding,
+          mobileBreakpoint: landingScreenConfig.mobileBreakpoint,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

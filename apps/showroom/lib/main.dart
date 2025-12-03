@@ -20,6 +20,7 @@ import 'usecases/progress_bar_usecases.dart';
 import 'usecases/screen_layout_usecases.dart';
 import 'usecases/screen_layout_interactive_usecases.dart';
 import 'usecases/dynamic_screen_usecases.dart';
+import 'usecases/landing_screen_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -413,6 +414,19 @@ class WidgetbookApp extends StatelessWidget {
                 WidgetbookUseCase(
                   name: 'Interactive Test',
                   builder: (context) => const ScreenLayoutInteractiveUsecases(),
+                ),
+              ],
+            ),
+            WidgetbookComponent(
+              name: 'LandingScreenEAE',
+              useCases: [
+                WidgetbookUseCase(
+                  name: 'Basic Demo',
+                  builder: (context) => const LandingScreenUsecases(),
+                ),
+                WidgetbookUseCase(
+                  name: 'With Background',
+                  builder: (context) => const LandingScreenWithBackgroundDemo(),
                 ),
               ],
             ),

@@ -2,7 +2,7 @@ import 'component_config.dart';
 
 /// Configuration for a dynamic screen layout
 class ScreenConfig {
-  /// Template type to use (e.g., 'screen_layout')
+  /// Template type to use (e.g., 'screen_layout', 'landing')
   final String template;
 
   /// Configuration for the top bar/header
@@ -64,5 +64,34 @@ class ScreenConfig {
     if (value is T) return value;
     return defaultValue;
   }
+}
+
+/// Configuration spécifique pour le template landing
+/// 
+/// Props supportés:
+/// - backgroundImageMobile: String (chemin de l'asset)
+/// - backgroundImageDesktop: String (chemin de l'asset)
+/// - logoLarge: String (chemin de l'asset du logo large pour mobile)
+/// - logoSmall: String (chemin de l'asset du logo small pour desktop)
+/// - topBarButtonText: String (texte du bouton dans le bandeau desktop)
+/// - topBarButtonAction: String (nom de l'action à appeler)
+class LandingScreenProps {
+  static String? getBackgroundImageMobile(ScreenConfig config) =>
+      config.getProp<String>('backgroundImageMobile');
+      
+  static String? getBackgroundImageDesktop(ScreenConfig config) =>
+      config.getProp<String>('backgroundImageDesktop');
+      
+  static String? getLogoLarge(ScreenConfig config) =>
+      config.getProp<String>('logoLarge');
+      
+  static String? getLogoSmall(ScreenConfig config) =>
+      config.getProp<String>('logoSmall');
+      
+  static String? getTopBarButtonText(ScreenConfig config) =>
+      config.getProp<String>('topBarButtonText');
+      
+  static String? getTopBarButtonAction(ScreenConfig config) =>
+      config.getProp<String>('topBarButtonAction');
 }
 

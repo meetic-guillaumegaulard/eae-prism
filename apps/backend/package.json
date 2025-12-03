@@ -10,6 +10,8 @@
     "build": "bun build src/index.ts --outdir=dist --target=bun"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.0.0",
+    "@elysiajs/static": "^1.0.0",
     "elysia": "^1.0.0"
   },
   "devDependencies": {

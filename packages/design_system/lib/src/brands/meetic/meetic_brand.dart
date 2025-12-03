@@ -177,4 +177,26 @@ class MeeticBrand implements BrandConfig {
         scrollGradientColor: Color(0xFF000000), // Noir pour le dégradé
         scrollGradientHeight: 16.0,
       );
+
+  @override
+  BrandLandingScreenConfig get landingScreenConfig =>
+      const BrandLandingScreenConfig(
+        mobileLogoAlignment: LandingLogoAlignment.center,
+        mobileLogoPaddingTop: 80.0,
+        mobileLogoPaddingBottom: 40.0,
+        mobileLogoPaddingHorizontal: 24.0,
+        desktopCardMaxWidth: 480.0,
+        desktopTopBarHeight: 84.0,
+        desktopTopBarPaddingHorizontal: 32.0,
+        desktopTopBarBackgroundColor: Colors.white,
+        desktopTopBarBoxShadow: BoxShadow(
+          color: Color(0x1A000000), // 10% noir
+          blurRadius: 8.0,
+          offset: Offset(0, 2),
+        ),
+        desktopCardBorderRadius: 16.0,
+        desktopCardElevation: 12.0,
+        desktopCardPadding: EdgeInsets.all(40.0),
+        mobileBreakpoint: 600.0,
+      );
 }

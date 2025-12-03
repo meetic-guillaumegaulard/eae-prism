@@ -22,6 +22,7 @@ abstract class BrandConfig {
   BrandTagConfig get tagConfig;
   BrandProgressBarConfig get progressBarConfig;
   BrandScreenLayoutConfig get screenLayoutConfig;
+  BrandLandingScreenConfig get landingScreenConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -405,5 +406,82 @@ class BrandScreenLayoutConfig {
     this.dividerThickness = 1.0,
     this.scrollGradientColor,
     this.scrollGradientHeight = 16.0,
+  });
+}
+
+/// Alignement horizontal pour le logo
+enum LandingLogoAlignment {
+  left,
+  center,
+  right,
+}
+
+/// Configuration pour le template landing screen
+class BrandLandingScreenConfig {
+  /// Alignement du logo large en mode mobile
+  final LandingLogoAlignment mobileLogoAlignment;
+  
+  /// Padding en haut du logo en mode mobile
+  final double mobileLogoPaddingTop;
+  
+  /// Padding en bas du logo en mode mobile
+  final double mobileLogoPaddingBottom;
+  
+  /// Padding horizontal du logo en mode mobile
+  final double mobileLogoPaddingHorizontal;
+  
+  /// Couleur de fond en mode mobile (utilisée si pas d'image de fond)
+  final Color? mobileBackgroundColor;
+  
+  /// Largeur maximale de la carte en mode desktop
+  final double desktopCardMaxWidth;
+  
+  /// Hauteur du bandeau en mode desktop
+  final double desktopTopBarHeight;
+  
+  /// Padding horizontal du bandeau desktop
+  final double desktopTopBarPaddingHorizontal;
+  
+  /// Padding vertical du bandeau desktop
+  final double desktopTopBarPaddingVertical;
+  
+  /// Couleur de fond du bandeau desktop (null = transparent)
+  final Color? desktopTopBarBackgroundColor;
+  
+  /// Ombre du bandeau desktop (null = pas d'ombre)
+  final BoxShadow? desktopTopBarBoxShadow;
+  
+  /// Couleur de fond de la carte desktop
+  final Color? desktopCardBackgroundColor;
+  
+  /// Rayon des coins de la carte desktop
+  final double desktopCardBorderRadius;
+  
+  /// Élévation (ombre) de la carte desktop
+  final double desktopCardElevation;
+  
+  /// Padding intérieur de la carte desktop
+  final EdgeInsets desktopCardPadding;
+  
+  /// Breakpoint pour passer du mode mobile au desktop
+  final double mobileBreakpoint;
+
+  const BrandLandingScreenConfig({
+    this.mobileLogoAlignment = LandingLogoAlignment.center,
+    this.mobileLogoPaddingTop = 60.0,
+    this.mobileLogoPaddingBottom = 32.0,
+    this.mobileLogoPaddingHorizontal = 24.0,
+    this.mobileBackgroundColor,
+    this.desktopCardMaxWidth = 480.0,
+    this.desktopTopBarHeight = 64.0,
+    this.desktopTopBarPaddingHorizontal = 24.0,
+    this.desktopTopBarPaddingVertical = 12.0,
+    this.desktopTopBarBackgroundColor,
+    this.desktopTopBarBoxShadow,
+    this.desktopCardBackgroundColor,
+    this.desktopCardBorderRadius = 16.0,
+    this.desktopCardElevation = 8.0,
+    this.desktopCardPadding = const EdgeInsets.all(32.0),
+    this.mobileBreakpoint = 600.0,
   });
 }

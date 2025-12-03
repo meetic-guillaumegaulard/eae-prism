@@ -176,4 +176,26 @@ class OkcBrand implements BrandConfig {
         scrollGradientColor: Color(0xFF000000), // Noir pour le dégradé
         scrollGradientHeight: 16.0,
       );
+
+  @override
+  BrandLandingScreenConfig get landingScreenConfig =>
+      const BrandLandingScreenConfig(
+        mobileLogoAlignment: LandingLogoAlignment.center,
+        mobileLogoPaddingTop: 60.0,
+        mobileLogoPaddingBottom: 32.0,
+        mobileLogoPaddingHorizontal: 24.0,
+        desktopCardMaxWidth: 520.0,
+        desktopTopBarHeight: 72.0,
+        desktopTopBarPaddingHorizontal: 40.0,
+        desktopTopBarBackgroundColor: Colors.white,
+        desktopTopBarBoxShadow: BoxShadow(
+          color: Color(0x1A000000),
+          blurRadius: 8.0,
+          offset: Offset(0, 2),
+        ),
+        desktopCardBorderRadius: 24.0,
+        desktopCardElevation: 16.0,
+        desktopCardPadding: EdgeInsets.all(48.0),
+        mobileBreakpoint: 600.0,
+      );
 }

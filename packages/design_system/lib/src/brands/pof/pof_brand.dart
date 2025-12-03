@@ -168,10 +168,36 @@ class PofBrand implements BrandConfig {
       );
 
   @override
-  BrandScreenLayoutConfig get screenLayoutConfig => const BrandScreenLayoutConfig(
-        dividerColor: Color(0xFFE0E0E0), // Gris clair pour la ligne de séparation
+  BrandScreenLayoutConfig get screenLayoutConfig =>
+      const BrandScreenLayoutConfig(
+        dividerColor:
+            Color(0xFFE0E0E0), // Gris clair pour la ligne de séparation
         dividerThickness: 1.0,
         scrollGradientColor: Color(0xFF000000), // Noir pour le dégradé
         scrollGradientHeight: 16.0,
+      );
+
+  @override
+  BrandLandingScreenConfig get landingScreenConfig =>
+      const BrandLandingScreenConfig(
+        mobileLogoAlignment: LandingLogoAlignment.left,
+        mobileLogoPaddingTop: 48.0,
+        mobileLogoPaddingBottom: 24.0,
+        mobileLogoPaddingHorizontal: 20.0,
+        mobileBackgroundColor:
+            Color(0xFFFFA18D), // Couleur saumon POF (pas d'image en mobile)
+        desktopCardMaxWidth: 440.0,
+        desktopTopBarHeight: 84.0,
+        desktopTopBarPaddingHorizontal: 24.0,
+        desktopTopBarBackgroundColor: Colors.white,
+        desktopTopBarBoxShadow: BoxShadow(
+          color: Color(0x1A000000),
+          blurRadius: 8.0,
+          offset: Offset(0, 2),
+        ),
+        desktopCardBorderRadius: 12.0,
+        desktopCardElevation: 8.0,
+        desktopCardPadding: EdgeInsets.all(32.0),
+        mobileBreakpoint: 600.0,
       );
 }

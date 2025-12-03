@@ -5,6 +5,7 @@ import 'screen_config.dart';
 import 'component_factory.dart';
 import 'form_state_manager.dart';
 import '../../templates/screen_layout_eae.dart';
+import '../../templates/landing_screen_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration
 /// Form values are automatically collected and accessible via [formValues]
@@ -123,7 +124,7 @@ class DynamicScreenState extends State<DynamicScreen> {
   @override
   void didUpdateWidget(DynamicScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.jsonString != oldWidget.jsonString || 
+    if (widget.jsonString != oldWidget.jsonString ||
         widget.config != oldWidget.config) {
       _parseConfig();
     }
@@ -192,8 +193,11 @@ class DynamicScreenState extends State<DynamicScreen> {
     switch (config.template.toLowerCase()) {
       case 'screen_layout':
         return _buildScreenLayout(config, factory);
+      case 'landing':
+        return _buildLandingScreen(config, factory);
       default:
-        return DynamicScreen._buildError('Unknown template: ${config.template}');
+        return DynamicScreen._buildError(
+            'Unknown template: ${config.template}');
     }
   }
 
@@ -250,6 +254,78 @@ class DynamicScreenState extends State<DynamicScreen> {
       content: content,
       bottomBar: bottomBar,
       backgroundColor: backgroundColor,
+    );
+  }
+
+  /// Build a screen using the LandingScreenEAE template
+  Widget _buildLandingScreen(ScreenConfig config, ComponentFactory factory) {
+    // Get landing screen specific props
+    final backgroundImageMobile =
+        LandingScreenProps.getBackgroundImageMobile(config);
+    final backgroundImageDesktop =
+        LandingScreenProps.getBackgroundImageDesktop(config);
+    final logoLargePath = LandingScreenProps.getLogoLarge(config);
+    final logoSmallPath = LandingScreenProps.getLogoSmall(config);
+    final topBarButtonText = LandingScreenProps.getTopBarButtonText(config);
+    final topBarButtonAction = LandingScreenProps.getTopBarButtonAction(config);
+
+    // Build content widget
+    Widget content;
+    if (config.content.length == 1) {
+      content = factory.build(config.content.first);
+    } else {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: config.content.map((comp) => factory.build(comp)).toList(),
+      );
+    }
+
+    // Build footer widget if provided (for mobile bottom bar)
+    Widget? bottomBar;
+    if (config.footer != null && config.footer!.isNotEmpty) {
+      if (config.footer!.length == 1) {
+        bottomBar = factory.build(config.footer!.first);
+      } else {
+        bottomBar = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: config.footer!.map((comp) => factory.build(comp)).toList(),
+        );
+      }
+    }
+
+    // Build action callback for top bar button
+    VoidCallback? onTopBarButtonPressed;
+    if (topBarButtonAction != null) {
+      // Check if there's a custom action or use submit
+      final effectiveActions = Map<String, VoidCallback>.from(widget.actions);
+      if (widget.onSubmit != null && !effectiveActions.containsKey('submit')) {
+        effectiveActions['submit'] = () {
+          widget.onSubmit!(_formState.nestedValues);
+        };
+      }
+      onTopBarButtonPressed = effectiveActions[topBarButtonAction];
+    }
+
+    return LandingScreenEAE(
+      config: LandingScreenConfig(
+        backgroundImageMobile: backgroundImageMobile != null
+            ? AssetImage(backgroundImageMobile)
+            : null,
+        backgroundImageDesktop: backgroundImageDesktop != null
+            ? AssetImage(backgroundImageDesktop)
+            : null,
+        logoLarge: logoLargePath != null
+            ? Image.asset(logoLargePath, height: 80)
+            : null,
+        logoSmall: logoSmallPath != null
+            ? Image.asset(logoSmallPath, height: 32)
+            : null,
+        topBarButtonText: topBarButtonText,
+        onTopBarButtonPressed: onTopBarButtonPressed,
+      ),
+      content: content,
+      bottomBar: bottomBar,
     );
   }
 
