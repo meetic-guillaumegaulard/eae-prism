@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screen_config.dart';
+import 'component_config.dart';
 import 'component_factory.dart';
 import 'form_state_manager.dart';
+import 'dynamic_screen_navigator.dart';
 import '../../templates/screen_layout_eae.dart';
 import '../../templates/landing_screen_eae.dart';
 import '../../../models/brand.dart';
@@ -11,6 +13,13 @@ import '../../atoms/logo_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration
 /// Form values are automatically collected and accessible via [formValues]
+/// 
+/// Pour activer la navigation dynamique avec appels API:
+/// - Définissez [baseUrl] pour pointer vers votre serveur
+/// - Utilisez la propriété "apiEndpoint" sur les boutons au lieu de "action"
+/// - Le serveur doit retourner un JSON avec:
+///   - navigation: { type: "refresh"|"navigate", direction: "left"|"right"|"up"|"down", scope: "full"|"content" }
+///   - screen: { ... configuration de l'écran ... }
 class DynamicScreen extends StatefulWidget {
   /// JSON configuration as a string
   final String? jsonString;
@@ -28,6 +37,16 @@ class DynamicScreen extends StatefulWidget {
   /// If provided, automatically adds a "submit" action
   final ValueChanged<Map<String, dynamic>>? onSubmit;
 
+  /// URL de base de l'API pour les appels dynamiques (optionnel)
+  /// Si défini, permet d'utiliser "apiEndpoint" sur les boutons
+  final String? baseUrl;
+
+  /// Callback lors d'une erreur API
+  final void Function(Object error)? onApiError;
+
+  /// Callback de debug pour voir les requêtes API
+  final void Function(String endpoint, Map<String, dynamic> data)? onApiRequest;
+
   const DynamicScreen({
     Key? key,
     this.jsonString,
@@ -35,6 +54,9 @@ class DynamicScreen extends StatefulWidget {
     this.actions = const {},
     this.onFormChanged,
     this.onSubmit,
+    this.baseUrl,
+    this.onApiError,
+    this.onApiRequest,
   })  : assert(
           jsonString != null || config != null,
           'Either jsonString or config must be provided',
@@ -47,6 +69,9 @@ class DynamicScreen extends StatefulWidget {
     Map<String, VoidCallback> actions = const {},
     ValueChanged<Map<String, dynamic>>? onFormChanged,
     ValueChanged<Map<String, dynamic>>? onSubmit,
+    String? baseUrl,
+    void Function(Object error)? onApiError,
+    void Function(String endpoint, Map<String, dynamic> data)? onApiRequest,
   }) {
     return FutureBuilder<String>(
       future: rootBundle.loadString(assetPath),
@@ -64,6 +89,9 @@ class DynamicScreen extends StatefulWidget {
           actions: actions,
           onFormChanged: onFormChanged,
           onSubmit: onSubmit,
+          baseUrl: baseUrl,
+          onApiError: onApiError,
+          onApiRequest: onApiRequest,
         );
       },
     );
@@ -101,12 +129,16 @@ class DynamicScreenState extends State<DynamicScreen> {
   late final FormStateManager _formState;
   ScreenConfig? _parsedConfig;
   String? _error;
+  
+  // Clé pour accéder au DynamicScreenNavigator
+  final GlobalKey<DynamicScreenNavigatorState> _navigatorKey = GlobalKey();
 
   /// Get the current form values as a flat map
   Map<String, dynamic> get formValues => _formState.values;
 
   /// Get the current form values as a nested JSON structure
-  Map<String, dynamic> get nestedFormValues => _formState.nestedValues;
+  Map<String, dynamic> get nestedFormValues => 
+      _navigatorKey.currentState?.formValues ?? _formState.nestedValues;
 
   @override
   void initState() {
@@ -162,6 +194,11 @@ class DynamicScreenState extends State<DynamicScreen> {
     _formState.setValues(values);
   }
 
+  /// Appelle l'API avec l'endpoint spécifié (si navigation activée)
+  Future<void> callApi(String endpoint) async {
+    await _navigatorKey.currentState?.callApi(endpoint);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_error != null) {
@@ -172,6 +209,22 @@ class DynamicScreenState extends State<DynamicScreen> {
       return DynamicScreen._buildError('No configuration provided');
     }
 
+    // Si baseUrl est défini ou si des boutons ont apiEndpoint,
+    // utiliser DynamicScreenNavigator pour les animations
+    if (widget.baseUrl != null || _hasApiEndpoints(_parsedConfig!)) {
+      return DynamicScreenNavigator(
+        key: _navigatorKey,
+        initialConfig: _parsedConfig!,
+        baseUrl: widget.baseUrl,
+        actions: widget.actions,
+        onFormChanged: widget.onFormChanged,
+        onSubmit: widget.onSubmit,
+        onApiError: widget.onApiError,
+        onApiRequest: widget.onApiRequest,
+      );
+    }
+
+    // Sinon, rendu simple sans navigation
     // Build actions map, including automatic submit action
     final effectiveActions = Map<String, VoidCallback>.from(widget.actions);
     if (widget.onSubmit != null && !effectiveActions.containsKey('submit')) {
@@ -188,6 +241,36 @@ class DynamicScreenState extends State<DynamicScreen> {
 
     // Build the screen based on the template
     return _buildTemplate(_parsedConfig!, factory);
+  }
+  
+  /// Vérifie si la config contient des boutons avec apiEndpoint
+  bool _hasApiEndpoints(ScreenConfig config) {
+    bool checkComponent(ComponentConfig comp) {
+      if (comp.type == 'button' && comp.props.containsKey('apiEndpoint')) {
+        return true;
+      }
+      if (comp.children != null) {
+        for (final child in comp.children!) {
+          if (checkComponent(child)) return true;
+        }
+      }
+      return false;
+    }
+
+    for (final comp in config.content) {
+      if (checkComponent(comp)) return true;
+    }
+    if (config.header != null) {
+      for (final comp in config.header!) {
+        if (checkComponent(comp)) return true;
+      }
+    }
+    if (config.footer != null) {
+      for (final comp in config.footer!) {
+        if (checkComponent(comp)) return true;
+      }
+    }
+    return false;
   }
 
   /// Build the screen using the appropriate template

@@ -17,6 +17,9 @@ import '../../molecules/selection_group_eae.dart';
 import '../../molecules/selectable_button_group_eae.dart';
 import '../../molecules/selectable_tag_group_eae.dart';
 
+/// Callback pour les actions d'appel API
+typedef ApiActionCallback = void Function(String endpoint);
+
 /// Factory class to build Flutter widgets from ComponentConfig
 class ComponentFactory {
   /// Form state manager to automatically collect values
@@ -25,9 +28,13 @@ class ComponentFactory {
   /// Map of action callbacks that can be referenced by name (for buttons)
   final Map<String, VoidCallback> actions;
 
+  /// Callback pour les appels API (si défini, les boutons avec apiEndpoint fonctionneront)
+  final ApiActionCallback? onApiAction;
+
   const ComponentFactory({
     required this.formState,
     this.actions = const {},
+    this.onApiAction,
   });
 
   /// Build a widget from a ComponentConfig
@@ -211,7 +218,16 @@ class ComponentFactory {
 
   Widget _buildButton(ComponentConfig config) {
     final actionName = config.getProp<String>('action');
-    final callback = actionName != null ? actions[actionName] : null;
+    final apiEndpoint = config.getProp<String>('apiEndpoint');
+    
+    VoidCallback? callback;
+    
+    // Priorité: apiEndpoint > action
+    if (apiEndpoint != null && onApiAction != null) {
+      callback = () => onApiAction!(apiEndpoint);
+    } else if (actionName != null) {
+      callback = actions[actionName];
+    }
 
     return ButtonEAE(
       label: config.getProp<String>('label') ?? 'Button',
