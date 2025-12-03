@@ -87,13 +87,12 @@ class MyApp extends StatelessWidget {
     Widget child,
   ) {
     // Offset de départ selon la direction
-    // "left" = l'écran actuel part vers la gauche, le nouveau arrive de la droite
     final Offset beginOffset = switch (direction) {
-      'left' => const Offset(1.0, 0.0), // Arrive de la droite
-      'right' => const Offset(-1.0, 0.0), // Arrive de la gauche
-      'up' => const Offset(0.0, 1.0), // Arrive du bas
-      'down' => const Offset(0.0, -1.0), // Arrive du haut
-      _ => const Offset(1.0, 0.0), // Par défaut: de la droite
+      'left' => const Offset(1.0, 0.0),
+      'right' => const Offset(-1.0, 0.0),
+      'up' => const Offset(0.0, 1.0),
+      'down' => const Offset(0.0, -1.0),
+      _ => const Offset(1.0, 0.0),
     };
 
     final offsetAnimation = Tween<Offset>(
@@ -106,10 +105,10 @@ class MyApp extends StatelessWidget {
 
     // Animation de sortie de l'écran précédent
     final exitOffset = switch (direction) {
-      'left' => const Offset(-0.3, 0.0), // Part vers la gauche
-      'right' => const Offset(0.3, 0.0), // Part vers la droite
-      'up' => const Offset(0.0, -0.3), // Part vers le haut
-      'down' => const Offset(0.0, 0.3), // Part vers le bas
+      'left' => const Offset(-0.3, 0.0),
+      'right' => const Offset(0.3, 0.0),
+      'up' => const Offset(0.0, -0.3),
+      'down' => const Offset(0.0, 0.3),
       _ => const Offset(-0.3, 0.0),
     };
 
@@ -122,9 +121,9 @@ class MyApp extends StatelessWidget {
     ));
 
     return SlideTransition(
-      position: offsetAnimation,
+      position: secondaryOffsetAnimation,
       child: SlideTransition(
-        position: secondaryOffsetAnimation,
+        position: offsetAnimation,
         child: child,
       ),
     );

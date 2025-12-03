@@ -277,6 +277,11 @@ class DynamicScreenState extends State<DynamicScreen> {
         if (navResponse.formValues != null) ...navResponse.formValues!,
       };
 
+      // Cacher le loader AVANT la navigation pour éviter le flickering
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+
       if (navResponse.navigation.type == NavigationType.refresh) {
         // Refresh: on met à jour l'écran en place
         if (widget.onRefresh != null) {
@@ -295,7 +300,7 @@ class DynamicScreenState extends State<DynamicScreen> {
       }
     } catch (e) {
       widget.onApiError?.call(e);
-    } finally {
+      // Cacher le loader en cas d'erreur
       if (mounted) {
         setState(() => _isLoading = false);
       }
@@ -328,20 +333,7 @@ class DynamicScreenState extends State<DynamicScreen> {
     );
 
     // Build the screen based on the template
-    return Stack(
-      children: [
-        _buildTemplate(_currentConfig!, factory),
-        if (_isLoading)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black26,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ),
-      ],
-    );
+    return _buildTemplate(_currentConfig!, factory);
   }
 
   /// Build the screen using the appropriate template

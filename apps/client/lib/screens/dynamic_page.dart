@@ -23,24 +23,36 @@ class DynamicPage extends StatefulWidget {
 class _DynamicPageState extends State<DynamicPage> {
   static const String _baseUrl = 'http://localhost:3000/api';
 
-  ScreenConfig? _config;
-  Map<String, dynamic>? _formValues;
-  bool _isLoading = true;
+  late ScreenConfig? _config;
+  late Map<String, dynamic>? _formValues;
+  late bool _isLoading;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _loadScreen();
+
+    // Si la config est fournie, on l'utilise immédiatement (pas de loading)
+    if (widget.config != null) {
+      _config = widget.config;
+      _formValues = widget.initialValues;
+      _isLoading = false;
+    } else {
+      // Sinon, on doit charger depuis le serveur
+      _config = null;
+      _formValues = null;
+      _isLoading = true;
+      _loadScreenFromServer();
+    }
   }
 
   @override
   void didUpdateWidget(DynamicPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Si on change de screenId ou de config, recharger
-    if (widget.screenId != oldWidget.screenId) {
-      _loadScreen();
-    } else if (widget.config != oldWidget.config) {
+    // Si on change de screenId, recharger depuis le serveur
+    if (widget.screenId != oldWidget.screenId && widget.config == null) {
+      _loadScreenFromServer();
+    } else if (widget.config != oldWidget.config && widget.config != null) {
       // Config fournie directement (navigation depuis un autre écran)
       setState(() {
         _config = widget.config;
@@ -51,19 +63,8 @@ class _DynamicPageState extends State<DynamicPage> {
     }
   }
 
-  Future<void> _loadScreen() async {
-    // Si une config est fournie directement (navigation depuis POST), l'utiliser
-    if (widget.config != null) {
-      setState(() {
-        _config = widget.config;
-        _formValues = widget.initialValues;
-        _isLoading = false;
-        _error = null;
-      });
-      return;
-    }
-
-    // Sinon, charger depuis le serveur via GET
+  /// Charge l'écran depuis le serveur (GET)
+  Future<void> _loadScreenFromServer() async {
     setState(() {
       _isLoading = true;
       _error = null;
@@ -137,7 +138,7 @@ class _DynamicPageState extends State<DynamicPage> {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: _loadScreen,
+                  onPressed: _loadScreenFromServer,
                   child: const Text('Réessayer'),
                 ),
               ],
@@ -180,12 +181,8 @@ class _DynamicPageState extends State<DynamicPage> {
       },
       // Navigation avec go_router - push pour avoir l'historique et les animations
       onNavigate: (response, formValues) {
-        // Extraire le screenId depuis les props de l'écran
         final newScreenId = _extractScreenId(response);
-
-        // Récupérer la direction et la durée de l'animation depuis la réponse serveur
-        final direction =
-            response.navigation.direction.name; // left, right, up, down
+        final direction = response.navigation.direction.name;
         final durationMs = response.navigation.durationMs;
 
         context.push(
@@ -201,10 +198,8 @@ class _DynamicPageState extends State<DynamicPage> {
       // Retour en arrière standard (apiEndpoint: ":back")
       onBack: () {
         if (context.canPop()) {
-          debugPrint("message: back");
           context.pop();
         } else {
-          debugPrint("message: no back");
           // Si on ne peut pas pop, retour à l'accueil
           context.go('/');
         }
