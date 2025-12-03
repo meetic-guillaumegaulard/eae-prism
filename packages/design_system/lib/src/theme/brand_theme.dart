@@ -23,6 +23,7 @@ class BrandTheme {
     final progressBarConfig = config.progressBarConfig;
     final screenLayoutConfig = config.screenLayoutConfig;
     final landingScreenConfig = config.landingScreenConfig;
+    final logoConfig = config.logoConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -176,6 +177,10 @@ class BrandTheme {
           desktopCardElevation: landingScreenConfig.desktopCardElevation,
           desktopCardPadding: landingScreenConfig.desktopCardPadding,
           mobileBreakpoint: landingScreenConfig.mobileBreakpoint,
+        ),
+        BrandLogoTheme(
+          smallHeight: logoConfig.smallHeight,
+          largeHeight: logoConfig.largeHeight,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

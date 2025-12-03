@@ -200,4 +200,10 @@ class PofBrand implements BrandConfig {
         desktopCardPadding: EdgeInsets.all(32.0),
         mobileBreakpoint: 600.0,
       );
+
+  @override
+  BrandLogoConfig get logoConfig => const BrandLogoConfig(
+        smallHeight: 60.0,
+        largeHeight: 60.0,
+      );
 }

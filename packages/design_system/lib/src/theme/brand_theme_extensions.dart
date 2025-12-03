@@ -795,6 +795,44 @@ class BrandScreenLayoutTheme extends ThemeExtension<BrandScreenLayoutTheme> {
   }
 }
 
+class BrandLogoTheme extends ThemeExtension<BrandLogoTheme> {
+  /// Hauteur par défaut du logo small
+  final double smallHeight;
+  
+  /// Hauteur par défaut des logos large (onDark, onWhite)
+  final double largeHeight;
+
+  const BrandLogoTheme({
+    this.smallHeight = 60.0,
+    this.largeHeight = 60.0,
+  });
+
+  @override
+  ThemeExtension<BrandLogoTheme> copyWith({
+    double? smallHeight,
+    double? largeHeight,
+  }) {
+    return BrandLogoTheme(
+      smallHeight: smallHeight ?? this.smallHeight,
+      largeHeight: largeHeight ?? this.largeHeight,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandLogoTheme> lerp(
+    ThemeExtension<BrandLogoTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandLogoTheme) {
+      return this;
+    }
+    return BrandLogoTheme(
+      smallHeight: lerpDouble(smallHeight, other.smallHeight, t)!,
+      largeHeight: lerpDouble(largeHeight, other.largeHeight, t)!,
+    );
+  }
+}
+
 class BrandLandingScreenTheme extends ThemeExtension<BrandLandingScreenTheme> {
   /// Alignement du logo large en mode mobile
   final LandingLogoAlignment mobileLogoAlignment;

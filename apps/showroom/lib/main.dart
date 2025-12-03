@@ -21,6 +21,7 @@ import 'usecases/screen_layout_usecases.dart';
 import 'usecases/screen_layout_interactive_usecases.dart';
 import 'usecases/dynamic_screen_usecases.dart';
 import 'usecases/landing_screen_usecases.dart';
+import 'usecases/logo_usecases.dart';
 
 void main() {
   runApp(const WidgetbookApp());
@@ -194,6 +195,15 @@ class WidgetbookApp extends StatelessWidget {
                     WidgetbookUseCase(
                       name: 'All Examples',
                       builder: (context) => const ProgressBarUsecases(),
+                    ),
+                  ],
+                ),
+                WidgetbookComponent(
+                  name: 'LogoEAE',
+                  useCases: [
+                    WidgetbookUseCase(
+                      name: 'All Examples',
+                      builder: (context) => const LogoUsecases(),
                     ),
                   ],
                 ),

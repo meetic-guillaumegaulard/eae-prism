@@ -23,6 +23,7 @@ abstract class BrandConfig {
   BrandProgressBarConfig get progressBarConfig;
   BrandScreenLayoutConfig get screenLayoutConfig;
   BrandLandingScreenConfig get landingScreenConfig;
+  BrandLogoConfig get logoConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -416,6 +417,20 @@ enum LandingLogoAlignment {
   left,
   center,
   right,
+}
+
+/// Configuration pour les logos de la marque
+class BrandLogoConfig {
+  /// Hauteur par défaut du logo small (compact)
+  final double smallHeight;
+
+  /// Hauteur par défaut des logos large (onDark, onWhite)
+  final double largeHeight;
+
+  const BrandLogoConfig({
+    this.smallHeight = 60.0,
+    this.largeHeight = 60.0,
+  });
 }
 
 /// Configuration pour le template landing screen

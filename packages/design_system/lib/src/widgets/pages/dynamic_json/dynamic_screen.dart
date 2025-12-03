@@ -6,6 +6,8 @@ import 'component_factory.dart';
 import 'form_state_manager.dart';
 import '../../templates/screen_layout_eae.dart';
 import '../../templates/landing_screen_eae.dart';
+import '../../../models/brand.dart';
+import '../../atoms/logo_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration
 /// Form values are automatically collected and accessible via [formValues]
@@ -260,14 +262,28 @@ class DynamicScreenState extends State<DynamicScreen> {
   /// Build a screen using the LandingScreenEAE template
   Widget _buildLandingScreen(ScreenConfig config, ComponentFactory factory) {
     // Get landing screen specific props
+    final brandString = LandingScreenProps.getBrand(config);
     final backgroundImageMobile =
         LandingScreenProps.getBackgroundImageMobile(config);
     final backgroundImageDesktop =
         LandingScreenProps.getBackgroundImageDesktop(config);
-    final logoLargePath = LandingScreenProps.getLogoLarge(config);
-    final logoSmallPath = LandingScreenProps.getLogoSmall(config);
+    final mobileLogoTypeString = LandingScreenProps.getMobileLogoType(config);
+    final desktopLogoTypeString = LandingScreenProps.getDesktopLogoType(config);
+    final mobileLogoHeight = LandingScreenProps.getMobileLogoHeight(config);
+    final desktopLogoHeight = LandingScreenProps.getDesktopLogoHeight(config);
     final topBarButtonText = LandingScreenProps.getTopBarButtonText(config);
     final topBarButtonAction = LandingScreenProps.getTopBarButtonAction(config);
+
+    // Parse brand (required)
+    final brand = _parseBrand(brandString);
+    if (brand == null) {
+      return DynamicScreen._buildError(
+          'Brand is required for landing template. Use: match, meetic, okc, or pof');
+    }
+
+    // Parse logo types
+    final mobileLogoType = _parseLogoType(mobileLogoTypeString) ?? LogoTypeEAE.onDark;
+    final desktopLogoType = _parseLogoType(desktopLogoTypeString) ?? LogoTypeEAE.small;
 
     // Build content widget
     Widget content;
@@ -307,26 +323,59 @@ class DynamicScreenState extends State<DynamicScreen> {
       onTopBarButtonPressed = effectiveActions[topBarButtonAction];
     }
 
+    // Parse image providers (support both assets and network URLs)
+    ImageProvider? mobileImage;
+    if (backgroundImageMobile != null) {
+      mobileImage = backgroundImageMobile.startsWith('http')
+          ? NetworkImage(backgroundImageMobile) as ImageProvider
+          : AssetImage(backgroundImageMobile) as ImageProvider;
+    }
+
+    ImageProvider? desktopImage;
+    if (backgroundImageDesktop != null) {
+      desktopImage = backgroundImageDesktop.startsWith('http')
+          ? NetworkImage(backgroundImageDesktop) as ImageProvider
+          : AssetImage(backgroundImageDesktop) as ImageProvider;
+    }
+
     return LandingScreenEAE(
       config: LandingScreenConfig(
-        backgroundImageMobile: backgroundImageMobile != null
-            ? AssetImage(backgroundImageMobile)
-            : null,
-        backgroundImageDesktop: backgroundImageDesktop != null
-            ? AssetImage(backgroundImageDesktop)
-            : null,
-        logoLarge: logoLargePath != null
-            ? Image.asset(logoLargePath, height: 80)
-            : null,
-        logoSmall: logoSmallPath != null
-            ? Image.asset(logoSmallPath, height: 32)
-            : null,
+        brand: brand,
+        backgroundImageMobile: mobileImage,
+        backgroundImageDesktop: desktopImage,
+        mobileLogoType: mobileLogoType,
+        desktopLogoType: desktopLogoType,
+        mobileLogoHeight: mobileLogoHeight,
+        desktopLogoHeight: desktopLogoHeight,
         topBarButtonText: topBarButtonText,
         onTopBarButtonPressed: onTopBarButtonPressed,
       ),
       content: content,
       bottomBar: bottomBar,
     );
+  }
+
+  /// Parse brand from string
+  static Brand? _parseBrand(String? brandString) {
+    if (brandString == null) return null;
+    return switch (brandString.toLowerCase()) {
+      'match' => Brand.match,
+      'meetic' => Brand.meetic,
+      'okc' || 'okcupid' => Brand.okc,
+      'pof' || 'plentyoffish' => Brand.pof,
+      _ => null,
+    };
+  }
+
+  /// Parse logo type from string
+  static LogoTypeEAE? _parseLogoType(String? logoTypeString) {
+    if (logoTypeString == null) return null;
+    return switch (logoTypeString.toLowerCase()) {
+      'small' => LogoTypeEAE.small,
+      'ondark' => LogoTypeEAE.onDark,
+      'onwhite' => LogoTypeEAE.onWhite,
+      _ => null,
+    };
   }
 
   /// Parse color from string (hex format)

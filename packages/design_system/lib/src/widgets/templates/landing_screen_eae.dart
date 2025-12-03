@@ -1,46 +1,60 @@
 import 'package:flutter/material.dart';
 import '../../theme/brand_theme_extensions.dart';
 import '../../brands/brand_config.dart' show LandingLogoAlignment;
+import '../../models/brand.dart';
 import '../atoms/button_eae.dart';
+import '../atoms/logo_eae.dart';
 
 /// Configuration pour le landing screen
 class LandingScreenConfig {
+  /// La marque à utiliser pour les logos
+  final Brand brand;
+
   /// Image de fond mobile
   final ImageProvider? backgroundImageMobile;
-  
+
   /// Image de fond desktop
   final ImageProvider? backgroundImageDesktop;
-  
-  /// Logo en mode large (pour mobile)
-  final Widget? logoLarge;
-  
-  /// Logo en mode small (pour le bandeau desktop)
-  final Widget? logoSmall;
-  
+
+  /// Type de logo pour mobile (par défaut: onDark car généralement sur image de fond)
+  final LogoTypeEAE mobileLogoType;
+
+  /// Type de logo pour la top bar desktop (par défaut: onWhite car fond blanc)
+  final LogoTypeEAE desktopLogoType;
+
+  /// Hauteur personnalisée du logo mobile (optionnel, utilise le thème par défaut)
+  final double? mobileLogoHeight;
+
+  /// Hauteur personnalisée du logo desktop (optionnel, utilise le thème par défaut)
+  final double? desktopLogoHeight;
+
   /// Texte du bouton dans le bandeau desktop
   final String? topBarButtonText;
-  
+
   /// Callback du bouton dans le bandeau desktop
   final VoidCallback? onTopBarButtonPressed;
 
   const LandingScreenConfig({
+    required this.brand,
     this.backgroundImageMobile,
     this.backgroundImageDesktop,
-    this.logoLarge,
-    this.logoSmall,
+    this.mobileLogoType = LogoTypeEAE.onDark,
+    this.desktopLogoType = LogoTypeEAE.small,
+    this.mobileLogoHeight,
+    this.desktopLogoHeight,
     this.topBarButtonText,
     this.onTopBarButtonPressed,
   });
 }
 
 /// Template component for landing screens with responsive layout
-/// 
+///
 /// Mobile mode:
 /// - Full screen background image
 /// - Large logo with configurable alignment and padding
 /// - Content below the logo
 /// - Fixed bottom bar for actions
-/// 
+///
 /// Desktop mode:
 /// - Full screen background image
 /// - Fixed top bar with small logo and outline button
@@ -48,10 +62,10 @@ class LandingScreenConfig {
 class LandingScreenEAE extends StatelessWidget {
   /// Configuration for images and logos
   final LandingScreenConfig config;
-  
+
   /// Main content (displayed below logo on mobile, inside card on desktop)
   final Widget content;
-  
+
   /// Fixed bottom bar content (mobile only)
   final Widget? bottomBar;
 
@@ -66,19 +80,20 @@ class LandingScreenEAE extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<BrandLandingScreenTheme>();
     final breakpoint = theme?.mobileBreakpoint ?? 600.0;
-    
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = constraints.maxWidth < breakpoint;
-        
-        return isMobile 
+
+        return isMobile
             ? _buildMobileLayout(context, theme)
             : _buildDesktopLayout(context, theme);
       },
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context, BrandLandingScreenTheme? theme) {
+  Widget _buildMobileLayout(
+      BuildContext context, BrandLandingScreenTheme? theme) {
     final alignment = theme?.mobileLogoAlignment ?? LandingLogoAlignment.center;
     final paddingTop = theme?.mobileLogoPaddingTop ?? 60.0;
     final paddingBottom = theme?.mobileLogoPaddingBottom ?? 32.0;
@@ -96,7 +111,8 @@ class LandingScreenEAE extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: config.backgroundImageMobile == null ? backgroundColor : null,
+      backgroundColor:
+          config.backgroundImageMobile == null ? backgroundColor : null,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -108,7 +124,7 @@ class LandingScreenEAE extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
             ),
-          
+
           // Content
           SafeArea(
             child: Column(
@@ -119,27 +135,31 @@ class LandingScreenEAE extends StatelessWidget {
                       crossAxisAlignment: crossAlignment,
                       children: [
                         // Logo with padding
-                        if (config.logoLarge != null)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: paddingTop,
-                              bottom: paddingBottom,
-                              left: paddingHorizontal,
-                              right: paddingHorizontal,
-                            ),
-                            child: config.logoLarge!,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: paddingTop,
+                            bottom: paddingBottom,
+                            left: paddingHorizontal,
+                            right: paddingHorizontal,
                           ),
-                        
+                          child: LogoEAE(
+                            brand: config.brand,
+                            type: config.mobileLogoType,
+                            height: config.mobileLogoHeight,
+                          ),
+                        ),
+
                         // Content below logo
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: paddingHorizontal),
                           child: content,
                         ),
                       ],
                     ),
                   ),
                 ),
-                
+
                 // Fixed bottom bar
                 if (bottomBar != null) bottomBar!,
               ],
@@ -150,7 +170,8 @@ class LandingScreenEAE extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context, BrandLandingScreenTheme? theme) {
+  Widget _buildDesktopLayout(
+      BuildContext context, BrandLandingScreenTheme? theme) {
     final topBarHeight = theme?.desktopTopBarHeight ?? 64.0;
     final topBarPaddingH = theme?.desktopTopBarPaddingHorizontal ?? 24.0;
     final topBarPaddingV = theme?.desktopTopBarPaddingVertical ?? 12.0;
@@ -160,7 +181,8 @@ class LandingScreenEAE extends StatelessWidget {
     final cardBorderRadius = theme?.desktopCardBorderRadius ?? 16.0;
     final cardElevation = theme?.desktopCardElevation ?? 8.0;
     final cardPadding = theme?.desktopCardPadding ?? const EdgeInsets.all(32.0);
-    final cardBackgroundColor = theme?.desktopCardBackgroundColor ?? Colors.white;
+    final cardBackgroundColor =
+        theme?.desktopCardBackgroundColor ?? Colors.white;
 
     return Scaffold(
       body: Stack(
@@ -174,14 +196,15 @@ class LandingScreenEAE extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
             ),
-          
+
           // Content overlay
           Column(
             children: [
               // Top bar with optional background and shadow
               Container(
                 height: topBarHeight,
-                padding: EdgeInsets.symmetric(horizontal: topBarPaddingH, vertical: topBarPaddingV),
+                padding: EdgeInsets.symmetric(
+                    horizontal: topBarPaddingH, vertical: topBarPaddingV),
                 decoration: BoxDecoration(
                   color: topBarBackgroundColor,
                   boxShadow: topBarBoxShadow != null ? [topBarBoxShadow] : null,
@@ -190,9 +213,13 @@ class LandingScreenEAE extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Small logo on the left
-                    if (config.logoSmall != null) config.logoSmall!,
+                    LogoEAE(
+                      brand: config.brand,
+                      type: config.desktopLogoType,
+                      height: config.desktopLogoHeight,
+                    ),
                     const Spacer(),
-                    
+
                     // Outline button on the right
                     if (config.topBarButtonText != null)
                       ButtonEAE(
@@ -203,7 +230,7 @@ class LandingScreenEAE extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Centered card
               Expanded(
                 child: Center(
@@ -232,4 +259,3 @@ class LandingScreenEAE extends StatelessWidget {
     );
   }
 }
-

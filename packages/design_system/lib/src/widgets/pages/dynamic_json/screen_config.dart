@@ -69,24 +69,36 @@ class ScreenConfig {
 /// Configuration spécifique pour le template landing
 /// 
 /// Props supportés:
-/// - backgroundImageMobile: String (chemin de l'asset)
-/// - backgroundImageDesktop: String (chemin de l'asset)
-/// - logoLarge: String (chemin de l'asset du logo large pour mobile)
-/// - logoSmall: String (chemin de l'asset du logo small pour desktop)
+/// - brand: String (match, meetic, okc, pof) - requis
+/// - backgroundImageMobile: String (chemin de l'asset ou URL)
+/// - backgroundImageDesktop: String (chemin de l'asset ou URL)
+/// - mobileLogoType: String (small, onDark, onWhite) - défaut: onDark
+/// - desktopLogoType: String (small, onDark, onWhite) - défaut: small
+/// - mobileLogoHeight: double (optionnel)
+/// - desktopLogoHeight: double (optionnel)
 /// - topBarButtonText: String (texte du bouton dans le bandeau desktop)
 /// - topBarButtonAction: String (nom de l'action à appeler)
 class LandingScreenProps {
+  static String? getBrand(ScreenConfig config) =>
+      config.getProp<String>('brand');
+
   static String? getBackgroundImageMobile(ScreenConfig config) =>
       config.getProp<String>('backgroundImageMobile');
       
   static String? getBackgroundImageDesktop(ScreenConfig config) =>
       config.getProp<String>('backgroundImageDesktop');
-      
-  static String? getLogoLarge(ScreenConfig config) =>
-      config.getProp<String>('logoLarge');
-      
-  static String? getLogoSmall(ScreenConfig config) =>
-      config.getProp<String>('logoSmall');
+
+  static String? getMobileLogoType(ScreenConfig config) =>
+      config.getProp<String>('mobileLogoType');
+
+  static String? getDesktopLogoType(ScreenConfig config) =>
+      config.getProp<String>('desktopLogoType');
+
+  static double? getMobileLogoHeight(ScreenConfig config) =>
+      config.getProp<num>('mobileLogoHeight')?.toDouble();
+
+  static double? getDesktopLogoHeight(ScreenConfig config) =>
+      config.getProp<num>('desktopLogoHeight')?.toDouble();
       
   static String? getTopBarButtonText(ScreenConfig config) =>
       config.getProp<String>('topBarButtonText');

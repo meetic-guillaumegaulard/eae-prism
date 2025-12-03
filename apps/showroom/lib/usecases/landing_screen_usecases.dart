@@ -13,20 +13,43 @@ class LandingScreenUsecases extends StatelessWidget {
 class _LandingScreenDemo extends StatelessWidget {
   const _LandingScreenDemo();
 
-  static const String _baseUrl = 'http://localhost:3000/api/assets';
+  /// Détecte la brand courante en fonction du thème
+  Brand _detectBrand(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    
+    // Match: #11144C, Meetic: #E9006D, OKC: #0046D5, POF: #000000
+    if (primaryColor == const Color(0xFF11144C)) return Brand.match;
+    if (primaryColor == const Color(0xFFE9006D)) return Brand.meetic;
+    if (primaryColor == const Color(0xFF0046D5)) return Brand.okc;
+    if (primaryColor == const Color(0xFF000000)) return Brand.pof;
+    
+    return Brand.match; // default
+  }
+
+  /// Retourne le nom de la brand pour l'URL des assets
+  String _getBrandName(Brand brand) {
+    return switch (brand) {
+      Brand.match => 'match',
+      Brand.meetic => 'meetic',
+      Brand.okc => 'okc',
+      Brand.pof => 'pof',
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
+    final brand = _detectBrand(context);
+    final brandName = _getBrandName(brand);
+
     return LandingScreenEAE(
       config: LandingScreenConfig(
-        backgroundImageMobile: const NetworkImage(
-          '$_baseUrl/brands/okc/landing-mobile.jpg',
+        brand: brand,
+        backgroundImageMobile: NetworkImage(
+          ApiUtils.landingMobileBackgroundUrl(brandName),
         ),
-        backgroundImageDesktop: const NetworkImage(
-          '$_baseUrl/brands/okc/landing-desktop.jpg',
+        backgroundImageDesktop: NetworkImage(
+          ApiUtils.landingDesktopBackgroundUrl(brandName),
         ),
-        logoLarge: _buildLogoPlaceholder(context, isLarge: true),
-        logoSmall: _buildLogoPlaceholder(context, isLarge: false),
         topBarButtonText: 'Se connecter',
         onTopBarButtonPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -36,29 +59,6 @@ class _LandingScreenDemo extends StatelessWidget {
       ),
       content: _buildContent(context),
       bottomBar: _buildBottomBar(context),
-    );
-  }
-
-  Widget _buildLogoPlaceholder(BuildContext context, {required bool isLarge}) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isLarge ? 24 : 12,
-        vertical: isLarge ? 12 : 6,
-      ),
-      decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        isLarge ? 'BRAND LOGO' : 'LOGO',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: isLarge ? 24 : 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
     );
   }
 
@@ -131,8 +131,22 @@ class _LandingScreenDemo extends StatelessWidget {
 class LandingScreenWithBackgroundDemo extends StatelessWidget {
   const LandingScreenWithBackgroundDemo({Key? key}) : super(key: key);
 
+  /// Détecte la brand courante en fonction du thème
+  Brand _detectBrand(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    
+    // Match: #11144C, Meetic: #E9006D, OKC: #0046D5, POF: #000000
+    if (primaryColor == const Color(0xFF11144C)) return Brand.match;
+    if (primaryColor == const Color(0xFFE9006D)) return Brand.meetic;
+    if (primaryColor == const Color(0xFF0046D5)) return Brand.okc;
+    if (primaryColor == const Color(0xFF000000)) return Brand.pof;
+    
+    return Brand.match; // default
+  }
+
   @override
   Widget build(BuildContext context) {
+    final brand = _detectBrand(context);
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
@@ -146,16 +160,16 @@ class LandingScreenWithBackgroundDemo extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  primaryColor.withOpacity(0.3),
-                  primaryColor.withOpacity(0.1),
+                  primaryColor.withValues(alpha: 0.3),
+                  primaryColor.withValues(alpha: 0.1),
                 ],
               ),
             ),
           ),
           LandingScreenEAE(
             config: LandingScreenConfig(
-              logoLarge: _buildLogoWidget(context, isLarge: true),
-              logoSmall: _buildLogoWidget(context, isLarge: false),
+              brand: brand,
+              mobileLogoType: LogoTypeEAE.onWhite, // Fond clair ici
               topBarButtonText: 'Se connecter',
               onTopBarButtonPressed: () {},
             ),
@@ -163,30 +177,6 @@ class LandingScreenWithBackgroundDemo extends StatelessWidget {
             bottomBar: _buildSimpleBottomBar(context),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLogoWidget(BuildContext context, {required bool isLarge}) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isLarge ? 32 : 16,
-        vertical: isLarge ? 16 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        isLarge ? 'MY APP' : 'APP',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: isLarge ? 32 : 18,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 2,
-        ),
       ),
     );
   }
