@@ -27,8 +27,8 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  // Navigation avec go_router - l'URL devient /screens/step1
-                  context.go('/screens/step1');
+                  // Navigation avec go_router - push pour avoir l'historique et les animations
+                  context.push('/screens/step1');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

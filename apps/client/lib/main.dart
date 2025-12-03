@@ -5,6 +5,9 @@ import 'screens/home_page.dart';
 import 'screens/dynamic_page.dart';
 
 void main() {
+  // Active la synchronisation de l'URL avec push() (pas seulement go())
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+
   // You can change the brand here to test different themes
   const brand = Brand.match; // Try: match, meetic, okc, pof
 

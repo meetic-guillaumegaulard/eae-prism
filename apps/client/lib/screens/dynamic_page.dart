@@ -178,12 +178,12 @@ class _DynamicPageState extends State<DynamicPage> {
           ),
         );
       },
-      // Navigation avec go_router - l'URL change dans la barre d'adresse
+      // Navigation avec go_router - push pour avoir l'historique et les animations
       onNavigate: (response, formValues) {
         // Extraire le screenId depuis les props de l'écran
         final newScreenId = _extractScreenId(response);
 
-        context.go(
+        context.push(
           '/screens/$newScreenId',
           extra: {
             'config': response.screen,
