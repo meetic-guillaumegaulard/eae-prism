@@ -24,6 +24,7 @@ class BrandTheme {
     final screenLayoutConfig = config.screenLayoutConfig;
     final landingScreenConfig = config.landingScreenConfig;
     final logoConfig = config.logoConfig;
+    final headerConfig = config.headerConfig;
 
     InputBorder getBorder(Color color, {double width = 1.0}) {
       switch (inputConfig.borderType) {
@@ -164,15 +165,20 @@ class BrandTheme {
           mobileLogoAlignment: landingScreenConfig.mobileLogoAlignment,
           mobileLogoPaddingTop: landingScreenConfig.mobileLogoPaddingTop,
           mobileLogoPaddingBottom: landingScreenConfig.mobileLogoPaddingBottom,
-          mobileLogoPaddingHorizontal: landingScreenConfig.mobileLogoPaddingHorizontal,
+          mobileLogoPaddingHorizontal:
+              landingScreenConfig.mobileLogoPaddingHorizontal,
           mobileBackgroundColor: landingScreenConfig.mobileBackgroundColor,
           desktopCardMaxWidth: landingScreenConfig.desktopCardMaxWidth,
           desktopTopBarHeight: landingScreenConfig.desktopTopBarHeight,
-          desktopTopBarPaddingHorizontal: landingScreenConfig.desktopTopBarPaddingHorizontal,
-          desktopTopBarPaddingVertical: landingScreenConfig.desktopTopBarPaddingVertical,
-          desktopTopBarBackgroundColor: landingScreenConfig.desktopTopBarBackgroundColor,
+          desktopTopBarPaddingHorizontal:
+              landingScreenConfig.desktopTopBarPaddingHorizontal,
+          desktopTopBarPaddingVertical:
+              landingScreenConfig.desktopTopBarPaddingVertical,
+          desktopTopBarBackgroundColor:
+              landingScreenConfig.desktopTopBarBackgroundColor,
           desktopTopBarBoxShadow: landingScreenConfig.desktopTopBarBoxShadow,
-          desktopCardBackgroundColor: landingScreenConfig.desktopCardBackgroundColor,
+          desktopCardBackgroundColor:
+              landingScreenConfig.desktopCardBackgroundColor,
           desktopCardBorderRadius: landingScreenConfig.desktopCardBorderRadius,
           desktopCardElevation: landingScreenConfig.desktopCardElevation,
           desktopCardPadding: landingScreenConfig.desktopCardPadding,
@@ -181,6 +187,14 @@ class BrandTheme {
         BrandLogoTheme(
           smallHeight: logoConfig.smallHeight,
           largeHeight: logoConfig.largeHeight,
+        ),
+        BrandHeaderTheme(
+          backIcon: headerConfig.backIcon,
+          foregroundColor: headerConfig.foregroundColor,
+          backgroundColor: headerConfig.backgroundColor,
+          iconTextSpacing: headerConfig.iconTextSpacing,
+          verticalPadding: headerConfig.verticalPadding,
+          horizontalPadding: headerConfig.horizontalPadding,
         ),
       ],
       elevatedButtonTheme: ElevatedButtonThemeData(

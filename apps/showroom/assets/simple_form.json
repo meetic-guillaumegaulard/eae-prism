@@ -120,7 +120,7 @@
             "label": "Submit",
             "variant": "primary",
             "isFullWidth": true,
-            "action": "submit"
+            "exit": "submit"
           }
         }
       ]

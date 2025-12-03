@@ -12,6 +12,11 @@ dependencies:
   design_system:
     path: ../../packages/design_system
   go_router: ^17.0.0
+  # Voice search dependencies
+  speech_to_text: ^7.0.0
+  flutter_riverpod: ^2.5.1
+  flutter_animate: ^4.5.0
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:

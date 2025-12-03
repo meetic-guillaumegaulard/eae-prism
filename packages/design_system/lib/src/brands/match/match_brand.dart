@@ -207,4 +207,14 @@ class MatchBrand implements BrandConfig {
         smallHeight: 60.0,
         largeHeight: 60.0,
       );
+
+  @override
+  BrandHeaderConfig get headerConfig => const BrandHeaderConfig(
+        backIcon: Icons.chevron_left,
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF11144C), // Bleu Match
+        iconTextSpacing: 12.0,
+        verticalPadding: 16.0,
+        horizontalPadding: 16.0,
+      );
 }

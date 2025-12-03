@@ -785,7 +785,8 @@ class BrandScreenLayoutTheme extends ThemeExtension<BrandScreenLayoutTheme> {
     }
     return BrandScreenLayoutTheme(
       dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
-      dividerThickness: lerpDouble(dividerThickness, other.dividerThickness, t)!,
+      dividerThickness:
+          lerpDouble(dividerThickness, other.dividerThickness, t)!,
       scrollGradientColor:
           Color.lerp(scrollGradientColor, other.scrollGradientColor, t),
       scrollGradientHeight:
@@ -798,7 +799,7 @@ class BrandScreenLayoutTheme extends ThemeExtension<BrandScreenLayoutTheme> {
 class BrandLogoTheme extends ThemeExtension<BrandLogoTheme> {
   /// Hauteur par défaut du logo small
   final double smallHeight;
-  
+
   /// Hauteur par défaut des logos large (onDark, onWhite)
   final double largeHeight;
 
@@ -833,52 +834,173 @@ class BrandLogoTheme extends ThemeExtension<BrandLogoTheme> {
   }
 }
 
+class BrandIconTheme extends ThemeExtension<BrandIconTheme> {
+  /// Couleur par défaut des icônes
+  final Color? defaultColor;
+
+  /// Couleur de fond pour les icônes en cercle
+  final Color? circleBackgroundColor;
+
+  /// Couleur des badges
+  final Color? badgeColor;
+
+  /// Couleur du texte des badges
+  final Color? badgeTextColor;
+
+  const BrandIconTheme({
+    this.defaultColor,
+    this.circleBackgroundColor,
+    this.badgeColor,
+    this.badgeTextColor,
+  });
+
+  @override
+  ThemeExtension<BrandIconTheme> copyWith({
+    Color? defaultColor,
+    Color? circleBackgroundColor,
+    Color? badgeColor,
+    Color? badgeTextColor,
+  }) {
+    return BrandIconTheme(
+      defaultColor: defaultColor ?? this.defaultColor,
+      circleBackgroundColor:
+          circleBackgroundColor ?? this.circleBackgroundColor,
+      badgeColor: badgeColor ?? this.badgeColor,
+      badgeTextColor: badgeTextColor ?? this.badgeTextColor,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandIconTheme> lerp(
+    ThemeExtension<BrandIconTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandIconTheme) {
+      return this;
+    }
+    return BrandIconTheme(
+      defaultColor: Color.lerp(defaultColor, other.defaultColor, t),
+      circleBackgroundColor:
+          Color.lerp(circleBackgroundColor, other.circleBackgroundColor, t),
+      badgeColor: Color.lerp(badgeColor, other.badgeColor, t),
+      badgeTextColor: Color.lerp(badgeTextColor, other.badgeTextColor, t),
+    );
+  }
+}
+
+class BrandHeaderTheme extends ThemeExtension<BrandHeaderTheme> {
+  /// Icône du bouton back
+  final IconData backIcon;
+
+  /// Couleur du texte et des icônes
+  final Color? foregroundColor;
+
+  /// Couleur de fond du header
+  final Color? backgroundColor;
+
+  /// Espacement entre l'icône et le texte
+  final double iconTextSpacing;
+
+  /// Padding vertical du header
+  final double verticalPadding;
+
+  /// Padding horizontal du header
+  final double horizontalPadding;
+
+  const BrandHeaderTheme({
+    this.backIcon = Icons.chevron_left,
+    this.foregroundColor,
+    this.backgroundColor,
+    this.iconTextSpacing = 12.0,
+    this.verticalPadding = 16.0,
+    this.horizontalPadding = 16.0,
+  });
+
+  @override
+  ThemeExtension<BrandHeaderTheme> copyWith({
+    IconData? backIcon,
+    Color? foregroundColor,
+    Color? backgroundColor,
+    double? iconTextSpacing,
+    double? verticalPadding,
+    double? horizontalPadding,
+  }) {
+    return BrandHeaderTheme(
+      backIcon: backIcon ?? this.backIcon,
+      foregroundColor: foregroundColor ?? this.foregroundColor,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      iconTextSpacing: iconTextSpacing ?? this.iconTextSpacing,
+      verticalPadding: verticalPadding ?? this.verticalPadding,
+      horizontalPadding: horizontalPadding ?? this.horizontalPadding,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandHeaderTheme> lerp(
+    ThemeExtension<BrandHeaderTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandHeaderTheme) {
+      return this;
+    }
+    return BrandHeaderTheme(
+      backIcon: t < 0.5 ? backIcon : other.backIcon,
+      foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t),
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      iconTextSpacing: lerpDouble(iconTextSpacing, other.iconTextSpacing, t)!,
+      verticalPadding: lerpDouble(verticalPadding, other.verticalPadding, t)!,
+      horizontalPadding:
+          lerpDouble(horizontalPadding, other.horizontalPadding, t)!,
+    );
+  }
+}
+
 class BrandLandingScreenTheme extends ThemeExtension<BrandLandingScreenTheme> {
   /// Alignement du logo large en mode mobile
   final LandingLogoAlignment mobileLogoAlignment;
-  
+
   /// Padding en haut du logo en mode mobile
   final double mobileLogoPaddingTop;
-  
+
   /// Padding en bas du logo en mode mobile
   final double mobileLogoPaddingBottom;
-  
+
   /// Padding horizontal du logo en mode mobile
   final double mobileLogoPaddingHorizontal;
-  
+
   /// Couleur de fond en mode mobile (utilisée si pas d'image de fond)
   final Color? mobileBackgroundColor;
-  
+
   /// Largeur maximale de la carte en mode desktop
   final double desktopCardMaxWidth;
-  
+
   /// Hauteur du bandeau en mode desktop
   final double desktopTopBarHeight;
-  
+
   /// Padding horizontal du bandeau desktop
   final double desktopTopBarPaddingHorizontal;
-  
+
   /// Padding vertical du bandeau desktop
   final double desktopTopBarPaddingVertical;
-  
+
   /// Couleur de fond du bandeau desktop (null = transparent)
   final Color? desktopTopBarBackgroundColor;
-  
+
   /// Ombre du bandeau desktop (null = pas d'ombre)
   final BoxShadow? desktopTopBarBoxShadow;
-  
+
   /// Couleur de fond de la carte desktop
   final Color? desktopCardBackgroundColor;
-  
+
   /// Rayon des coins de la carte desktop
   final double desktopCardBorderRadius;
-  
+
   /// Élévation (ombre) de la carte desktop
   final double desktopCardElevation;
-  
+
   /// Padding intérieur de la carte desktop
   final EdgeInsets desktopCardPadding;
-  
+
   /// Breakpoint pour passer du mode mobile au desktop
   final double mobileBreakpoint;
 
@@ -923,17 +1045,26 @@ class BrandLandingScreenTheme extends ThemeExtension<BrandLandingScreenTheme> {
     return BrandLandingScreenTheme(
       mobileLogoAlignment: mobileLogoAlignment ?? this.mobileLogoAlignment,
       mobileLogoPaddingTop: mobileLogoPaddingTop ?? this.mobileLogoPaddingTop,
-      mobileLogoPaddingBottom: mobileLogoPaddingBottom ?? this.mobileLogoPaddingBottom,
-      mobileLogoPaddingHorizontal: mobileLogoPaddingHorizontal ?? this.mobileLogoPaddingHorizontal,
-      mobileBackgroundColor: mobileBackgroundColor ?? this.mobileBackgroundColor,
+      mobileLogoPaddingBottom:
+          mobileLogoPaddingBottom ?? this.mobileLogoPaddingBottom,
+      mobileLogoPaddingHorizontal:
+          mobileLogoPaddingHorizontal ?? this.mobileLogoPaddingHorizontal,
+      mobileBackgroundColor:
+          mobileBackgroundColor ?? this.mobileBackgroundColor,
       desktopCardMaxWidth: desktopCardMaxWidth ?? this.desktopCardMaxWidth,
       desktopTopBarHeight: desktopTopBarHeight ?? this.desktopTopBarHeight,
-      desktopTopBarPaddingHorizontal: desktopTopBarPaddingHorizontal ?? this.desktopTopBarPaddingHorizontal,
-      desktopTopBarPaddingVertical: desktopTopBarPaddingVertical ?? this.desktopTopBarPaddingVertical,
-      desktopTopBarBackgroundColor: desktopTopBarBackgroundColor ?? this.desktopTopBarBackgroundColor,
-      desktopTopBarBoxShadow: desktopTopBarBoxShadow ?? this.desktopTopBarBoxShadow,
-      desktopCardBackgroundColor: desktopCardBackgroundColor ?? this.desktopCardBackgroundColor,
-      desktopCardBorderRadius: desktopCardBorderRadius ?? this.desktopCardBorderRadius,
+      desktopTopBarPaddingHorizontal:
+          desktopTopBarPaddingHorizontal ?? this.desktopTopBarPaddingHorizontal,
+      desktopTopBarPaddingVertical:
+          desktopTopBarPaddingVertical ?? this.desktopTopBarPaddingVertical,
+      desktopTopBarBackgroundColor:
+          desktopTopBarBackgroundColor ?? this.desktopTopBarBackgroundColor,
+      desktopTopBarBoxShadow:
+          desktopTopBarBoxShadow ?? this.desktopTopBarBoxShadow,
+      desktopCardBackgroundColor:
+          desktopCardBackgroundColor ?? this.desktopCardBackgroundColor,
+      desktopCardBorderRadius:
+          desktopCardBorderRadius ?? this.desktopCardBorderRadius,
       desktopCardElevation: desktopCardElevation ?? this.desktopCardElevation,
       desktopCardPadding: desktopCardPadding ?? this.desktopCardPadding,
       mobileBreakpoint: mobileBreakpoint ?? this.mobileBreakpoint,
@@ -949,22 +1080,38 @@ class BrandLandingScreenTheme extends ThemeExtension<BrandLandingScreenTheme> {
       return this;
     }
     return BrandLandingScreenTheme(
-      mobileLogoAlignment: t < 0.5 ? mobileLogoAlignment : other.mobileLogoAlignment,
-      mobileLogoPaddingTop: lerpDouble(mobileLogoPaddingTop, other.mobileLogoPaddingTop, t)!,
-      mobileLogoPaddingBottom: lerpDouble(mobileLogoPaddingBottom, other.mobileLogoPaddingBottom, t)!,
-      mobileLogoPaddingHorizontal: lerpDouble(mobileLogoPaddingHorizontal, other.mobileLogoPaddingHorizontal, t)!,
-      mobileBackgroundColor: Color.lerp(mobileBackgroundColor, other.mobileBackgroundColor, t),
-      desktopCardMaxWidth: lerpDouble(desktopCardMaxWidth, other.desktopCardMaxWidth, t)!,
-      desktopTopBarHeight: lerpDouble(desktopTopBarHeight, other.desktopTopBarHeight, t)!,
-      desktopTopBarPaddingHorizontal: lerpDouble(desktopTopBarPaddingHorizontal, other.desktopTopBarPaddingHorizontal, t)!,
-      desktopTopBarPaddingVertical: lerpDouble(desktopTopBarPaddingVertical, other.desktopTopBarPaddingVertical, t)!,
-      desktopTopBarBackgroundColor: Color.lerp(desktopTopBarBackgroundColor, other.desktopTopBarBackgroundColor, t),
-      desktopTopBarBoxShadow: BoxShadow.lerp(desktopTopBarBoxShadow, other.desktopTopBarBoxShadow, t),
-      desktopCardBackgroundColor: Color.lerp(desktopCardBackgroundColor, other.desktopCardBackgroundColor, t),
-      desktopCardBorderRadius: lerpDouble(desktopCardBorderRadius, other.desktopCardBorderRadius, t)!,
-      desktopCardElevation: lerpDouble(desktopCardElevation, other.desktopCardElevation, t)!,
-      desktopCardPadding: EdgeInsets.lerp(desktopCardPadding, other.desktopCardPadding, t)!,
-      mobileBreakpoint: lerpDouble(mobileBreakpoint, other.mobileBreakpoint, t)!,
+      mobileLogoAlignment:
+          t < 0.5 ? mobileLogoAlignment : other.mobileLogoAlignment,
+      mobileLogoPaddingTop:
+          lerpDouble(mobileLogoPaddingTop, other.mobileLogoPaddingTop, t)!,
+      mobileLogoPaddingBottom: lerpDouble(
+          mobileLogoPaddingBottom, other.mobileLogoPaddingBottom, t)!,
+      mobileLogoPaddingHorizontal: lerpDouble(
+          mobileLogoPaddingHorizontal, other.mobileLogoPaddingHorizontal, t)!,
+      mobileBackgroundColor:
+          Color.lerp(mobileBackgroundColor, other.mobileBackgroundColor, t),
+      desktopCardMaxWidth:
+          lerpDouble(desktopCardMaxWidth, other.desktopCardMaxWidth, t)!,
+      desktopTopBarHeight:
+          lerpDouble(desktopTopBarHeight, other.desktopTopBarHeight, t)!,
+      desktopTopBarPaddingHorizontal: lerpDouble(desktopTopBarPaddingHorizontal,
+          other.desktopTopBarPaddingHorizontal, t)!,
+      desktopTopBarPaddingVertical: lerpDouble(
+          desktopTopBarPaddingVertical, other.desktopTopBarPaddingVertical, t)!,
+      desktopTopBarBackgroundColor: Color.lerp(
+          desktopTopBarBackgroundColor, other.desktopTopBarBackgroundColor, t),
+      desktopTopBarBoxShadow: BoxShadow.lerp(
+          desktopTopBarBoxShadow, other.desktopTopBarBoxShadow, t),
+      desktopCardBackgroundColor: Color.lerp(
+          desktopCardBackgroundColor, other.desktopCardBackgroundColor, t),
+      desktopCardBorderRadius: lerpDouble(
+          desktopCardBorderRadius, other.desktopCardBorderRadius, t)!,
+      desktopCardElevation:
+          lerpDouble(desktopCardElevation, other.desktopCardElevation, t)!,
+      desktopCardPadding:
+          EdgeInsets.lerp(desktopCardPadding, other.desktopCardPadding, t)!,
+      mobileBreakpoint:
+          lerpDouble(mobileBreakpoint, other.mobileBreakpoint, t)!,
     );
   }
 }

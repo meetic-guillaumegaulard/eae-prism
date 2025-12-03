@@ -205,4 +205,13 @@ class OkcBrand implements BrandConfig {
         smallHeight: 60.0,
         largeHeight: 60.0,
       );
+
+  @override
+  BrandHeaderConfig get headerConfig => const BrandHeaderConfig(
+        backIcon: Icons.chevron_left,
+        foregroundColor: Colors.white, // Blanc sur fond sombre
+        iconTextSpacing: 12.0,
+        verticalPadding: 16.0,
+        horizontalPadding: 16.0,
+      );
 }

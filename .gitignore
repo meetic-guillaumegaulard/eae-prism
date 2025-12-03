@@ -30,3 +30,7 @@ Thumbs.db
 apps/backend/node_modules
 apps/backend/dist
 
+# Environment files (API keys)
+.env
+*.env.local
+

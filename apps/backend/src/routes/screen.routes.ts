@@ -449,7 +449,7 @@ const screenConfigs: Record<string, object> = {
 };
 
 export const screenRoutes = new Elysia({ prefix: "/api/screens" })
-  // Route GET générique pour récupérer un écran par son ID
+
   .get(
     "/:screenId",
     ({ params: { screenId } }) => {
@@ -461,6 +461,12 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
         };
       }
       return {
+        navigation: {
+          type: "navigate",
+          direction: "left",
+          scope: "full",
+          durationMs: 300,
+        },
         screen: config,
         formValues: {},
       };
@@ -471,12 +477,13 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
       }),
     }
   )
-
   // Obtenir l'écran initial (legacy, redirige vers step1)
   .get("/initial", () => ({
     navigation: {
-      type: "refresh",
+      type: "navigate",
+      direction: "down",
       scope: "full",
+      durationMs: 400,
     },
     screen: screen1Config,
     formValues: {},

@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:design_system/design_system.dart';
-import 'screens/home_page.dart';
-import 'screens/dynamic_page.dart';
+import 'screens/home/home_page.dart';
+import 'screens/interests/interests_page.dart';
+import 'screens/interests/services/recommendation_service.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Active la synchronisation de l'URL avec push() (pas seulement go())
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   // You can change the brand here to test different themes
   const brand = Brand.match; // Try: match, meetic, okc, pof
 
-  runApp(MyApp(brand: brand));
+  // Configure le backend URL pour le service de recommandation
+  // Le backend gère l'appel à OpenAI (évite les problèmes CORS sur web)
+  RecommendationService.initialize('http://localhost:3000');
+
+  runApp(
+    ProviderScope(
+      child: MyApp(brand: brand),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   final Brand brand;
+  static const String _baseUrl = 'http://localhost:3000/api';
 
   MyApp({super.key, required this.brand});
 
@@ -27,39 +40,45 @@ class MyApp extends StatelessWidget {
         name: 'home',
         builder: (context, state) => HomePage(brand: brand),
       ),
+      // Route pour la page des intérêts avec recherche vocale
+      GoRoute(
+        path: '/interests',
+        name: 'interests',
+        builder: (context, state) => const InterestsPage(),
+      ),
       // Route dynamique pour les écrans du flow
       GoRoute(
         path: '/screens/:screenId',
         name: 'dynamic-screen',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final screenId = state.pathParameters['screenId']!;
-          // Récupère la config et les form values depuis extra si disponibles
           final extra = state.extra as Map<String, dynamic>?;
 
-          // La config peut être soit un ScreenConfig, soit un Map (après sérialisation)
-          ScreenConfig? config;
-          final rawConfig = extra?['config'];
-          if (rawConfig is ScreenConfig) {
-            config = rawConfig;
-          } else if (rawConfig is Map) {
-            // Convertir le Map en Map<String, dynamic> si nécessaire
-            config =
-                ScreenConfig.fromJson(Map<String, dynamic>.from(rawConfig));
-          }
-
-          // Pareil pour formValues
-          Map<String, dynamic>? formValues;
-          final rawFormValues = extra?['formValues'];
-          if (rawFormValues is Map) {
-            formValues = Map<String, dynamic>.from(rawFormValues);
-          }
-
-          return DynamicPage(
-            brand: brand,
+          // Utilise le builder du design_system avec les callbacks go_router
+          return buildDynamicPage(
             screenId: screenId,
-            config: config,
-            initialValues: formValues,
-          );
+            baseUrl: _baseUrl,
+            extra: extra,
+            onNavigate: (newScreenId, navExtra) {
+              context.push('/screens/$newScreenId', extra: navExtra);
+            },
+            onBack: () => context.pop(),
+            onGoHome: () => context.go('/'),
+            canPop: () => context.canPop(),
+            onExit: (destination, values) {
+              // Navigation vers des écrans statiques selon la destination
+              debugPrint('Exit flow: $destination with values: $values');
+              switch (destination) {
+                case 'submit':
+                  // Retour à l'accueil après soumission
+                  context.go('/');
+                  break;
+                default:
+                  // Navigation par défaut vers une route nommée
+                  context.go('/$destination');
+              }
+            },
+          ).toPage(state.pageKey);
         },
       ),
     ],

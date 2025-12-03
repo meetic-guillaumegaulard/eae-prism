@@ -5,18 +5,18 @@ import 'screen_config.dart';
 import 'component_factory.dart';
 import 'form_state_manager.dart';
 import 'navigation_response.dart';
-import '../../templates/screen_layout_eae.dart';
-import '../../templates/landing_screen_eae.dart';
+import '../../templates/screen_layout/screen_layout_eae.dart';
+import '../../templates/landing_screen/landing_screen_eae.dart';
 import '../../../models/brand.dart';
 import '../../../utils/api_utils.dart';
-import '../../atoms/logo_eae.dart';
+import '../../atoms/logo/logo_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration.
-/// 
+///
 /// La navigation est gérée par le parent via les callbacks:
 /// - [onNavigate] pour la navigation vers un nouvel écran (via apiEndpoint)
 /// - [onBack] pour revenir en arrière (quand apiEndpoint = ":back")
-/// 
+///
 /// Exemple d'utilisation:
 /// ```dart
 /// DynamicScreen(
@@ -36,9 +36,6 @@ class DynamicScreen extends StatefulWidget {
 
   /// Screen configuration object (alternative to jsonString)
   final ScreenConfig? config;
-
-  /// Map of action callbacks for buttons (referenced by "action" prop)
-  final Map<String, VoidCallback> actions;
 
   /// Callback when form values change
   final ValueChanged<Map<String, dynamic>>? onFormChanged;
@@ -62,21 +59,27 @@ class DynamicScreen extends StatefulWidget {
   /// Le parent est responsable de faire le Navigator.push ou context.go
   /// [response] contient la config du nouvel écran
   /// [formValues] contient toutes les valeurs du formulaire accumulées
-  final void Function(NavigationResponse response, Map<String, dynamic> formValues)? onNavigate;
+  final void Function(
+      NavigationResponse response, Map<String, dynamic> formValues)? onNavigate;
 
   /// Appelé quand l'écran doit simplement être rafraîchi (navigation type: refresh)
   /// Si non fourni, le refresh sera géré en interne avec setState
-  final void Function(ScreenConfig newConfig, Map<String, dynamic> formValues)? onRefresh;
+  final void Function(ScreenConfig newConfig, Map<String, dynamic> formValues)?
+      onRefresh;
 
   /// Callback appelé quand un bouton avec apiEndpoint=":back" est pressé
   /// Le parent est responsable de faire le Navigator.pop() ou context.pop()
   final VoidCallback? onBack;
 
+  /// Callback appelé quand un composant a une propriété "exit"
+  /// [destination] identifie où l'utilisateur veut aller (ex: 'submit', 'skip', 'profile')
+  /// [values] contient les valeurs courantes du formulaire
+  final void Function(String destination, Map<String, dynamic> values)? onExit;
+
   const DynamicScreen({
     super.key,
     this.jsonString,
     this.config,
-    this.actions = const {},
     this.onFormChanged,
     this.onSubmit,
     this.baseUrl,
@@ -86,6 +89,7 @@ class DynamicScreen extends StatefulWidget {
     this.onNavigate,
     this.onRefresh,
     this.onBack,
+    this.onExit,
   }) : assert(
           jsonString != null || config != null,
           'Either jsonString or config must be provided',
@@ -94,14 +98,15 @@ class DynamicScreen extends StatefulWidget {
   /// Create a DynamicScreen from an asset file
   static Widget fromAsset(
     String assetPath, {
-    Map<String, VoidCallback> actions = const {},
     ValueChanged<Map<String, dynamic>>? onFormChanged,
     ValueChanged<Map<String, dynamic>>? onSubmit,
     String? baseUrl,
     void Function(Object error)? onApiError,
     void Function(String endpoint, Map<String, dynamic> data)? onApiRequest,
-    void Function(NavigationResponse response, Map<String, dynamic> formValues)? onNavigate,
+    void Function(NavigationResponse response, Map<String, dynamic> formValues)?
+        onNavigate,
     VoidCallback? onBack,
+    void Function(String destination, Map<String, dynamic> values)? onExit,
   }) {
     return FutureBuilder<String>(
       future: rootBundle.loadString(assetPath),
@@ -116,7 +121,6 @@ class DynamicScreen extends StatefulWidget {
 
         return DynamicScreen(
           jsonString: snapshot.data,
-          actions: actions,
           onFormChanged: onFormChanged,
           onSubmit: onSubmit,
           baseUrl: baseUrl,
@@ -124,6 +128,7 @@ class DynamicScreen extends StatefulWidget {
           onApiRequest: onApiRequest,
           onNavigate: onNavigate,
           onBack: onBack,
+          onExit: onExit,
         );
       },
     );
@@ -248,7 +253,7 @@ class DynamicScreenState extends State<DynamicScreen> {
       widget.onBack?.call();
       return;
     }
-    
+
     // Sinon, appel API normal
     callApi(endpoint);
   }
@@ -270,12 +275,17 @@ class DynamicScreenState extends State<DynamicScreen> {
       );
 
       final navResponse = NavigationResponse.fromJson(response);
-      
+
       // Merge server values with local values
       final mergedValues = {
         ..._formState.nestedValues,
         if (navResponse.formValues != null) ...navResponse.formValues!,
       };
+
+      // Cacher le loader AVANT la navigation pour éviter le flickering
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
 
       if (navResponse.navigation.type == NavigationType.refresh) {
         // Refresh: on met à jour l'écran en place
@@ -295,7 +305,7 @@ class DynamicScreenState extends State<DynamicScreen> {
       }
     } catch (e) {
       widget.onApiError?.call(e);
-    } finally {
+      // Cacher le loader en cas d'erreur
       if (mounted) {
         setState(() => _isLoading = false);
       }
@@ -312,36 +322,15 @@ class DynamicScreenState extends State<DynamicScreen> {
       return DynamicScreen._buildError('No configuration provided');
     }
 
-    // Build actions map, including automatic submit action
-    final effectiveActions = Map<String, VoidCallback>.from(widget.actions);
-    if (widget.onSubmit != null && !effectiveActions.containsKey('submit')) {
-      effectiveActions['submit'] = () {
-        widget.onSubmit!(_formState.nestedValues);
-      };
-    }
-
     // Create the component factory with form state
     final factory = ComponentFactory(
       formState: _formState,
-      actions: effectiveActions,
       onApiAction: _handleApiAction, // Utilise le handler qui gère :back
+      onExit: widget.onExit,
     );
 
     // Build the screen based on the template
-    return Stack(
-      children: [
-        _buildTemplate(_currentConfig!, factory),
-        if (_isLoading)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black26,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ),
-      ],
-    );
+    return _buildTemplate(_currentConfig!, factory);
   }
 
   /// Build the screen using the appropriate template
@@ -468,15 +457,9 @@ class DynamicScreenState extends State<DynamicScreen> {
 
     // Build action callback for top bar button
     VoidCallback? onTopBarButtonPressed;
-    if (topBarButtonAction != null) {
-      // Check if there's a custom action or use submit
-      final effectiveActions = Map<String, VoidCallback>.from(widget.actions);
-      if (widget.onSubmit != null && !effectiveActions.containsKey('submit')) {
-        effectiveActions['submit'] = () {
-          widget.onSubmit!(_formState.nestedValues);
-        };
-      }
-      onTopBarButtonPressed = effectiveActions[topBarButtonAction];
+    if (topBarButtonAction != null && widget.onExit != null) {
+      onTopBarButtonPressed =
+          () => widget.onExit!(topBarButtonAction, _formState.nestedValues);
     }
 
     // Parse image providers (support both assets and network URLs)

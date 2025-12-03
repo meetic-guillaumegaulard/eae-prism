@@ -205,4 +205,14 @@ class MeeticBrand implements BrandConfig {
         smallHeight: 60.0,
         largeHeight: 60.0,
       );
+
+  @override
+  BrandHeaderConfig get headerConfig => const BrandHeaderConfig(
+        backIcon: Icons.chevron_left,
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFFE9006D), // Rose Meetic
+        iconTextSpacing: 12.0,
+        verticalPadding: 16.0,
+        horizontalPadding: 16.0,
+      );
 }

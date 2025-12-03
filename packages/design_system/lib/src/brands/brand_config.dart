@@ -24,6 +24,7 @@ abstract class BrandConfig {
   BrandScreenLayoutConfig get screenLayoutConfig;
   BrandLandingScreenConfig get landingScreenConfig;
   BrandLogoConfig get logoConfig;
+  BrandHeaderConfig get headerConfig;
 
   static BrandConfig fromBrand(Brand brand) {
     switch (brand) {
@@ -62,7 +63,8 @@ class BrandButtonConfig {
       verticalPadding; // Override default vertical padding (and remove fixed height)
   final Color? disabledBackgroundColor;
   final Color? disabledForegroundColor;
-  final double? outlineElevation; // Elevation for outline variant (null = use elevation)
+  final double?
+      outlineElevation; // Elevation for outline variant (null = use elevation)
 
   const BrandButtonConfig({
     this.borderRadius = 12.0,
@@ -394,13 +396,13 @@ class BrandProgressBarConfig {
 class BrandScreenLayoutConfig {
   /// Couleur de la ligne de séparation entre le header/footer et le contenu
   final Color? dividerColor;
-  
+
   /// Épaisseur de la ligne de séparation
   final double dividerThickness;
-  
+
   /// Couleur du dégradé indiquant qu'il est possible de scroller
   final Color? scrollGradientColor;
-  
+
   /// Hauteur du dégradé de scroll
   final double scrollGradientHeight;
 
@@ -433,53 +435,83 @@ class BrandLogoConfig {
   });
 }
 
+/// Configuration pour le header molécule
+class BrandHeaderConfig {
+  /// Icône du bouton back
+  final IconData backIcon;
+
+  /// Couleur du texte et des icônes
+  final Color? foregroundColor;
+
+  /// Couleur de fond du header
+  final Color? backgroundColor;
+
+  /// Espacement entre l'icône et le texte
+  final double iconTextSpacing;
+
+  /// Padding vertical du header
+  final double verticalPadding;
+
+  /// Padding horizontal du header
+  final double horizontalPadding;
+
+  const BrandHeaderConfig({
+    this.backIcon = Icons.chevron_left,
+    this.foregroundColor,
+    this.backgroundColor,
+    this.iconTextSpacing = 12.0,
+    this.verticalPadding = 16.0,
+    this.horizontalPadding = 16.0,
+  });
+}
+
 /// Configuration pour le template landing screen
 class BrandLandingScreenConfig {
   /// Alignement du logo large en mode mobile
   final LandingLogoAlignment mobileLogoAlignment;
-  
+
   /// Padding en haut du logo en mode mobile
   final double mobileLogoPaddingTop;
-  
+
   /// Padding en bas du logo en mode mobile
   final double mobileLogoPaddingBottom;
-  
+
   /// Padding horizontal du logo en mode mobile
   final double mobileLogoPaddingHorizontal;
-  
+
   /// Couleur de fond en mode mobile (utilisée si pas d'image de fond)
   final Color? mobileBackgroundColor;
-  
+
   /// Largeur maximale de la carte en mode desktop
   final double desktopCardMaxWidth;
-  
+
   /// Hauteur du bandeau en mode desktop
   final double desktopTopBarHeight;
-  
+
   /// Padding horizontal du bandeau desktop
   final double desktopTopBarPaddingHorizontal;
-  
+
   /// Padding vertical du bandeau desktop
   final double desktopTopBarPaddingVertical;
-  
+
   /// Couleur de fond du bandeau desktop (null = transparent)
   final Color? desktopTopBarBackgroundColor;
-  
+
   /// Ombre du bandeau desktop (null = pas d'ombre)
   final BoxShadow? desktopTopBarBoxShadow;
-  
+
   /// Couleur de fond de la carte desktop
   final Color? desktopCardBackgroundColor;
-  
+
   /// Rayon des coins de la carte desktop
   final double desktopCardBorderRadius;
-  
+
   /// Élévation (ombre) de la carte desktop
   final double desktopCardElevation;
-  
+
   /// Padding intérieur de la carte desktop
   final EdgeInsets desktopCardPadding;
-  
+
   /// Breakpoint pour passer du mode mobile au desktop
   final double mobileBreakpoint;
 
