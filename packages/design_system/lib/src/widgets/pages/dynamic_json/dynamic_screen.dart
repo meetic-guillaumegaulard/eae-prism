@@ -13,10 +13,9 @@ import '../../atoms/logo_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration.
 /// 
-/// La navigation est gérée par le parent via le callback [onNavigate].
-/// Quand un bouton avec [apiEndpoint] est pressé, l'API est appelée et
-/// [onNavigate] est invoqué avec la réponse. Le parent peut alors faire
-/// un simple `Navigator.push` avec une nouvelle instance de DynamicScreen.
+/// La navigation est gérée par le parent via les callbacks:
+/// - [onNavigate] pour la navigation vers un nouvel écran (via apiEndpoint)
+/// - [onBack] pour revenir en arrière (quand apiEndpoint = ":back")
 /// 
 /// Exemple d'utilisation:
 /// ```dart
@@ -24,17 +23,10 @@ import '../../atoms/logo_eae.dart';
 ///   config: screenConfig,
 ///   baseUrl: 'http://localhost:3000/api',
 ///   onNavigate: (response, formValues) {
-///     Navigator.push(
-///       context,
-///       MaterialPageRoute(
-///         builder: (context) => DynamicScreen(
-///           config: response.screen,
-///           baseUrl: 'http://localhost:3000/api',
-///           initialValues: formValues,
-///           onNavigate: ...,
-///         ),
-///       ),
-///     );
+///     context.go('/screens/${screenId}', extra: {...});
+///   },
+///   onBack: () {
+///     context.pop();
 ///   },
 /// );
 /// ```
@@ -67,7 +59,7 @@ class DynamicScreen extends StatefulWidget {
   final Map<String, dynamic>? initialValues;
 
   /// Callback appelé quand une navigation est demandée (via apiEndpoint)
-  /// Le parent est responsable de faire le Navigator.push
+  /// Le parent est responsable de faire le Navigator.push ou context.go
   /// [response] contient la config du nouvel écran
   /// [formValues] contient toutes les valeurs du formulaire accumulées
   final void Function(NavigationResponse response, Map<String, dynamic> formValues)? onNavigate;
@@ -75,6 +67,10 @@ class DynamicScreen extends StatefulWidget {
   /// Appelé quand l'écran doit simplement être rafraîchi (navigation type: refresh)
   /// Si non fourni, le refresh sera géré en interne avec setState
   final void Function(ScreenConfig newConfig, Map<String, dynamic> formValues)? onRefresh;
+
+  /// Callback appelé quand un bouton avec apiEndpoint=":back" est pressé
+  /// Le parent est responsable de faire le Navigator.pop() ou context.pop()
+  final VoidCallback? onBack;
 
   const DynamicScreen({
     super.key,
@@ -89,6 +85,7 @@ class DynamicScreen extends StatefulWidget {
     this.initialValues,
     this.onNavigate,
     this.onRefresh,
+    this.onBack,
   }) : assert(
           jsonString != null || config != null,
           'Either jsonString or config must be provided',
@@ -104,6 +101,7 @@ class DynamicScreen extends StatefulWidget {
     void Function(Object error)? onApiError,
     void Function(String endpoint, Map<String, dynamic> data)? onApiRequest,
     void Function(NavigationResponse response, Map<String, dynamic> formValues)? onNavigate,
+    VoidCallback? onBack,
   }) {
     return FutureBuilder<String>(
       future: rootBundle.loadString(assetPath),
@@ -125,6 +123,7 @@ class DynamicScreen extends StatefulWidget {
           onApiError: onApiError,
           onApiRequest: onApiRequest,
           onNavigate: onNavigate,
+          onBack: onBack,
         );
       },
     );
@@ -242,6 +241,18 @@ class DynamicScreenState extends State<DynamicScreen> {
     }
   }
 
+  /// Gère les actions API (appelé par ComponentFactory)
+  void _handleApiAction(String endpoint) {
+    // Cas spécial: :back déclenche un retour en arrière
+    if (endpoint == ':back') {
+      widget.onBack?.call();
+      return;
+    }
+    
+    // Sinon, appel API normal
+    callApi(endpoint);
+  }
+
   /// Appelle l'API avec l'endpoint spécifié
   Future<void> callApi(String endpoint) async {
     if (_isLoading) return;
@@ -313,7 +324,7 @@ class DynamicScreenState extends State<DynamicScreen> {
     final factory = ComponentFactory(
       formState: _formState,
       actions: effectiveActions,
-      onApiAction: callApi,
+      onApiAction: _handleApiAction, // Utilise le handler qui gère :back
     );
 
     // Build the screen based on the template

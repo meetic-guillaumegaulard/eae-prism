@@ -5,6 +5,9 @@ import { Elysia, t } from "elysia";
  *
  * Ces routes démontrent comment le serveur peut retourner des configurations
  * d'écran avec des instructions de navigation.
+ *
+ * Pour le bouton "Retour", utilisez apiEndpoint: ":back" qui déclenche
+ * un Navigator.pop() standard côté client.
  */
 
 // Écran 1: Formulaire de base
@@ -216,7 +219,8 @@ const screen2Config = {
               props: {
                 label: "Retour",
                 variant: "outline",
-                apiEndpoint: "/screens/step1-back",
+                // :back déclenche un Navigator.pop() standard
+                apiEndpoint: ":back",
               },
             },
             {
@@ -336,7 +340,8 @@ const screen3Config = {
               props: {
                 label: "Retour",
                 variant: "outline",
-                apiEndpoint: "/screens/step2-back",
+                // :back déclenche un Navigator.pop() standard
+                apiEndpoint: ":back",
               },
             },
             {
@@ -457,7 +462,6 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
       }
       return {
         screen: config,
-        // Valeurs initiales du formulaire (peuvent venir d'une BDD en prod)
         formValues: {},
       };
     },
@@ -491,28 +495,6 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 300,
         },
         screen: screen2Config,
-        // Retourne les données reçues comme formValues pour les conserver
-        formValues: body as Record<string, unknown>,
-      };
-    },
-    {
-      body: t.Any(),
-    }
-  )
-
-  // Retour à l'étape 1 depuis étape 2
-  .post(
-    "/step1-back",
-    ({ body }) => {
-      console.log("Back to step 1 - Received data:", body);
-      return {
-        navigation: {
-          type: "navigate",
-          direction: "right",
-          scope: "content",
-          durationMs: 300,
-        },
-        screen: screen1Config,
         formValues: body as Record<string, unknown>,
       };
     },
@@ -534,27 +516,6 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 300,
         },
         screen: screen3Config,
-        formValues: body as Record<string, unknown>,
-      };
-    },
-    {
-      body: t.Any(),
-    }
-  )
-
-  // Retour à l'étape 2 depuis étape 3
-  .post(
-    "/step2-back",
-    ({ body }) => {
-      console.log("Back to step 2 - Received data:", body);
-      return {
-        navigation: {
-          type: "navigate",
-          direction: "right",
-          scope: "content",
-          durationMs: 300,
-        },
-        screen: screen2Config,
         formValues: body as Record<string, unknown>,
       };
     },
@@ -597,7 +558,6 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 400,
         },
         screen: screen1Config,
-        // Reset des formValues
         formValues: {},
       };
     },

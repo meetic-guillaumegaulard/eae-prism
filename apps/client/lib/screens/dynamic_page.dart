@@ -191,6 +191,17 @@ class _DynamicPageState extends State<DynamicPage> {
           },
         );
       },
+      // Retour en arrière standard (apiEndpoint: ":back")
+      onBack: () {
+        if (context.canPop()) {
+          debugPrint("message: back");
+          context.pop();
+        } else {
+          debugPrint("message: no back");
+          // Si on ne peut pas pop, retour à l'accueil
+          context.go('/');
+        }
+      },
     );
   }
 
