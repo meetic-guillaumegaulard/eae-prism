@@ -55,6 +55,9 @@ class MyApp extends StatelessWidget {
           // Direction de l'animation (depuis la réponse serveur)
           final direction = extra?['direction'] as String? ?? 'left';
           final durationMs = extra?['durationMs'] as int? ?? 300;
+          // Scope: 'full' = anime toute la page, 'content' = anime seulement le contenu
+          final scope = extra?['scope'] as String? ?? 'full';
+          final animateFullPage = scope == 'full';
 
           final child = DynamicPage(
             brand: brand,
@@ -79,9 +82,22 @@ class MyApp extends StatelessWidget {
             reverseTransitionDuration: Duration(milliseconds: durationMs),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              // Wrappe le child dans ScreenTransitionScope pour que
-              // ScreenLayoutEAE puisse appliquer l'animation au contenu uniquement
-              // (les barres top/bottom restent statiques)
+              // Si animateFullPage, on anime toute la page (barres incluses)
+              // Sinon, ScreenLayoutEAE anime seulement le contenu
+              if (animateFullPage) {
+                return ScreenTransitionScope(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  direction: transitionDirection,
+                  animateFullPage: true,
+                  child: _FullPageTransition(
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    direction: transitionDirection,
+                    child: child,
+                  ),
+                );
+              }
               return ScreenTransitionScope(
                 animation: animation,
                 secondaryAnimation: secondaryAnimation,
@@ -102,6 +118,64 @@ class MyApp extends StatelessWidget {
       theme: BrandTheme.getTheme(brand),
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+/// Widget pour animer toute la page (utilisé quand animateFullPage = true)
+class _FullPageTransition extends StatelessWidget {
+  final Animation<double> animation;
+  final Animation<double> secondaryAnimation;
+  final TransitionDirection direction;
+  final Widget child;
+
+  const _FullPageTransition({
+    required this.animation,
+    required this.secondaryAnimation,
+    required this.direction,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Offset de départ selon la direction
+    final Offset beginOffset = switch (direction) {
+      TransitionDirection.left => const Offset(1.0, 0.0),
+      TransitionDirection.right => const Offset(-1.0, 0.0),
+      TransitionDirection.up => const Offset(0.0, 1.0),
+      TransitionDirection.down => const Offset(0.0, -1.0),
+    };
+
+    final offsetAnimation = Tween<Offset>(
+      begin: beginOffset,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    // Animation de sortie de l'écran précédent
+    final exitOffset = switch (direction) {
+      TransitionDirection.left => const Offset(-0.3, 0.0),
+      TransitionDirection.right => const Offset(0.3, 0.0),
+      TransitionDirection.up => const Offset(0.0, -0.3),
+      TransitionDirection.down => const Offset(0.0, 0.3),
+    };
+
+    final secondaryOffsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: exitOffset,
+    ).animate(CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    return SlideTransition(
+      position: secondaryOffsetAnimation,
+      child: SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      ),
     );
   }
 }

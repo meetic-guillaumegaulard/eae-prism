@@ -21,11 +21,17 @@ class ScreenTransitionScope extends InheritedWidget {
   /// Direction de la transition
   final TransitionDirection direction;
 
+  /// Si true, anime toute la page (barres incluses).
+  /// Si false (défaut), seul le contenu est animé et les barres restent statiques.
+  /// Utile pour les écrans de confirmation/succès où toute la page doit transitionner.
+  final bool animateFullPage;
+
   const ScreenTransitionScope({
     super.key,
     required this.animation,
     required this.secondaryAnimation,
     this.direction = TransitionDirection.left,
+    this.animateFullPage = false,
     required super.child,
   });
 
@@ -38,7 +44,8 @@ class ScreenTransitionScope extends InheritedWidget {
   bool updateShouldNotify(ScreenTransitionScope oldWidget) {
     return animation != oldWidget.animation ||
         secondaryAnimation != oldWidget.secondaryAnimation ||
-        direction != oldWidget.direction;
+        direction != oldWidget.direction ||
+        animateFullPage != oldWidget.animateFullPage;
   }
 }
 
@@ -209,8 +216,10 @@ class _ScreenLayoutEAEState extends State<ScreenLayoutEAE> {
       ],
     );
 
-    // Si on a un scope de transition, applique l'animation au contenu uniquement
-    if (transitionScope != null) {
+    // Si on a un scope de transition ET que animateFullPage est false,
+    // applique l'animation au contenu uniquement (barres statiques)
+    // Si animateFullPage est true, le ScreenTransitionScope anime toute la page
+    if (transitionScope != null && !transitionScope.animateFullPage) {
       bodyContent = ClipRect(
         child: _AnimatedContent(
           animation: transitionScope.animation,

@@ -184,6 +184,7 @@ class _DynamicPageState extends State<DynamicPage> {
         final newScreenId = _extractScreenId(response);
         final direction = response.navigation.direction.name;
         final durationMs = response.navigation.durationMs;
+        final scope = response.navigation.scope.name;
 
         context.push(
           '/screens/$newScreenId',
@@ -192,6 +193,7 @@ class _DynamicPageState extends State<DynamicPage> {
             'formValues': formValues,
             'direction': direction,
             'durationMs': durationMs,
+            'scope': scope,
           },
         );
       },
