@@ -12,17 +12,30 @@ class FormStateManager extends ChangeNotifier {
   /// Field paths like "user.name" become {"user": {"name": "value"}}
   Map<String, dynamic> get nestedValues {
     final result = <String, dynamic>{};
-    
+
     for (final entry in _values.entries) {
       _setNestedValue(result, entry.key, entry.value);
     }
-    
+
     return result;
   }
 
   /// Get a specific value by field path
   T? getValue<T>(String field) {
-    return _values[field] as T?;
+    final value = _values[field];
+    if (value == null) return null;
+
+    // Handle List<dynamic> to List<String> conversion
+    if (value is List && T == List<String>) {
+      return value.map((e) => e.toString()).toList() as T;
+    }
+
+    // Handle List<dynamic> to List<dynamic> (just return as-is)
+    if (value is List) {
+      return value as T;
+    }
+
+    return value as T?;
   }
 
   /// Set a value for a field
@@ -71,7 +84,7 @@ class FormStateManager extends ChangeNotifier {
   void _setNestedValue(Map<String, dynamic> map, String path, dynamic value) {
     final parts = path.split('.');
     var current = map;
-    
+
     for (int i = 0; i < parts.length - 1; i++) {
       final part = parts[i];
       current[part] ??= <String, dynamic>{};
@@ -82,8 +95,7 @@ class FormStateManager extends ChangeNotifier {
         return;
       }
     }
-    
+
     current[parts.last] = value;
   }
 }
-

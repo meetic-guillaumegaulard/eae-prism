@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'navigation_response.dart';
+import 'navigation_storage.dart';
 import 'screen_config.dart';
-import 'component_config.dart';
 import 'component_factory.dart';
 import 'form_state_manager.dart';
+import 'dynamic_screen.dart';
 import '../../templates/screen_layout_eae.dart';
 import '../../templates/landing_screen_eae.dart';
 import '../../../models/brand.dart';
-import '../../atoms/logo_eae.dart';
 import '../../../utils/api_utils.dart';
 
 /// Callback appelé quand une action API est déclenchée
 typedef OnApiAction = void Function(String endpoint, Map<String, dynamic> data);
 
-/// Widget qui gère la navigation dynamique entre écrans avec animations
+/// Widget qui gère la navigation dynamique entre écrans
+///
+/// Utilise le Router natif de Flutter (Navigator) pour la navigation
 class DynamicScreenNavigator extends StatefulWidget {
   /// Configuration initiale de l'écran
   final ScreenConfig initialConfig;
 
-  /// URL de base de l'API (optionnel, utilise ApiUtils.baseUrl par défaut)
+  /// URL de base de l'API
   final String? baseUrl;
 
   /// Map des actions personnalisées
@@ -36,6 +38,15 @@ class DynamicScreenNavigator extends StatefulWidget {
   /// Callback de debug pour voir les requêtes
   final void Function(String endpoint, Map<String, dynamic> data)? onApiRequest;
 
+  /// Identifiant unique pour le stockage local
+  final String storageId;
+
+  /// Active la persistance des données en local
+  final bool persistData;
+
+  /// Valeurs initiales du formulaire
+  final Map<String, dynamic>? initialValues;
+
   const DynamicScreenNavigator({
     super.key,
     required this.initialConfig,
@@ -45,60 +56,94 @@ class DynamicScreenNavigator extends StatefulWidget {
     this.onSubmit,
     this.onApiError,
     this.onApiRequest,
+    this.storageId = 'default',
+    this.persistData = true,
+    this.initialValues,
   });
 
   @override
   State<DynamicScreenNavigator> createState() => DynamicScreenNavigatorState();
 }
 
-class DynamicScreenNavigatorState extends State<DynamicScreenNavigator>
-    with TickerProviderStateMixin {
-  late FormStateManager _formState;
+class DynamicScreenNavigatorState extends State<DynamicScreenNavigator> {
+  // Stockage local
+  late final NavigationStorage _storage;
+
+  // Valeurs accumulées du formulaire
+  Map<String, dynamic> _accumulatedFormValues = {};
+
+  // Configuration courante
   late ScreenConfig _currentConfig;
 
-  // Animation controllers
-  AnimationController? _contentAnimationController;
-  AnimationController? _fullAnimationController;
-  Animation<Offset>? _outgoingSlide;
-  Animation<Offset>? _incomingSlide;
+  // FormState pour l'écran courant
+  late FormStateManager _currentFormState;
 
-  // État de transition
-  bool _isTransitioning = false;
-  ScreenConfig? _nextConfig;
-  NavigationConfig? _currentNavigation;
+  // État
+  bool _isInitialized = false;
+  bool _isLoading = false;
 
-  // Pour les transitions content-only
-  bool _headerChanged = false;
-  bool _footerChanged = false;
-
-  Map<String, dynamic> get formValues => _formState.nestedValues;
+  /// Retourne toutes les valeurs accumulées du formulaire
+  Map<String, dynamic> get formValues => _accumulatedFormValues;
 
   @override
   void initState() {
     super.initState();
-    _formState = FormStateManager();
-    _formState.addListener(_onFormChanged);
+    _storage = NavigationStorage(storageId: widget.storageId);
     _currentConfig = widget.initialConfig;
+    _currentFormState = FormStateManager();
+    
+    // Initialise avec les valeurs initiales si fournies
+    if (widget.initialValues != null) {
+      _accumulatedFormValues = Map.from(widget.initialValues!);
+      _restoreFormValues(_accumulatedFormValues);
+    }
+
+    _currentFormState.addListener(_onFormChanged);
+
+    // Initialisation asynchrone
+    _initializeAsync();
+  }
+
+  Future<void> _initializeAsync() async {
+    if (widget.persistData) {
+      await _storage.init();
+
+      // Charge les données locales
+      final savedFormData = await _storage.loadFormData();
+      if (savedFormData.isNotEmpty) {
+        _accumulatedFormValues = savedFormData;
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
+    }
   }
 
   @override
   void dispose() {
-    _formState.removeListener(_onFormChanged);
-    _formState.dispose();
-    _contentAnimationController?.dispose();
-    _fullAnimationController?.dispose();
+    _currentFormState.removeListener(_onFormChanged);
+    _currentFormState.dispose();
     super.dispose();
   }
 
   void _onFormChanged() {
-    widget.onFormChanged?.call(_formState.nestedValues);
+    _accumulatedFormValues = {
+      ..._accumulatedFormValues,
+      ..._currentFormState.nestedValues,
+    };
+    widget.onFormChanged?.call(_accumulatedFormValues);
+
+    if (widget.persistData && !_isLoading) {
+      _storage.saveFormData(_accumulatedFormValues);
+    }
   }
 
   /// Appelle l'API avec l'endpoint et les données actuelles du formulaire
   Future<void> callApi(String endpoint) async {
-    if (_isTransitioning) return;
-
-    final data = _formState.nestedValues;
+    final data = _accumulatedFormValues;
     widget.onApiRequest?.call(endpoint, data);
 
     try {
@@ -109,229 +154,132 @@ class DynamicScreenNavigatorState extends State<DynamicScreenNavigator>
       );
 
       final navResponse = NavigationResponse.fromJson(response);
-      await _handleNavigation(navResponse);
+      await _handleNavigation(navResponse, endpoint);
     } catch (e) {
       widget.onApiError?.call(e);
     }
   }
 
   /// Gère la navigation en fonction de la réponse du serveur
-  Future<void> _handleNavigation(NavigationResponse response) async {
+  Future<void> _handleNavigation(
+      NavigationResponse response, String endpoint) async {
     final nav = response.navigation;
 
+    // Merge les valeurs du serveur avec nos valeurs locales si présentes
+    if (response.formValues != null) {
+      _accumulatedFormValues = {
+        ..._accumulatedFormValues,
+        ...response.formValues!,
+      };
+    }
+
     if (nav.type == NavigationType.refresh) {
-      // Simple refresh sans animation
+      // Simple refresh - pas d'animation
       setState(() {
         _currentConfig = response.screen;
-        _formState.clear(); // Reset form pour le nouvel écran
+        _currentFormState.clear();
+        _restoreFormValues(_accumulatedFormValues);
       });
-    } else {
-      // Navigation avec animation
-      await _animateTransition(nav, response.screen);
-    }
-  }
 
-  /// Anime la transition vers le nouvel écran
-  Future<void> _animateTransition(
-    NavigationConfig nav,
-    ScreenConfig nextScreen,
-  ) async {
-    final duration = Duration(milliseconds: nav.durationMs);
-
-    // Détermine les offsets de l'animation
-    final (outOffset, inOffset) = _getSlideOffsets(nav.direction);
-
-    if (nav.scope == NavigationScope.full) {
-      await _animateFullScreen(
-        nextScreen,
-        duration,
-        outOffset,
-        inOffset,
-      );
-    } else {
-      await _animateContentOnly(
-        nextScreen,
-        duration,
-        outOffset,
-        inOffset,
-      );
-    }
-  }
-
-  /// Retourne les offsets pour les animations d'entrée/sortie
-  (Offset, Offset) _getSlideOffsets(NavigationDirection direction) {
-    return switch (direction) {
-      NavigationDirection.left => (const Offset(-1, 0), const Offset(1, 0)),
-      NavigationDirection.right => (const Offset(1, 0), const Offset(-1, 0)),
-      NavigationDirection.up => (const Offset(0, -1), const Offset(0, 1)),
-      NavigationDirection.down => (const Offset(0, 1), const Offset(0, -1)),
-    };
-  }
-
-  /// Animation sur tout l'écran
-  Future<void> _animateFullScreen(
-    ScreenConfig nextScreen,
-    Duration duration,
-    Offset outOffset,
-    Offset inOffset,
-  ) async {
-    _fullAnimationController?.dispose();
-    _fullAnimationController = AnimationController(
-      vsync: this,
-      duration: duration,
-    );
-
-    _outgoingSlide = Tween<Offset>(
-      begin: Offset.zero,
-      end: outOffset,
-    ).animate(CurvedAnimation(
-      parent: _fullAnimationController!,
-      curve: Curves.easeInOut,
-    ));
-
-    _incomingSlide = Tween<Offset>(
-      begin: inOffset,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _fullAnimationController!,
-      curve: Curves.easeInOut,
-    ));
-
-    setState(() {
-      _isTransitioning = true;
-      _nextConfig = nextScreen;
-      _currentNavigation = NavigationConfig(
-        type: NavigationType.navigate,
-        scope: NavigationScope.full,
-      );
-    });
-
-    await _fullAnimationController!.forward();
-
-    setState(() {
-      _currentConfig = nextScreen;
-      _isTransitioning = false;
-      _nextConfig = null;
-      _currentNavigation = null;
-      _formState.clear();
-    });
-  }
-
-  /// Animation uniquement sur le contenu, bandeaux fixes
-  Future<void> _animateContentOnly(
-    ScreenConfig nextScreen,
-    Duration duration,
-    Offset outOffset,
-    Offset inOffset,
-  ) async {
-    _contentAnimationController?.dispose();
-    _contentAnimationController = AnimationController(
-      vsync: this,
-      duration: duration,
-    );
-
-    _outgoingSlide = Tween<Offset>(
-      begin: Offset.zero,
-      end: outOffset,
-    ).animate(CurvedAnimation(
-      parent: _contentAnimationController!,
-      curve: Curves.easeInOut,
-    ));
-
-    _incomingSlide = Tween<Offset>(
-      begin: inOffset,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _contentAnimationController!,
-      curve: Curves.easeInOut,
-    ));
-
-    // Vérifie si les bandeaux ont changé
-    _headerChanged = !_areConfigsEqual(
-      _currentConfig.header,
-      nextScreen.header,
-    );
-    _footerChanged = !_areConfigsEqual(
-      _currentConfig.footer,
-      nextScreen.footer,
-    );
-
-    setState(() {
-      _isTransitioning = true;
-      _nextConfig = nextScreen;
-      _currentNavigation = NavigationConfig(
-        type: NavigationType.navigate,
-        scope: NavigationScope.content,
-      );
-      // Mise à jour instantanée des bandeaux s'ils ont changé
-      if (_headerChanged || _footerChanged) {
-        // Les bandeaux seront reconstruits avec la nouvelle config
+      if (widget.persistData) {
+        await _storage.saveCurrentPath(endpoint);
+        await _storage.saveFormData(_accumulatedFormValues);
       }
-    });
-
-    await _contentAnimationController!.forward();
-
-    setState(() {
-      _currentConfig = nextScreen;
-      _isTransitioning = false;
-      _nextConfig = null;
-      _currentNavigation = null;
-      _headerChanged = false;
-      _footerChanged = false;
-      _formState.clear();
-    });
-  }
-
-  /// Compare deux listes de ComponentConfig
-  bool _areConfigsEqual(
-    List<ComponentConfig>? a,
-    List<ComponentConfig>? b,
-  ) {
-    if (a == null && b == null) return true;
-    if (a == null || b == null) return false;
-    if (a.length != b.length) return false;
-    // Comparaison simple par sérialisation JSON
-    for (var i = 0; i < a.length; i++) {
-      if (a[i].toJson().toString() != b[i].toJson().toString()) {
-        return false;
+    } else {
+      // Navigation : on push une nouvelle instance de DynamicScreen
+      // Cela permet d'utiliser le Navigator natif de Flutter (et donc le back button, animations, etc.)
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            settings: RouteSettings(name: endpoint),
+            builder: (context) => DynamicScreen(
+              config: response.screen,
+              baseUrl: widget.baseUrl,
+              actions: widget.actions,
+              onFormChanged: widget.onFormChanged,
+              onSubmit: widget.onSubmit,
+              onApiError: widget.onApiError,
+              onApiRequest: widget.onApiRequest,
+              initialValues: _accumulatedFormValues,
+            ),
+          ),
+        );
       }
     }
-    return true;
+  }
+
+  /// Efface toutes les données persistées et réinitialise
+  Future<void> clearAndReset() async {
+    if (widget.persistData) {
+      await _storage.clear();
+    }
+
+    _accumulatedFormValues.clear();
+
+    // On pop jusqu'à la racine si on est dans une stack de navigation
+    if (Navigator.canPop(context)) {
+       Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {
+      // Sinon on reset l'état local
+      _currentFormState.removeListener(_onFormChanged);
+      _currentFormState.dispose();
+      _currentFormState = FormStateManager();
+      _currentFormState.addListener(_onFormChanged);
+
+      setState(() {
+        _currentConfig = widget.initialConfig;
+      });
+    }
+  }
+
+  void _restoreFormValues(Map<String, dynamic> values) {
+    _flattenAndRestore(values, '');
+  }
+
+  void _flattenAndRestore(Map<String, dynamic> values, String prefix) {
+    for (final entry in values.entries) {
+      final key = prefix.isEmpty ? entry.key : '$prefix.${entry.key}';
+      if (entry.value is Map<String, dynamic>) {
+        _flattenAndRestore(entry.value as Map<String, dynamic>, key);
+      } else {
+        _currentFormState.setValue(key, entry.value);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final factory = _createFactory();
-
-    if (!_isTransitioning) {
-      return _buildScreen(_currentConfig, factory);
+    if (!_isInitialized) {
+      return const Center(child: CircularProgressIndicator());
     }
 
-    // En transition
-    if (_currentNavigation?.scope == NavigationScope.full) {
-      return _buildFullTransition(factory);
-    } else {
-      return _buildContentTransition(factory);
-    }
+    return _buildContent();
+  }
+
+  Widget _buildContent() {
+      return _buildScreenContent(_currentConfig, _currentFormState);
+  }
+
+  Widget _buildScreenContent(ScreenConfig config, FormStateManager formState) {
+    final factory = ComponentFactory(
+      formState: formState,
+      actions: _buildEffectiveActions(),
+      onApiAction: callApi,
+    );
+
+    return _buildScreen(config, factory);
   }
 
   Map<String, VoidCallback> _buildEffectiveActions() {
     final actions = Map<String, VoidCallback>.from(widget.actions);
 
-    // Ajoute l'action submit si callback fourni
     if (widget.onSubmit != null && !actions.containsKey('submit')) {
-      actions['submit'] = () => widget.onSubmit!(_formState.nestedValues);
+      actions['submit'] = () => widget.onSubmit!(_accumulatedFormValues);
     }
 
-    return actions;
-  }
+    actions['reset'] = () => clearAndReset();
 
-  ComponentFactory _createFactory({FormStateManager? formState}) {
-    return ComponentFactory(
-      formState: formState ?? _formState,
-      actions: _buildEffectiveActions(),
-      onApiAction: callApi,
-    );
+    return actions;
   }
 
   Widget _buildScreen(ScreenConfig config, ComponentFactory factory) {
@@ -341,134 +289,48 @@ class DynamicScreenNavigatorState extends State<DynamicScreenNavigator>
       case 'landing':
         return _buildLandingScreen(config, factory);
       default:
-        return _buildError('Unknown template: ${config.template}');
+        return _buildGenericScreen(config, factory);
     }
-  }
-
-  Widget _buildFullTransition(ComponentFactory factory) {
-    final currentFactory = _createFactory();
-    final nextFactory = _createFactory(formState: FormStateManager());
-
-    return Stack(
-      children: [
-        // Écran sortant
-        SlideTransition(
-          position: _outgoingSlide!,
-          child: _buildScreen(_currentConfig, currentFactory),
-        ),
-        // Écran entrant
-        SlideTransition(
-          position: _incomingSlide!,
-          child: _buildScreen(_nextConfig!, nextFactory),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContentTransition(ComponentFactory factory) {
-    // Pour les transitions content-only, on utilise les bandeaux du nouvel écran
-    // si ils ont changé (changement instantané)
-    final headerConfig =
-        _headerChanged ? _nextConfig!.header : _currentConfig.header;
-    final footerConfig =
-        _footerChanged ? _nextConfig!.footer : _currentConfig.footer;
-
-    final currentFactory = _createFactory();
-
-    Widget? topBar;
-    if (headerConfig != null && headerConfig.isNotEmpty) {
-      topBar = headerConfig.length == 1
-          ? currentFactory.build(headerConfig.first)
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: headerConfig.map((c) => currentFactory.build(c)).toList(),
-            );
-    }
-
-    Widget? bottomBar;
-    if (footerConfig != null && footerConfig.isNotEmpty) {
-      bottomBar = footerConfig.length == 1
-          ? currentFactory.build(footerConfig.first)
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: footerConfig.map((c) => currentFactory.build(c)).toList(),
-            );
-    }
-
-    // Contenu animé
-    final currentContent = _buildContentWidget(_currentConfig, currentFactory);
-    final nextFactory = _createFactory(formState: FormStateManager());
-    final nextContent = _buildContentWidget(_nextConfig!, nextFactory);
-
-    final animatedContent = ClipRect(
-      child: Stack(
-        children: [
-          SlideTransition(
-            position: _outgoingSlide!,
-            child: currentContent,
-          ),
-          SlideTransition(
-            position: _incomingSlide!,
-            child: nextContent,
-          ),
-        ],
-      ),
-    );
-
-    // Récupère la couleur de fond
-    Color? backgroundColor;
-    final bgColorString = _currentConfig.getProp<String>('backgroundColor');
-    if (bgColorString != null) {
-      backgroundColor = _parseColor(bgColorString);
-    }
-
-    return ScreenLayoutEAE(
-      topBar: topBar,
-      content: animatedContent,
-      bottomBar: bottomBar,
-      backgroundColor: backgroundColor,
-    );
-  }
-
-  Widget _buildContentWidget(ScreenConfig config, ComponentFactory factory) {
-    if (config.content.length == 1) {
-      return factory.build(config.content.first);
-    }
-    return Column(
-      children: config.content.map((c) => factory.build(c)).toList(),
-    );
   }
 
   Widget _buildScreenLayout(ScreenConfig config, ComponentFactory factory) {
+    // Build header widget if provided
     Widget? topBar;
     if (config.header != null && config.header!.isNotEmpty) {
-      topBar = config.header!.length == 1
-          ? factory.build(config.header!.first)
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: config.header!.map((c) => factory.build(c)).toList(),
-            );
+      if (config.header!.length == 1) {
+        topBar = factory.build(config.header!.first);
+      } else {
+        topBar = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: config.header!.map((comp) => factory.build(comp)).toList(),
+        );
+      }
     }
 
+    // Build content widget
     Widget content;
     if (config.content.length == 1) {
       content = factory.build(config.content.first);
     } else {
       content = Column(
-        children: config.content.map((c) => factory.build(c)).toList(),
+        children: config.content.map((comp) => factory.build(comp)).toList(),
       );
     }
 
+    // Build footer widget if provided
     Widget? bottomBar;
     if (config.footer != null && config.footer!.isNotEmpty) {
-      bottomBar = config.footer!.length == 1
-          ? factory.build(config.footer!.first)
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: config.footer!.map((c) => factory.build(c)).toList(),
-            );
+      if (config.footer!.length == 1) {
+        bottomBar = factory.build(config.footer!.first);
+      } else {
+        bottomBar = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: config.footer!.map((comp) => factory.build(comp)).toList(),
+        );
+      }
     }
 
+    // Get background color from props
     Color? backgroundColor;
     final bgColorString = config.getProp<String>('backgroundColor');
     if (bgColorString != null) {
@@ -484,90 +346,68 @@ class DynamicScreenNavigatorState extends State<DynamicScreenNavigator>
   }
 
   Widget _buildLandingScreen(ScreenConfig config, ComponentFactory factory) {
-    final brandString = LandingScreenProps.getBrand(config);
-    final backgroundImageMobile =
-        LandingScreenProps.getBackgroundImageMobile(config);
-    final backgroundImageDesktop =
-        LandingScreenProps.getBackgroundImageDesktop(config);
-    final mobileLogoTypeString = LandingScreenProps.getMobileLogoType(config);
-    final desktopLogoTypeString = LandingScreenProps.getDesktopLogoType(config);
-    final mobileLogoHeight = LandingScreenProps.getMobileLogoHeight(config);
-    final desktopLogoHeight = LandingScreenProps.getDesktopLogoHeight(config);
-    final topBarButtonText = LandingScreenProps.getTopBarButtonText(config);
-    final topBarButtonAction = LandingScreenProps.getTopBarButtonAction(config);
-
-    final brand = _parseBrand(brandString);
-    if (brand == null) {
-      return _buildError(
-          'Brand is required for landing template. Use: match, meetic, okc, or pof');
-    }
-
-    final mobileLogoType =
-        _parseLogoType(mobileLogoTypeString) ?? LogoTypeEAE.onDark;
-    final desktopLogoType =
-        _parseLogoType(desktopLogoTypeString) ?? LogoTypeEAE.small;
-
+    // Build content widget
     Widget content;
     if (config.content.length == 1) {
       content = factory.build(config.content.first);
     } else {
       content = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: config.content.map((c) => factory.build(c)).toList(),
+        children: config.content.map((comp) => factory.build(comp)).toList(),
       );
     }
 
+    // Build footer widget if provided
     Widget? bottomBar;
     if (config.footer != null && config.footer!.isNotEmpty) {
-      bottomBar = config.footer!.length == 1
-          ? factory.build(config.footer!.first)
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: config.footer!.map((c) => factory.build(c)).toList(),
-            );
+      if (config.footer!.length == 1) {
+        bottomBar = factory.build(config.footer!.first);
+      } else {
+        bottomBar = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: config.footer!.map((comp) => factory.build(comp)).toList(),
+        );
+      }
     }
 
-    VoidCallback? onTopBarButtonPressed;
-    if (topBarButtonAction != null) {
-      final effectiveActions = _buildEffectiveActions();
-      onTopBarButtonPressed = effectiveActions[topBarButtonAction];
-    }
-
-    ImageProvider? mobileImage;
-    if (backgroundImageMobile != null) {
-      mobileImage = backgroundImageMobile.startsWith('http')
-          ? NetworkImage(backgroundImageMobile) as ImageProvider
-          : AssetImage(backgroundImageMobile) as ImageProvider;
-    }
-
-    ImageProvider? desktopImage;
-    if (backgroundImageDesktop != null) {
-      desktopImage = backgroundImageDesktop.startsWith('http')
-          ? NetworkImage(backgroundImageDesktop) as ImageProvider
-          : AssetImage(backgroundImageDesktop) as ImageProvider;
-    }
+    // Get landing config
+    final landingConfig = LandingScreenConfig(
+      brand: _parseBrand(config.getProp<String>('brand')) ?? Brand.match,
+    );
 
     return LandingScreenEAE(
-      config: LandingScreenConfig(
-        brand: brand,
-        backgroundImageMobile: mobileImage,
-        backgroundImageDesktop: desktopImage,
-        mobileLogoType: mobileLogoType,
-        desktopLogoType: desktopLogoType,
-        mobileLogoHeight: mobileLogoHeight,
-        desktopLogoHeight: desktopLogoHeight,
-        topBarButtonText: topBarButtonText,
-        onTopBarButtonPressed: onTopBarButtonPressed,
-      ),
+      config: landingConfig,
       content: content,
       bottomBar: bottomBar,
     );
   }
 
-  static Brand? _parseBrand(String? brandString) {
-    if (brandString == null) return null;
-    return switch (brandString.toLowerCase()) {
+  Widget _buildGenericScreen(ScreenConfig config, ComponentFactory factory) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            if (config.header != null)
+              ...config.header!.map((comp) => factory.build(comp)),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: config.content
+                      .map((comp) => factory.build(comp))
+                      .toList(),
+                ),
+              ),
+            ),
+            if (config.footer != null)
+              ...config.footer!.map((comp) => factory.build(comp)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Brand? _parseBrand(String? brandName) {
+    if (brandName == null) return null;
+    return switch (brandName.toLowerCase()) {
       'match' => Brand.match,
       'meetic' => Brand.meetic,
       'okc' || 'okcupid' => Brand.okc,
@@ -576,48 +416,15 @@ class DynamicScreenNavigatorState extends State<DynamicScreenNavigator>
     };
   }
 
-  static LogoTypeEAE? _parseLogoType(String? logoTypeString) {
-    if (logoTypeString == null) return null;
-    return switch (logoTypeString.toLowerCase()) {
-      'small' => LogoTypeEAE.small,
-      'ondark' => LogoTypeEAE.onDark,
-      'onwhite' => LogoTypeEAE.onWhite,
-      _ => null,
-    };
-  }
-
-  static Color? _parseColor(String colorString) {
-    if (colorString.startsWith('#')) {
-      final hexCode = colorString.substring(1);
-      if (hexCode.length == 6) {
-        return Color(int.parse('FF$hexCode', radix: 16));
-      } else if (hexCode.length == 8) {
-        return Color(int.parse(hexCode, radix: 16));
+  Color? _parseColor(String colorStr) {
+    if (colorStr.startsWith('#')) {
+      final hex = colorStr.substring(1);
+      if (hex.length == 6) {
+        return Color(int.parse('FF$hex', radix: 16));
+      } else if (hex.length == 8) {
+        return Color(int.parse(hex, radix: 16));
       }
     }
     return null;
   }
-
-  Widget _buildError(String message) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
-

@@ -4,6 +4,7 @@ import 'screen_config.dart';
 enum NavigationType {
   /// Rafraîchit l'écran courant sans animation
   refresh,
+
   /// Navigation vers un nouvel écran avec animation
   navigate,
 }
@@ -12,10 +13,13 @@ enum NavigationType {
 enum NavigationDirection {
   /// L'écran actuel part vers la gauche, le nouveau arrive de la droite
   left,
+
   /// L'écran actuel part vers la droite, le nouveau arrive de la gauche
   right,
+
   /// L'écran actuel part vers le haut, le nouveau arrive du bas
   up,
+
   /// L'écran actuel part vers le bas, le nouveau arrive du haut
   down,
 }
@@ -24,6 +28,7 @@ enum NavigationDirection {
 enum NavigationScope {
   /// Animation sur tout l'écran
   full,
+
   /// Animation uniquement sur le contenu, les bandeaux fixes restent en place
   content,
 }
@@ -99,9 +104,14 @@ class NavigationResponse {
   /// Configuration du nouvel écran
   final ScreenConfig screen;
 
+  /// Valeurs de formulaire retournées par le serveur (optionnel)
+  /// Ces valeurs seront mergées avec les valeurs locales
+  final Map<String, dynamic>? formValues;
+
   const NavigationResponse({
     required this.navigation,
     required this.screen,
+    this.formValues,
   });
 
   factory NavigationResponse.fromJson(Map<String, dynamic> json) {
@@ -112,6 +122,7 @@ class NavigationResponse {
       screen: ScreenConfig.fromJson(
         json['screen'] as Map<String, dynamic>,
       ),
+      formValues: json['formValues'] as Map<String, dynamic>?,
     );
   }
 
@@ -119,7 +130,7 @@ class NavigationResponse {
     return {
       'navigation': navigation.toJson(),
       'screen': screen.toJson(),
+      if (formValues != null) 'formValues': formValues,
     };
   }
 }
-

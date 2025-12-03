@@ -13,7 +13,7 @@ import '../../atoms/logo_eae.dart';
 
 /// Widget that builds a screen dynamically from JSON configuration
 /// Form values are automatically collected and accessible via [formValues]
-/// 
+///
 /// Pour activer la navigation dynamique avec appels API:
 /// - Définissez [baseUrl] pour pointer vers votre serveur
 /// - Utilisez la propriété "apiEndpoint" sur les boutons au lieu de "action"
@@ -47,6 +47,9 @@ class DynamicScreen extends StatefulWidget {
   /// Callback de debug pour voir les requêtes API
   final void Function(String endpoint, Map<String, dynamic> data)? onApiRequest;
 
+  /// Valeurs initiales du formulaire
+  final Map<String, dynamic>? initialValues;
+
   const DynamicScreen({
     Key? key,
     this.jsonString,
@@ -57,6 +60,7 @@ class DynamicScreen extends StatefulWidget {
     this.baseUrl,
     this.onApiError,
     this.onApiRequest,
+    this.initialValues,
   })  : assert(
           jsonString != null || config != null,
           'Either jsonString or config must be provided',
@@ -129,7 +133,7 @@ class DynamicScreenState extends State<DynamicScreen> {
   late final FormStateManager _formState;
   ScreenConfig? _parsedConfig;
   String? _error;
-  
+
   // Clé pour accéder au DynamicScreenNavigator
   final GlobalKey<DynamicScreenNavigatorState> _navigatorKey = GlobalKey();
 
@@ -137,13 +141,16 @@ class DynamicScreenState extends State<DynamicScreen> {
   Map<String, dynamic> get formValues => _formState.values;
 
   /// Get the current form values as a nested JSON structure
-  Map<String, dynamic> get nestedFormValues => 
+  Map<String, dynamic> get nestedFormValues =>
       _navigatorKey.currentState?.formValues ?? _formState.nestedValues;
 
   @override
   void initState() {
     super.initState();
     _formState = FormStateManager();
+    if (widget.initialValues != null) {
+      _formState.setValues(widget.initialValues!);
+    }
     _formState.addListener(_onFormChanged);
     _parseConfig();
   }
@@ -221,6 +228,7 @@ class DynamicScreenState extends State<DynamicScreen> {
         onSubmit: widget.onSubmit,
         onApiError: widget.onApiError,
         onApiRequest: widget.onApiRequest,
+        initialValues: widget.initialValues,
       );
     }
 
@@ -242,7 +250,7 @@ class DynamicScreenState extends State<DynamicScreen> {
     // Build the screen based on the template
     return _buildTemplate(_parsedConfig!, factory);
   }
-  
+
   /// Vérifie si la config contient des boutons avec apiEndpoint
   bool _hasApiEndpoints(ScreenConfig config) {
     bool checkComponent(ComponentConfig comp) {
@@ -365,8 +373,10 @@ class DynamicScreenState extends State<DynamicScreen> {
     }
 
     // Parse logo types
-    final mobileLogoType = _parseLogoType(mobileLogoTypeString) ?? LogoTypeEAE.onDark;
-    final desktopLogoType = _parseLogoType(desktopLogoTypeString) ?? LogoTypeEAE.small;
+    final mobileLogoType =
+        _parseLogoType(mobileLogoTypeString) ?? LogoTypeEAE.onDark;
+    final desktopLogoType =
+        _parseLogoType(desktopLogoTypeString) ?? LogoTypeEAE.small;
 
     // Build content widget
     Widget content;
