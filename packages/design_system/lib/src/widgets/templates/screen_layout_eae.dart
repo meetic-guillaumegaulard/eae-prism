@@ -1,13 +1,61 @@
 import 'package:flutter/material.dart';
 import '../../theme/brand_theme_extensions.dart';
 
+/// Direction de la transition
+enum TransitionDirection {
+  left,
+  right,
+  up,
+  down,
+}
+
+/// InheritedWidget qui fournit les données de transition aux descendants.
+/// Utilisé pour animer uniquement le contenu tout en gardant les barres statiques.
+class ScreenTransitionScope extends InheritedWidget {
+  /// Animation principale (entrée de la nouvelle page)
+  final Animation<double> animation;
+
+  /// Animation secondaire (sortie de la page précédente)
+  final Animation<double> secondaryAnimation;
+
+  /// Direction de la transition
+  final TransitionDirection direction;
+
+  const ScreenTransitionScope({
+    super.key,
+    required this.animation,
+    required this.secondaryAnimation,
+    this.direction = TransitionDirection.left,
+    required super.child,
+  });
+
+  /// Récupère le scope de transition si disponible
+  static ScreenTransitionScope? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ScreenTransitionScope>();
+  }
+
+  @override
+  bool updateShouldNotify(ScreenTransitionScope oldWidget) {
+    return animation != oldWidget.animation ||
+        secondaryAnimation != oldWidget.secondaryAnimation ||
+        direction != oldWidget.direction;
+  }
+}
+
 /// Template component that manages screen layout with optional fixed top/bottom bars
-/// and scroll indicators
+/// and scroll indicators.
+///
+/// Uses Scaffold's native appBar and bottomNavigationBar.
+/// When wrapped in a [ScreenTransitionScope], applies the transition animation
+/// only to the content, keeping top and bottom bars static.
 class ScreenLayoutEAE extends StatefulWidget {
-  /// Optional fixed top bar widget
+  /// Optional fixed top bar widget (will be wrapped in a PreferredSize AppBar)
   final Widget? topBar;
 
-  /// Optional fixed bottom bar widget
+  /// Height of the top bar (required if topBar is provided)
+  final double topBarHeight;
+
+  /// Optional fixed bottom bar widget (uses Scaffold's bottomNavigationBar)
   final Widget? bottomBar;
 
   /// Main scrollable content
@@ -19,6 +67,7 @@ class ScreenLayoutEAE extends StatefulWidget {
   const ScreenLayoutEAE({
     Key? key,
     this.topBar,
+    this.topBarHeight = kToolbarHeight,
     this.bottomBar,
     required this.content,
     this.backgroundColor,
@@ -63,7 +112,8 @@ class _ScreenLayoutEAEState extends State<ScreenLayoutEAE> {
     final isScrollable = position.maxScrollExtent > 0;
 
     // Check if we can scroll down (not at the bottom)
-    final canScrollDown = isScrollable && position.pixels < position.maxScrollExtent - 1;
+    final canScrollDown =
+        isScrollable && position.pixels < position.maxScrollExtent - 1;
 
     // Check if we can scroll up (not at the top)
     final canScrollUp = isScrollable && position.pixels > 1;
@@ -82,113 +132,224 @@ class _ScreenLayoutEAEState extends State<ScreenLayoutEAE> {
 
   @override
   Widget build(BuildContext context) {
-    final screenLayoutTheme = Theme.of(context).extension<BrandScreenLayoutTheme>();
-    final backgroundColor = widget.backgroundColor ?? 
-        screenLayoutTheme?.backgroundColor ?? 
+    final screenLayoutTheme =
+        Theme.of(context).extension<BrandScreenLayoutTheme>();
+    final backgroundColor = widget.backgroundColor ??
+        screenLayoutTheme?.backgroundColor ??
         Theme.of(context).colorScheme.surface;
+
+    // Récupère le scope de transition si disponible
+    final transitionScope = ScreenTransitionScope.maybeOf(context);
+
+    // Construit le contenu scrollable
+    Widget bodyContent = Stack(
+      children: [
+        // Main scrollable content
+        SingleChildScrollView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: widget.content,
+        ),
+
+        // Top gradient indicator (visible when can scroll up)
+        if (_canScrollUp && widget.topBar != null)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: IgnorePointer(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: _canScrollUp ? 1.0 : 0.0,
+                child: Container(
+                  height: screenLayoutTheme?.scrollGradientHeight ?? 16.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        (screenLayoutTheme?.scrollGradientColor ?? Colors.black)
+                            .withValues(alpha: 0.1),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        // Bottom gradient indicator (visible when can scroll down)
+        if (_canScrollDown && widget.bottomBar != null)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: IgnorePointer(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: _canScrollDown ? 1.0 : 0.0,
+                child: Container(
+                  height: screenLayoutTheme?.scrollGradientHeight ?? 16.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        (screenLayoutTheme?.scrollGradientColor ?? Colors.black)
+                            .withValues(alpha: 0.1),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+
+    // Si on a un scope de transition, applique l'animation au contenu uniquement
+    if (transitionScope != null) {
+      bodyContent = ClipRect(
+        child: _AnimatedContent(
+          animation: transitionScope.animation,
+          secondaryAnimation: transitionScope.secondaryAnimation,
+          direction: transitionScope.direction,
+          child: bodyContent,
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: SafeArea(
+      // AppBar statique (pas animée)
+      appBar: widget.topBar != null
+          ? _TopBarWrapper(
+              height: widget.topBarHeight,
+              showDivider: _showTopDivider,
+              dividerThickness: screenLayoutTheme?.dividerThickness ?? 1.0,
+              dividerColor:
+                  screenLayoutTheme?.dividerColor ?? const Color(0xFFE0E0E0),
+              backgroundColor: backgroundColor,
+              child: widget.topBar!,
+            )
+          : null,
+      // BottomNavigationBar statique (pas animée)
+      bottomNavigationBar: widget.bottomBar != null
+          ? _BottomBarWrapper(
+              showDivider: _showBottomDivider,
+              dividerThickness: screenLayoutTheme?.dividerThickness ?? 1.0,
+              dividerColor:
+                  screenLayoutTheme?.dividerColor ?? const Color(0xFFE0E0E0),
+              backgroundColor: backgroundColor,
+              child: widget.bottomBar!,
+            )
+          : null,
+      body: bodyContent,
+    );
+  }
+}
+
+/// Widget qui applique l'animation de transition au contenu
+class _AnimatedContent extends StatelessWidget {
+  final Animation<double> animation;
+  final Animation<double> secondaryAnimation;
+  final TransitionDirection direction;
+  final Widget child;
+
+  const _AnimatedContent({
+    required this.animation,
+    required this.secondaryAnimation,
+    required this.direction,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Offset de départ selon la direction (entrée de la nouvelle page)
+    final Offset beginOffset = switch (direction) {
+      TransitionDirection.left => const Offset(1.0, 0.0),
+      TransitionDirection.right => const Offset(-1.0, 0.0),
+      TransitionDirection.up => const Offset(0.0, 1.0),
+      TransitionDirection.down => const Offset(0.0, -1.0),
+    };
+
+    final offsetAnimation = Tween<Offset>(
+      begin: beginOffset,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    // Animation de sortie (page qui part)
+    final exitOffset = switch (direction) {
+      TransitionDirection.left => const Offset(-0.3, 0.0),
+      TransitionDirection.right => const Offset(0.3, 0.0),
+      TransitionDirection.up => const Offset(0.0, -0.3),
+      TransitionDirection.down => const Offset(0.0, 0.3),
+    };
+
+    final secondaryOffsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: exitOffset,
+    ).animate(CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    return SlideTransition(
+      position: secondaryOffsetAnimation,
+      child: SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      ),
+    );
+  }
+}
+
+/// Wrapper for top bar that implements PreferredSizeWidget for Scaffold.appBar
+class _TopBarWrapper extends StatelessWidget implements PreferredSizeWidget {
+  final double height;
+  final bool showDivider;
+  final double dividerThickness;
+  final Color dividerColor;
+  final Color backgroundColor;
+  final Widget child;
+
+  const _TopBarWrapper({
+    required this.height,
+    required this.showDivider,
+    required this.dividerThickness,
+    required this.dividerColor,
+    required this.backgroundColor,
+    required this.child,
+  });
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(height + (showDivider ? dividerThickness : 0));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+        bottom: false,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Top bar (fixed)
-            if (widget.topBar != null) ...[
-              widget.topBar!,
-              // Divider below top bar (only visible when content is scrollable)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                height: _showTopDivider ? (screenLayoutTheme?.dividerThickness ?? 1.0) : 0,
-                color: _showTopDivider
-                    ? (screenLayoutTheme?.dividerColor ?? const Color(0xFFE0E0E0))
-                    : Colors.transparent,
-              ),
-            ],
-
-            // Scrollable content with gradient indicators
-            Expanded(
-              child: Stack(
-                children: [
-                  // Main scrollable content
-                  SingleChildScrollView(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: widget.content,
-                  ),
-
-                  // Top gradient indicator (visible when can scroll up)
-                  if (_canScrollUp && widget.topBar != null)
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: IgnorePointer(
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 200),
-                          opacity: _canScrollUp ? 1.0 : 0.0,
-                          child: Container(
-                            height: screenLayoutTheme?.scrollGradientHeight ?? 16.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  (screenLayoutTheme?.scrollGradientColor ??
-                                          Colors.black)
-                                      .withValues(alpha: 0.1),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  // Bottom gradient indicator (visible when can scroll down)
-                  if (_canScrollDown && widget.bottomBar != null)
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: IgnorePointer(
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 200),
-                          opacity: _canScrollDown ? 1.0 : 0.0,
-                          child: Container(
-                            height: screenLayoutTheme?.scrollGradientHeight ?? 16.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  (screenLayoutTheme?.scrollGradientColor ??
-                                          Colors.black)
-                                      .withValues(alpha: 0.1),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+            SizedBox(
+              height: height,
+              child: child,
             ),
-
-            // Bottom bar (fixed)
-            if (widget.bottomBar != null) ...[
-              // Divider above bottom bar (only visible when content is scrollable)
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                height: _showBottomDivider ? (screenLayoutTheme?.dividerThickness ?? 1.0) : 0,
-                color: _showBottomDivider
-                    ? (screenLayoutTheme?.dividerColor ?? const Color(0xFFE0E0E0))
-                    : Colors.transparent,
-              ),
-              widget.bottomBar!,
-            ],
+            // Animated divider below top bar
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: showDivider ? dividerThickness : 0,
+              color: showDivider ? dividerColor : Colors.transparent,
+            ),
           ],
         ),
       ),
@@ -196,3 +357,41 @@ class _ScreenLayoutEAEState extends State<ScreenLayoutEAE> {
   }
 }
 
+/// Wrapper for bottom bar with animated divider
+class _BottomBarWrapper extends StatelessWidget {
+  final bool showDivider;
+  final double dividerThickness;
+  final Color dividerColor;
+  final Color backgroundColor;
+  final Widget child;
+
+  const _BottomBarWrapper({
+    required this.showDivider,
+    required this.dividerThickness,
+    required this.dividerColor,
+    required this.backgroundColor,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Animated divider above bottom bar
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: showDivider ? dividerThickness : 0,
+              color: showDivider ? dividerColor : Colors.transparent,
+            ),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}

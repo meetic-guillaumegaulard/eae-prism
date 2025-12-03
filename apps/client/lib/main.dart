@@ -63,6 +63,15 @@ class MyApp extends StatelessWidget {
             initialValues: formValues,
           );
 
+          // Convertit la direction string en enum
+          final transitionDirection = switch (direction) {
+            'left' => TransitionDirection.left,
+            'right' => TransitionDirection.right,
+            'up' => TransitionDirection.up,
+            'down' => TransitionDirection.down,
+            _ => TransitionDirection.left,
+          };
+
           return CustomTransitionPage(
             key: state.pageKey,
             child: child,
@@ -70,64 +79,21 @@ class MyApp extends StatelessWidget {
             reverseTransitionDuration: Duration(milliseconds: durationMs),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return _buildTransition(
-                  direction, animation, secondaryAnimation, child);
+              // Wrappe le child dans ScreenTransitionScope pour que
+              // ScreenLayoutEAE puisse appliquer l'animation au contenu uniquement
+              // (les barres top/bottom restent statiques)
+              return ScreenTransitionScope(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                direction: transitionDirection,
+                child: child,
+              );
             },
           );
         },
       ),
     ],
   );
-
-  /// Construit la transition selon la direction
-  static Widget _buildTransition(
-    String direction,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) {
-    // Offset de départ selon la direction
-    final Offset beginOffset = switch (direction) {
-      'left' => const Offset(1.0, 0.0),
-      'right' => const Offset(-1.0, 0.0),
-      'up' => const Offset(0.0, 1.0),
-      'down' => const Offset(0.0, -1.0),
-      _ => const Offset(1.0, 0.0),
-    };
-
-    final offsetAnimation = Tween<Offset>(
-      begin: beginOffset,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animation,
-      curve: Curves.easeOutCubic,
-    ));
-
-    // Animation de sortie de l'écran précédent
-    final exitOffset = switch (direction) {
-      'left' => const Offset(-0.3, 0.0),
-      'right' => const Offset(0.3, 0.0),
-      'up' => const Offset(0.0, -0.3),
-      'down' => const Offset(0.0, 0.3),
-      _ => const Offset(-0.3, 0.0),
-    };
-
-    final secondaryOffsetAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: exitOffset,
-    ).animate(CurvedAnimation(
-      parent: secondaryAnimation,
-      curve: Curves.easeOutCubic,
-    ));
-
-    return SlideTransition(
-      position: secondaryOffsetAnimation,
-      child: SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
