@@ -2,6 +2,36 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../brands/brand_config.dart' show LandingLogoAlignment;
 
+class BrandButtonTheme extends ThemeExtension<BrandButtonTheme> {
+  final double? outlineElevation;
+
+  const BrandButtonTheme({
+    this.outlineElevation,
+  });
+
+  @override
+  ThemeExtension<BrandButtonTheme> copyWith({
+    double? outlineElevation,
+  }) {
+    return BrandButtonTheme(
+      outlineElevation: outlineElevation ?? this.outlineElevation,
+    );
+  }
+
+  @override
+  ThemeExtension<BrandButtonTheme> lerp(
+    ThemeExtension<BrandButtonTheme>? other,
+    double t,
+  ) {
+    if (other is! BrandButtonTheme) {
+      return this;
+    }
+    return BrandButtonTheme(
+      outlineElevation: lerpDouble(outlineElevation, other.outlineElevation, t),
+    );
+  }
+}
+
 class BrandSelectableButtonTheme
     extends ThemeExtension<BrandSelectableButtonTheme> {
   final Color? unselectedBorderColor;

@@ -20,6 +20,7 @@ class OkcBrand implements BrandConfig {
         shadowColor: Colors.black.withOpacity(0.5),
         disabledBackgroundColor: Color(0xFFBDBDBD), // Medium grey for disabled
         disabledForegroundColor: Colors.white, // White text
+        outlineElevation: 0.0, // No shadow for outline buttons
       );
 
   @override

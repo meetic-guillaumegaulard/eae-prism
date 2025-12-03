@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/brand_theme_extensions.dart';
 
 enum ButtonEAEVariant {
   primary,
@@ -199,7 +200,11 @@ class ButtonEAE extends StatelessWidget {
             ],
           );
 
-    final double elevation = elevatedButtonTheme?.elevation?.resolve({}) ?? 0.0;
+    final brandButtonTheme = Theme.of(context).extension<BrandButtonTheme>();
+    final double baseElevation = elevatedButtonTheme?.elevation?.resolve({}) ?? 0.0;
+    final double elevation = variant == ButtonEAEVariant.outline
+        ? (brandButtonTheme?.outlineElevation ?? baseElevation)
+        : baseElevation;
     final Color? shadowColor = elevatedButtonTheme?.shadowColor?.resolve({});
 
     return SizedBox(

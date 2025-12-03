@@ -50,6 +50,9 @@ class BrandTheme {
         onSurface: Colors.black87,
       ),
       extensions: [
+        BrandButtonTheme(
+          outlineElevation: buttonConfig.outlineElevation,
+        ),
         BrandSelectableButtonTheme(
           unselectedBorderColor: selectableButtonConfig.unselectedBorderColor,
           unselectedTextColor: selectableButtonConfig.unselectedTextColor,

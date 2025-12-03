@@ -61,6 +61,7 @@ class BrandButtonConfig {
       verticalPadding; // Override default vertical padding (and remove fixed height)
   final Color? disabledBackgroundColor;
   final Color? disabledForegroundColor;
+  final double? outlineElevation; // Elevation for outline variant (null = use elevation)
 
   const BrandButtonConfig({
     this.borderRadius = 12.0,
@@ -70,6 +71,7 @@ class BrandButtonConfig {
     this.verticalPadding,
     this.disabledBackgroundColor,
     this.disabledForegroundColor,
+    this.outlineElevation,
   });
 }
 
