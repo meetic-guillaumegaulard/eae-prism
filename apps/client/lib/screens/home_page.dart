@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:design_system/design_system.dart';
-import 'dynamic_page.dart';
 
 class HomePage extends StatelessWidget {
   final Brand brand;
@@ -27,12 +27,8 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DynamicPage(brand: brand),
-                    ),
-                  );
+                  // Navigation avec go_router - l'URL devient /screens/step1
+                  context.go('/screens/step1');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

@@ -12,6 +12,7 @@ const screen1Config = {
   template: "screen_layout",
   props: {
     backgroundColor: "#FFFFFF",
+    screenId: "step1",
   },
   header: [
     {
@@ -102,6 +103,7 @@ const screen2Config = {
   template: "screen_layout",
   props: {
     backgroundColor: "#FFFFFF",
+    screenId: "step2",
   },
   header: [
     {
@@ -237,6 +239,7 @@ const screen3Config = {
   template: "screen_layout",
   props: {
     backgroundColor: "#FFFFFF",
+    screenId: "step3",
   },
   header: [
     {
@@ -356,6 +359,7 @@ const successConfig = {
   template: "screen_layout",
   props: {
     backgroundColor: "#E8F5E9",
+    screenId: "success",
   },
   header: [
     {
@@ -431,14 +435,47 @@ const successConfig = {
   ],
 };
 
+// Map des configs par screenId
+const screenConfigs: Record<string, object> = {
+  step1: screen1Config,
+  step2: screen2Config,
+  step3: screen3Config,
+  success: successConfig,
+};
+
 export const screenRoutes = new Elysia({ prefix: "/api/screens" })
-  // Obtenir l'écran initial
+  // Route GET générique pour récupérer un écran par son ID
+  .get(
+    "/:screenId",
+    ({ params: { screenId } }) => {
+      const config = screenConfigs[screenId];
+      if (!config) {
+        return {
+          error: "Screen not found",
+          screenId,
+        };
+      }
+      return {
+        screen: config,
+        // Valeurs initiales du formulaire (peuvent venir d'une BDD en prod)
+        formValues: {},
+      };
+    },
+    {
+      params: t.Object({
+        screenId: t.String(),
+      }),
+    }
+  )
+
+  // Obtenir l'écran initial (legacy, redirige vers step1)
   .get("/initial", () => ({
     navigation: {
       type: "refresh",
       scope: "full",
     },
     screen: screen1Config,
+    formValues: {},
   }))
 
   // Navigation vers étape 2
@@ -449,11 +486,13 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
       return {
         navigation: {
           type: "navigate",
-          direction: "left", // L'écran actuel part vers la gauche
-          scope: "content", // Seul le contenu est animé
+          direction: "left",
+          scope: "content",
           durationMs: 300,
         },
         screen: screen2Config,
+        // Retourne les données reçues comme formValues pour les conserver
+        formValues: body as Record<string, unknown>,
       };
     },
     {
@@ -469,11 +508,12 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
       return {
         navigation: {
           type: "navigate",
-          direction: "right", // L'écran actuel part vers la droite
+          direction: "right",
           scope: "content",
           durationMs: 300,
         },
         screen: screen1Config,
+        formValues: body as Record<string, unknown>,
       };
     },
     {
@@ -494,6 +534,7 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 300,
         },
         screen: screen3Config,
+        formValues: body as Record<string, unknown>,
       };
     },
     {
@@ -514,6 +555,7 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 300,
         },
         screen: screen2Config,
+        formValues: body as Record<string, unknown>,
       };
     },
     {
@@ -529,11 +571,12 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
       return {
         navigation: {
           type: "navigate",
-          direction: "up", // Animation vers le haut
-          scope: "full", // Tout l'écran est animé
+          direction: "up",
+          scope: "full",
           durationMs: 400,
         },
         screen: successConfig,
+        formValues: body as Record<string, unknown>,
       };
     },
     {
@@ -554,6 +597,8 @@ export const screenRoutes = new Elysia({ prefix: "/api/screens" })
           durationMs: 400,
         },
         screen: screen1Config,
+        // Reset des formValues
+        formValues: {},
       };
     },
     {
