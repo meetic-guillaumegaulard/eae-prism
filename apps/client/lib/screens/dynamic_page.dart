@@ -183,11 +183,18 @@ class _DynamicPageState extends State<DynamicPage> {
         // Extraire le screenId depuis les props de l'écran
         final newScreenId = _extractScreenId(response);
 
+        // Récupérer la direction et la durée de l'animation depuis la réponse serveur
+        final direction =
+            response.navigation.direction.name; // left, right, up, down
+        final durationMs = response.navigation.durationMs;
+
         context.push(
           '/screens/$newScreenId',
           extra: {
             'config': response.screen,
             'formValues': formValues,
+            'direction': direction,
+            'durationMs': durationMs,
           },
         );
       },

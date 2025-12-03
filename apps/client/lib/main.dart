@@ -31,39 +31,104 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/screens/:screenId',
         name: 'dynamic-screen',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final screenId = state.pathParameters['screenId']!;
-          // Récupère la config et les form values depuis extra si disponibles
           final extra = state.extra as Map<String, dynamic>?;
 
-          // La config peut être soit un ScreenConfig, soit un Map (après sérialisation)
+          // La config peut être soit un ScreenConfig, soit un Map
           ScreenConfig? config;
           final rawConfig = extra?['config'];
           if (rawConfig is ScreenConfig) {
             config = rawConfig;
           } else if (rawConfig is Map) {
-            // Convertir le Map en Map<String, dynamic> si nécessaire
             config =
                 ScreenConfig.fromJson(Map<String, dynamic>.from(rawConfig));
           }
 
-          // Pareil pour formValues
+          // FormValues
           Map<String, dynamic>? formValues;
           final rawFormValues = extra?['formValues'];
           if (rawFormValues is Map) {
             formValues = Map<String, dynamic>.from(rawFormValues);
           }
 
-          return DynamicPage(
+          // Direction de l'animation (depuis la réponse serveur)
+          final direction = extra?['direction'] as String? ?? 'left';
+          final durationMs = extra?['durationMs'] as int? ?? 300;
+
+          final child = DynamicPage(
             brand: brand,
             screenId: screenId,
             config: config,
             initialValues: formValues,
           );
+
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: child,
+            transitionDuration: Duration(milliseconds: durationMs),
+            reverseTransitionDuration: Duration(milliseconds: durationMs),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return _buildTransition(
+                  direction, animation, secondaryAnimation, child);
+            },
+          );
         },
       ),
     ],
   );
+
+  /// Construit la transition selon la direction
+  static Widget _buildTransition(
+    String direction,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // Offset de départ selon la direction
+    // "left" = l'écran actuel part vers la gauche, le nouveau arrive de la droite
+    final Offset beginOffset = switch (direction) {
+      'left' => const Offset(1.0, 0.0), // Arrive de la droite
+      'right' => const Offset(-1.0, 0.0), // Arrive de la gauche
+      'up' => const Offset(0.0, 1.0), // Arrive du bas
+      'down' => const Offset(0.0, -1.0), // Arrive du haut
+      _ => const Offset(1.0, 0.0), // Par défaut: de la droite
+    };
+
+    final offsetAnimation = Tween<Offset>(
+      begin: beginOffset,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    // Animation de sortie de l'écran précédent
+    final exitOffset = switch (direction) {
+      'left' => const Offset(-0.3, 0.0), // Part vers la gauche
+      'right' => const Offset(0.3, 0.0), // Part vers la droite
+      'up' => const Offset(0.0, -0.3), // Part vers le haut
+      'down' => const Offset(0.0, 0.3), // Part vers le bas
+      _ => const Offset(-0.3, 0.0),
+    };
+
+    final secondaryOffsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: exitOffset,
+    ).animate(CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeOutCubic,
+    ));
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: SlideTransition(
+        position: secondaryOffsetAnimation,
+        child: child,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
