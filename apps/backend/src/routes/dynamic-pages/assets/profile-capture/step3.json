@@ -1,0 +1,126 @@
+{
+  "navigation": {
+    "type": "navigate",
+    "direction": "left",
+    "scope": "content",
+    "durationMs": 300
+  },
+  "screen": {
+    "template": "screen_layout",
+    "props": {
+      "backgroundColor": "#FFFFFF",
+      "screenId": "step3",
+      "topBarHeight": 80
+    },
+    "header": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "text",
+            "props": {
+              "text": "Étape 3: Confirmation",
+              "type": "headline_medium",
+              "fontWeight": "bold"
+            }
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "type": "column",
+        "props": { "crossAxisAlignment": "stretch" },
+        "children": [
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "text": "Vérifiez vos informations",
+                  "type": "title_large"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "labeled_control",
+                "props": {
+                  "htmlLabel": "J'accepte les <a href='#'>conditions d'utilisation</a>",
+                  "field": "acceptTerms",
+                  "defaultValue": false,
+                  "controlType": "checkbox"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "labeled_control",
+                "props": {
+                  "htmlLabel": "Je souhaite recevoir la newsletter",
+                  "field": "newsletter",
+                  "defaultValue": true,
+                  "controlType": "toggle"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "progress_bar",
+                "props": {
+                  "value": 100,
+                  "showCounter": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "row",
+            "props": { "mainAxisAlignment": "spaceBetween" },
+            "children": [
+              {
+                "type": "button",
+                "props": {
+                  "label": "Retour",
+                  "variant": "outline",
+                  "apiEndpoint": ":back"
+                }
+              },
+              {
+                "type": "button",
+                "props": {
+                  "label": "Terminer",
+                  "variant": "primary",
+                  "apiEndpoint": "/dynamic-pages/profile-capture/success"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

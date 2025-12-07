@@ -48,19 +48,21 @@ class MyApp extends StatelessWidget {
       ),
       // Route dynamique pour les écrans du flow
       GoRoute(
-        path: '/screens/:screenId',
+        path: '/dynamic-pages/:flowId/:screenId',
         name: 'dynamic-screen',
         pageBuilder: (context, state) {
+          final flowId = state.pathParameters['flowId']!;
           final screenId = state.pathParameters['screenId']!;
           final extra = state.extra as Map<String, dynamic>?;
 
           // Utilise le builder du design_system avec les callbacks go_router
           return buildDynamicPage(
-            screenId: screenId,
+            screenId: '$flowId/$screenId',
             baseUrl: _baseUrl,
             extra: extra,
             onNavigate: (newScreenId, navExtra) {
-              context.push('/screens/$newScreenId', extra: navExtra);
+              context.push('/dynamic-pages/$flowId/$newScreenId',
+                  extra: navExtra);
             },
             onBack: () => context.pop(),
             onGoHome: () => context.go('/'),

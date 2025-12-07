@@ -3,7 +3,7 @@ import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { brandRoutes } from "./routes/brand.routes";
 import { healthRoutes } from "./routes/health.routes";
-import { screenRoutes } from "./routes/screen.routes";
+import { dynamicPagesRoutes } from "./routes/dynamic-pages";
 import { aiRoutes } from "./routes/ai.routes";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -20,7 +20,7 @@ const corsHeaders: Record<string, string> = {
 const elysiaApp = new Elysia()
   .use(healthRoutes)
   .use(brandRoutes)
-  .use(screenRoutes)
+  .use(dynamicPagesRoutes)
   .use(aiRoutes)
   .get("/", () => ({
     message: "EAE Prism API",

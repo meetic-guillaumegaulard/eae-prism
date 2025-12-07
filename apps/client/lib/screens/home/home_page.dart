@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  context.push('/screens/initial');
+                  context.push('/dynamic-pages/profile-capture/step1');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
@@ -58,4 +58,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

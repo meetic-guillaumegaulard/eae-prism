@@ -1,0 +1,143 @@
+{
+  "navigation": {
+    "type": "navigate",
+    "direction": "left",
+    "scope": "content",
+    "durationMs": 300
+  },
+  "screen": {
+    "template": "screen_layout",
+    "props": {
+      "backgroundColor": "#FFFFFF",
+      "screenId": "step2",
+      "topBarHeight": 80
+    },
+    "header": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "text",
+            "props": {
+              "text": "Étape 2: Préférences",
+              "type": "headline_medium",
+              "fontWeight": "bold"
+            }
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "type": "column",
+        "props": { "crossAxisAlignment": "stretch" },
+        "children": [
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "text": "Sélectionnez votre genre",
+                  "type": "title_medium"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": { "left": 16, "right": 16, "bottom": 16 } },
+            "children": [
+              {
+                "type": "selectable_button_group",
+                "props": {
+                  "labels": ["Homme", "Femme", "Autre"],
+                  "field": "gender"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "text": "Vos centres d'intérêt",
+                  "type": "title_medium"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": { "left": 16, "right": 16, "bottom": 16 } },
+            "children": [
+              {
+                "type": "selectable_tag_group",
+                "props": {
+                  "labels": [
+                    "Voyages",
+                    "Musique",
+                    "Sport",
+                    "Cinéma",
+                    "Cuisine",
+                    "Art"
+                  ],
+                  "field": "interests",
+                  "defaultValue": []
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "progress_bar",
+                "props": {
+                  "value": 66,
+                  "showCounter": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "row",
+            "props": { "mainAxisAlignment": "spaceBetween" },
+            "children": [
+              {
+                "type": "button",
+                "props": {
+                  "label": "Retour",
+                  "variant": "outline",
+                  "apiEndpoint": ":back"
+                }
+              },
+              {
+                "type": "button",
+                "props": {
+                  "label": "Continuer",
+                  "variant": "primary",
+                  "apiEndpoint": "/dynamic-pages/profile-capture/step3"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

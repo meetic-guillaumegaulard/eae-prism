@@ -110,7 +110,7 @@ class _DynamicPageState extends State<DynamicPage> {
 
     try {
       final response = await ApiUtils.get(
-        '/screens/${widget.screenId}',
+        '/dynamic-pages/${widget.screenId}',
         customBaseUrl: widget.baseUrl,
       );
 

@@ -1,0 +1,88 @@
+{
+  "navigation": {
+    "type": "navigate",
+    "direction": "up",
+    "scope": "full",
+    "durationMs": 400
+  },
+  "screen": {
+    "template": "screen_layout",
+    "props": {
+      "backgroundColor": "#E8F5E9",
+      "screenId": "success",
+      "topBarHeight": 80
+    },
+    "header": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "text",
+            "props": {
+              "text": "Inscription réussie !",
+              "type": "headline_medium",
+              "fontWeight": "bold"
+            }
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "type": "column",
+        "props": {
+          "crossAxisAlignment": "center",
+          "mainAxisAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "padding",
+            "props": { "padding": 32 },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "text": "Merci pour votre inscription !",
+                  "type": "title_large",
+                  "textAlign": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": 16 },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "text": "Vos informations ont été enregistrées avec succès.",
+                  "type": "body_large",
+                  "textAlign": "center"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "type": "container",
+        "props": { "padding": 16 },
+        "children": [
+          {
+            "type": "button",
+            "props": {
+              "label": "Recommencer",
+              "variant": "primary",
+              "isFullWidth": true,
+              "apiEndpoint": "/dynamic-pages/profile-capture/step1"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

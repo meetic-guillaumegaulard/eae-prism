@@ -394,8 +394,12 @@ class DynamicScreenState extends State<DynamicScreen> {
       backgroundColor = _parseColor(bgColorString);
     }
 
+    // Get top bar height from props (defaults to 80px)
+    final topBarHeight = config.getProp<num>('topBarHeight')?.toDouble();
+
     return ScreenLayoutEAE(
       topBar: topBar,
+      topBarHeight: topBarHeight ?? 80.0,
       content: content,
       bottomBar: bottomBar,
       backgroundColor: backgroundColor,
