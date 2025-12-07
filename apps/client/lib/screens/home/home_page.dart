@@ -4,14 +4,51 @@ import 'package:design_system/design_system.dart';
 
 class HomePage extends StatelessWidget {
   final Brand brand;
+  final ValueChanged<Brand>? onBrandChanged;
 
-  const HomePage({super.key, required this.brand});
+  const HomePage({
+    super.key,
+    required this.brand,
+    this.onBrandChanged,
+  });
+
+  /// Convertit Brand enum en string pour l'URL
+  String get _brandSlug => switch (brand) {
+        Brand.match => 'match',
+        Brand.meetic => 'meetic',
+        Brand.okc => 'okc',
+        Brand.pof => 'pof',
+      };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(BrandTheme.getBrandName(brand)),
+        actions: [
+          // Sélecteur de brand
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: DropdownButton<Brand>(
+              value: brand,
+              underline: const SizedBox(),
+              icon: const Icon(Icons.arrow_drop_down),
+              onChanged: onBrandChanged != null
+                  ? (newBrand) {
+                      if (newBrand != null) {
+                        onBrandChanged!(newBrand);
+                      }
+                    }
+                  : null,
+              items: Brand.values.map((b) {
+                return DropdownMenuItem<Brand>(
+                  value: b,
+                  child: Text(BrandTheme.getBrandName(b)),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Padding(
@@ -27,7 +64,8 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  context.push('/dynamic-pages/profile-capture/step1');
+                  context
+                      .push('/dynamic-pages/$_brandSlug/profile-capture/step1');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

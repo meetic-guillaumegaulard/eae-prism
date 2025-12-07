@@ -26,13 +26,14 @@ interface ScreenResponse {
 }
 
 /**
- * Charge un fichier JSON d'écran depuis le dossier assets/{flowId}/{screenId}.json
+ * Charge un fichier JSON d'écran depuis assets/{brand}/{flowId}/{screenId}.json
  */
 function loadScreenConfig(
+  brand: string,
   flowId: string,
   screenId: string
 ): ScreenResponse | null {
-  const filePath = join(assetsPath, flowId, `${screenId}.json`);
+  const filePath = join(assetsPath, brand, flowId, `${screenId}.json`);
 
   if (!existsSync(filePath)) {
     return null;
@@ -42,19 +43,25 @@ function loadScreenConfig(
     const content = readFileSync(filePath, "utf-8");
     return JSON.parse(content) as ScreenResponse;
   } catch (error) {
-    console.error(`Error loading screen config ${flowId}/${screenId}:`, error);
+    console.error(
+      `Error loading screen config ${brand}/${flowId}/${screenId}:`,
+      error
+    );
     return null;
   }
 }
 
 /**
- * Liste tous les flows disponibles (dossiers dans assets/)
+ * Liste les sous-dossiers d'un chemin
  */
-function listAvailableFlows(): string[] {
+function listSubdirectories(path: string): string[] {
   try {
-    const entries = readdirSync(assetsPath);
+    if (!existsSync(path)) {
+      return [];
+    }
+    const entries = readdirSync(path);
     return entries.filter((entry) => {
-      const entryPath = join(assetsPath, entry);
+      const entryPath = join(path, entry);
       return statSync(entryPath).isDirectory();
     });
   } catch {
@@ -63,11 +70,25 @@ function listAvailableFlows(): string[] {
 }
 
 /**
- * Liste tous les écrans disponibles pour un flow donné
+ * Liste toutes les brands disponibles
  */
-function listAvailableScreens(flowId: string): string[] {
+function listAvailableBrands(): string[] {
+  return listSubdirectories(assetsPath);
+}
+
+/**
+ * Liste tous les flows disponibles pour une brand
+ */
+function listAvailableFlows(brand: string): string[] {
+  return listSubdirectories(join(assetsPath, brand));
+}
+
+/**
+ * Liste tous les écrans disponibles pour un flow
+ */
+function listAvailableScreens(brand: string, flowId: string): string[] {
   try {
-    const flowPath = join(assetsPath, flowId);
+    const flowPath = join(assetsPath, brand, flowId);
     if (!existsSync(flowPath)) {
       return [];
     }
@@ -84,19 +105,22 @@ function listAvailableScreens(flowId: string): string[] {
  * Construit la réponse pour un écran donné
  */
 function buildScreenResponse(
+  brand: string,
   flowId: string,
   screenId: string,
   formValues?: Record<string, unknown>
 ) {
-  const config = loadScreenConfig(flowId, screenId);
+  const config = loadScreenConfig(brand, flowId, screenId);
 
   if (!config) {
     return {
       error: "Screen not found",
+      brand,
       flowId,
       screenId,
-      availableFlows: listAvailableFlows(),
-      availableScreens: listAvailableScreens(flowId),
+      availableBrands: listAvailableBrands(),
+      availableFlows: listAvailableFlows(brand),
+      availableScreens: listAvailableScreens(brand, flowId),
     };
   }
 
@@ -110,12 +134,13 @@ function buildScreenResponse(
  * Routes pour la navigation dynamique des écrans
  *
  * Structure des URLs:
- * - GET  /api/dynamic-pages                     → Liste les flows disponibles
- * - GET  /api/dynamic-pages/:flowId             → Liste les écrans d'un flow
- * - GET  /api/dynamic-pages/:flowId/:screenId   → Récupère un écran
- * - POST /api/dynamic-pages/:flowId/:screenId   → Navigue avec données du formulaire
+ * - GET  /api/dynamic-pages                              → Liste les brands
+ * - GET  /api/dynamic-pages/:brand                       → Liste les flows d'une brand
+ * - GET  /api/dynamic-pages/:brand/:flowId               → Liste les écrans d'un flow
+ * - GET  /api/dynamic-pages/:brand/:flowId/:screenId     → Récupère un écran
+ * - POST /api/dynamic-pages/:brand/:flowId/:screenId     → Navigue avec données du formulaire
  *
- * Structure des fichiers: assets/{flowId}/{screenId}.json
+ * Structure des fichiers: assets/{brand}/{flowId}/{screenId}.json
  *
  * Structure d'un fichier JSON:
  * {
@@ -128,28 +153,52 @@ function buildScreenResponse(
  */
 export const dynamicPagesRoutes = new Elysia({ prefix: "/api/dynamic-pages" })
 
-  // Liste tous les flows disponibles
+  // Liste toutes les brands disponibles
   .get("/", () => {
-    const flows = listAvailableFlows();
-    return { flows, count: flows.length };
+    const brands = listAvailableBrands();
+    return { brands, count: brands.length };
   })
 
-  // Liste tous les écrans d'un flow
+  // Liste tous les flows d'une brand
   .get(
-    "/:flowId",
-    ({ params: { flowId } }) => {
-      const screens = listAvailableScreens(flowId);
-      if (screens.length === 0) {
+    "/:brand",
+    ({ params: { brand } }) => {
+      const flows = listAvailableFlows(brand);
+      if (flows.length === 0) {
         return {
-          error: "Flow not found",
-          flowId,
-          availableFlows: listAvailableFlows(),
+          error: "Brand not found",
+          brand,
+          availableBrands: listAvailableBrands(),
         };
       }
-      return { flowId, screens, count: screens.length };
+      return { brand, flows, count: flows.length };
     },
     {
       params: t.Object({
+        brand: t.String(),
+      }),
+    }
+  )
+
+  // Liste tous les écrans d'un flow
+  .get(
+    "/:brand/:flowId",
+    ({ params: { brand, flowId } }) => {
+      const screens = listAvailableScreens(brand, flowId);
+      if (screens.length === 0) {
+        return {
+          error: "Flow not found",
+          brand,
+          flowId,
+          availableBrands: listAvailableBrands(),
+          availableFlows: listAvailableFlows(brand),
+        };
+      }
+      return { brand, flowId, screens, count: screens.length };
+    },
+    {
+      params: t.Object({
+        brand: t.String(),
         flowId: t.String(),
       }),
     }
@@ -157,10 +206,12 @@ export const dynamicPagesRoutes = new Elysia({ prefix: "/api/dynamic-pages" })
 
   // Endpoint GET pour récupérer un écran (navigation initiale)
   .get(
-    "/:flowId/:screenId",
-    ({ params: { flowId, screenId } }) => buildScreenResponse(flowId, screenId),
+    "/:brand/:flowId/:screenId",
+    ({ params: { brand, flowId, screenId } }) =>
+      buildScreenResponse(brand, flowId, screenId),
     {
       params: t.Object({
+        brand: t.String(),
         flowId: t.String(),
         screenId: t.String(),
       }),
@@ -169,10 +220,11 @@ export const dynamicPagesRoutes = new Elysia({ prefix: "/api/dynamic-pages" })
 
   // Endpoint POST pour naviguer vers un écran (avec données du formulaire)
   .post(
-    "/:flowId/:screenId",
-    ({ params: { flowId, screenId }, body }) => {
-      console.log(`[${flowId}/${screenId}] Received data:`, body);
+    "/:brand/:flowId/:screenId",
+    ({ params: { brand, flowId, screenId }, body }) => {
+      console.log(`[${brand}/${flowId}/${screenId}] Received data:`, body);
       return buildScreenResponse(
+        brand,
         flowId,
         screenId,
         body as Record<string, unknown>
@@ -180,6 +232,7 @@ export const dynamicPagesRoutes = new Elysia({ prefix: "/api/dynamic-pages" })
     },
     {
       params: t.Object({
+        brand: t.String(),
         flowId: t.String(),
         screenId: t.String(),
       }),

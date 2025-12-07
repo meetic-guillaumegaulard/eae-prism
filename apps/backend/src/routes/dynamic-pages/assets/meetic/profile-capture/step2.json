@@ -9,7 +9,7 @@
     "template": "screen_layout",
     "props": {
       "backgroundColor": "#FFFFFF",
-      "screenId": "step3",
+      "screenId": "step2",
       "topBarHeight": 80
     },
     "header": [
@@ -20,7 +20,7 @@
           {
             "type": "text",
             "props": {
-              "text": "Étape 3: Confirmation",
+              "text": "Étape 2: Préférences",
               "type": "headline_medium",
               "fontWeight": "bold"
             }
@@ -40,8 +40,21 @@
               {
                 "type": "text",
                 "props": {
-                  "text": "Vérifiez vos informations",
-                  "type": "title_large"
+                  "text": "Sélectionnez votre genre",
+                  "type": "title_medium"
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": { "padding": { "left": 16, "right": 16, "bottom": 16 } },
+            "children": [
+              {
+                "type": "selectable_button_group",
+                "props": {
+                  "labels": ["Homme", "Femme", "Autre"],
+                  "field": "gender"
                 }
               }
             ]
@@ -51,27 +64,31 @@
             "props": { "padding": 16 },
             "children": [
               {
-                "type": "labeled_control",
+                "type": "text",
                 "props": {
-                  "htmlLabel": "J'accepte les <a href='#'>conditions d'utilisation</a>",
-                  "field": "acceptTerms",
-                  "defaultValue": false,
-                  "controlType": "checkbox"
+                  "text": "Vos centres d'intérêt",
+                  "type": "title_medium"
                 }
               }
             ]
           },
           {
             "type": "padding",
-            "props": { "padding": 16 },
+            "props": { "padding": { "left": 16, "right": 16, "bottom": 16 } },
             "children": [
               {
-                "type": "labeled_control",
+                "type": "selectable_tag_group",
                 "props": {
-                  "htmlLabel": "Je souhaite recevoir la newsletter",
-                  "field": "newsletter",
-                  "defaultValue": true,
-                  "controlType": "toggle"
+                  "labels": [
+                    "Voyages",
+                    "Musique",
+                    "Sport",
+                    "Cinéma",
+                    "Cuisine",
+                    "Art"
+                  ],
+                  "field": "interests",
+                  "defaultValue": []
                 }
               }
             ]
@@ -83,7 +100,7 @@
               {
                 "type": "progress_bar",
                 "props": {
-                  "value": 100,
+                  "value": 66,
                   "showCounter": true
                 }
               }
@@ -112,9 +129,9 @@
               {
                 "type": "button",
                 "props": {
-                  "label": "Terminer",
+                  "label": "Continuer",
                   "variant": "primary",
-                  "apiEndpoint": "/dynamic-pages/profile-capture/success"
+                  "apiEndpoint": "/dynamic-pages/meetic/profile-capture/step3"
                 }
               }
             ]

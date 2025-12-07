@@ -1,15 +1,15 @@
 {
   "navigation": {
     "type": "navigate",
-    "direction": "left",
-    "scope": "content",
-    "durationMs": 300
+    "direction": "up",
+    "scope": "full",
+    "durationMs": 400
   },
   "screen": {
     "template": "screen_layout",
     "props": {
-      "backgroundColor": "#FFFFFF",
-      "screenId": "step1",
+      "backgroundColor": "#E8F5E9",
+      "screenId": "success",
       "topBarHeight": 80
     },
     "header": [
@@ -20,7 +20,7 @@
           {
             "type": "text",
             "props": {
-              "text": "Étape 1: Informations",
+              "text": "Inscription réussie !",
               "type": "headline_medium",
               "fontWeight": "bold"
             }
@@ -31,18 +31,21 @@
     "content": [
       {
         "type": "column",
-        "props": { "crossAxisAlignment": "stretch" },
+        "props": {
+          "crossAxisAlignment": "center",
+          "mainAxisAlignment": "center"
+        },
         "children": [
           {
             "type": "padding",
-            "props": { "padding": 16 },
+            "props": { "padding": 32 },
             "children": [
               {
-                "type": "text_input",
+                "type": "text",
                 "props": {
-                  "label": "Prénom",
-                  "hintText": "Entrez votre prénom",
-                  "field": "firstName"
+                  "text": "Merci pour votre inscription !",
+                  "type": "title_large",
+                  "textAlign": "center"
                 }
               }
             ]
@@ -52,24 +55,11 @@
             "props": { "padding": 16 },
             "children": [
               {
-                "type": "text_input",
+                "type": "text",
                 "props": {
-                  "label": "Nom",
-                  "hintText": "Entrez votre nom",
-                  "field": "lastName"
-                }
-              }
-            ]
-          },
-          {
-            "type": "padding",
-            "props": { "padding": 16 },
-            "children": [
-              {
-                "type": "progress_bar",
-                "props": {
-                  "value": 33,
-                  "showCounter": true
+                  "text": "Vos informations ont été enregistrées avec succès.",
+                  "type": "body_large",
+                  "textAlign": "center"
                 }
               }
             ]
@@ -85,10 +75,10 @@
           {
             "type": "button",
             "props": {
-              "label": "Continuer",
+              "label": "Recommencer",
               "variant": "primary",
               "isFullWidth": true,
-              "apiEndpoint": "/dynamic-pages/profile-capture/step2"
+              "apiEndpoint": "/dynamic-pages/meetic/profile-capture/step1"
             }
           }
         ]
