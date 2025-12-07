@@ -5,6 +5,7 @@ import { brandRoutes } from "./routes/brand.routes";
 import { healthRoutes } from "./routes/health.routes";
 import { dynamicPagesRoutes } from "./routes/dynamic-pages";
 import { aiRoutes } from "./routes/ai.routes";
+import { builderRoutes } from "./routes/builder.routes";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const assetsPath = resolve(__dirname, "assets");
@@ -22,6 +23,7 @@ const elysiaApp = new Elysia()
   .use(brandRoutes)
   .use(dynamicPagesRoutes)
   .use(aiRoutes)
+  .use(builderRoutes)
   .get("/", () => ({
     message: "EAE Prism API",
     version: "1.0.0",

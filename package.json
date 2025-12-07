@@ -10,7 +10,7 @@
   "scripts": {
     "setup": "npx nx run eae-prism:install:all &&npm run setup:backend && npm run setup:flutter",
     "setup:backend": "cd apps/backend && bun install",
-    "setup:flutter": "cd packages/design_system && flutter pub get && cd ../../apps/showroom && flutter pub get && cd ../client && flutter pub get",
+    "setup:flutter": "cd packages/design_system && flutter pub get && cd ../../apps/showroom && flutter pub get && cd ../client && flutter pub get && cd ../builder && flutter pub get",
     "setup:platforms": "cd apps/client && flutter create . --platforms=web,ios,android && cd ../showroom && flutter create . --platforms=web",
     "client": "npx nx run eae-prism:client:web",
     "client:web": "npx nx run eae-prism:client:web",
@@ -20,6 +20,9 @@
     "devices": "cd apps/client && flutter devices",
     "emulators": "cd apps/client && flutter emulators",
     "showroom": "cd apps/showroom && flutter run -d chrome --debug",
+    "builder": "cd apps/builder && flutter run -d chrome --web-port 8090",
+    "builder:web": "cd apps/builder && flutter run -d chrome --web-port 8090",
+    "builder:macos": "cd apps/builder && flutter run -d macos",
     "backend": "npx nx run eae-prism:backend:dev",
     "backend:dev": "npx nx run eae-prism:backend:dev",
     "backend:start": "npx nx run eae-prism:backend:start"
