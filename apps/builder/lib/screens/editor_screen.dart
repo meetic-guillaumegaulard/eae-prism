@@ -335,14 +335,6 @@ class _EditorScreenState extends State<EditorScreen> {
     });
   }
 
-  // Returns the List containing the item at the end of path, OR the Map if the path points to a container
-  // For path ["0", "children", "1"], it returns the List at "children"
-  // For path ["0"], it returns the Map at index 0
-  dynamic _findListByPath(dynamic root, List<String> parts) {
-    // This helper was confusing. Let's use _findContainerByPath instead.
-    return null;
-  }
-
   // Follows the path to find the element pointed to by the path
   // path ["0"] -> returns element at index 0 (Map)
   // path ["0", "children", "1"] -> returns element at index 1 of children (Map)
@@ -433,28 +425,29 @@ class _EditorScreenState extends State<EditorScreen> {
   void _removeNestedComponent(
       Map<String, dynamic> screen, String section, List<String> pathParts) {
     final list = List<dynamic>.from(screen[section] ?? []);
-    dynamic current = list;
-
-    for (var i = 0; i < pathParts.length - 1; i++) {
-      final part = pathParts[i];
-      if (part == 'children') {
-        if (current is Map && current['children'] != null) {
-          current = List<dynamic>.from(current['children']);
-        }
-      } else {
-        final index = int.tryParse(part);
-        if (index != null && current is List && index < current.length) {
-          current = Map<String, dynamic>.from(current[index]);
-        }
-      }
-    }
-
-    final lastIndex = int.tryParse(pathParts.last);
-    if (lastIndex != null && current is List && lastIndex < current.length) {
-      current.removeAt(lastIndex);
-    }
-
+    _recursiveRemove(list, pathParts);
     screen[section] = list;
+  }
+
+  void _recursiveRemove(List<dynamic> list, List<String> pathParts) {
+    if (pathParts.isEmpty) return;
+
+    final index = int.tryParse(pathParts[0]);
+    if (index == null || index >= list.length) return;
+
+    if (pathParts.length == 1) {
+      // Reached the item to remove
+      list.removeAt(index);
+    } else if (pathParts.length >= 3 && pathParts[1] == 'children') {
+      // Navigate deeper
+      final component = Map<String, dynamic>.from(list[index]);
+      final children = List<dynamic>.from(component['children'] ?? []);
+
+      _recursiveRemove(children, pathParts.sublist(2));
+
+      component['children'] = children;
+      list[index] = component;
+    }
   }
 
   void _updateComponent(String path, Map<String, dynamic> props) {
