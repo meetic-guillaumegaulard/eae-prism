@@ -277,7 +277,11 @@ class PropertyEditor extends StatelessWidget {
     dynamic currentValue,
     Map<String, dynamic> allProps,
   ) {
+    // We need a Key that depends on the component path AND the property key
+    // so that when we switch components, the input field is rebuilt with the new initialValue.
+    // Otherwise, the controller keeps the old text.
     return TextFormField(
+      key: ValueKey('${componentPath}_$key'),
       initialValue: currentValue?.toString() ?? '',
       decoration: InputDecoration(
         isDense: true,
@@ -302,6 +306,7 @@ class PropertyEditor extends StatelessWidget {
     Map<String, dynamic> allProps,
   ) {
     return TextFormField(
+      key: ValueKey('${componentPath}_$key'),
       initialValue: currentValue?.toString() ?? '',
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
@@ -377,28 +382,29 @@ class PropertyEditor extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Expanded(
-          child: TextFormField(
-            initialValue: colorString,
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              hintText: '#FFFFFF',
-              hintStyle: TextStyle(
-                color: Colors.white.withValues(alpha: 0.3),
-                fontSize: 13,
+          Expanded(
+            child: TextFormField(
+              key: ValueKey('${componentPath}_$key'),
+              initialValue: colorString,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                hintText: '#FFFFFF',
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  fontSize: 13,
+                ),
               ),
+              style: const TextStyle(fontSize: 13, color: Colors.white),
+              onChanged: (value) {
+                if (value.isEmpty ||
+                    (value.startsWith('#') && value.length == 7)) {
+                  _updateProperty(key, value.isEmpty ? null : value);
+                }
+              },
             ),
-            style: const TextStyle(fontSize: 13, color: Colors.white),
-            onChanged: (value) {
-              if (value.isEmpty ||
-                  (value.startsWith('#') && value.length == 7)) {
-                _updateProperty(key, value.isEmpty ? null : value);
-              }
-            },
           ),
-        ),
       ],
     );
   }
