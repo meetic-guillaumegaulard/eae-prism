@@ -37,7 +37,7 @@ class PropertyEditor extends StatelessWidget {
           ),
           child: const Row(
             children: [
-              Icon(Icons.tune, size: 16, color: Color(0xFF6C63FF)),
+              Icon(Icons.tune, size: 16, color: Color(0xFF00E4D7)),
               SizedBox(width: 8),
               Text(
                 'Properties',
@@ -104,7 +104,7 @@ class PropertyEditor extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFF252538),
+            color: const Color(0xFF2D1B4E),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
@@ -112,13 +112,13 @@ class PropertyEditor extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6C63FF).withValues(alpha: 0.2),
+                  color: const Color(0xFF00E4D7).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(
                   isScreen ? Icons.web : _getIconForType(type),
                   size: 18,
-                  color: const Color(0xFF6C63FF),
+                  color: const Color(0xFF00E4D7),
                 ),
               ),
               const SizedBox(width: 12),
@@ -338,7 +338,7 @@ class PropertyEditor extends StatelessWidget {
         Switch(
           value: currentValue == true,
           onChanged: (value) => _updateProperty(key, value),
-          activeTrackColor: const Color(0xFF6C63FF),
+          activeTrackColor: const Color(0xFF00E4D7),
         ),
         const SizedBox(width: 8),
         Text(
@@ -422,7 +422,7 @@ class PropertyEditor extends StatelessWidget {
           fontSize: 13,
         ),
       ),
-      dropdownColor: const Color(0xFF252538),
+      dropdownColor: const Color(0xFF2D1B4E),
       style: const TextStyle(fontSize: 13, color: Colors.white),
       items: values.map((value) {
         return DropdownMenuItem(

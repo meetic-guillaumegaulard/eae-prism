@@ -45,7 +45,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.widgets, size: 18, color: Color(0xFF6C63FF)),
+                  const Icon(Icons.widgets, size: 18, color: Color(0xFF00E4D7)),
                   const SizedBox(width: 8),
                   const Text(
                     'Components',
@@ -125,7 +125,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
       padding: const EdgeInsets.only(right: 6),
       child: Material(
         color: isSelected
-            ? const Color(0xFF6C63FF).withValues(alpha: 0.2)
+            ? const Color(0xFF00E4D7).withValues(alpha: 0.2)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
@@ -139,7 +139,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
                 Icon(
                   icon,
                   size: 14,
-                  color: isSelected ? const Color(0xFF6C63FF) : Colors.white54,
+                  color: isSelected ? const Color(0xFF00E4D7) : Colors.white54,
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -147,7 +147,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                    color: isSelected ? const Color(0xFF6C63FF) : Colors.white54,
+                    color: isSelected ? const Color(0xFF00E4D7) : Colors.white54,
                   ),
                 ),
               ],
@@ -192,7 +192,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
             width: 200,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF6C63FF),
+              color: const Color(0xFF00E4D7),
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
@@ -255,7 +255,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
 
   Widget _buildComponentCardContent(ComponentSpec spec, {VoidCallback? onTap}) {
     return Material(
-      color: const Color(0xFF252538),
+      color: const Color(0xFF2D1B4E),
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         onTap: onTap,
@@ -318,7 +318,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: const Color(0xFF201034),
         title: Text('Add ${spec.label}'),
         content: const Text(
           'In which section do you want to add this component?',
@@ -359,7 +359,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
       SnackBar(
         content: Text('${spec.label} added to $section'),
         duration: const Duration(seconds: 1),
-        backgroundColor: const Color(0xFF6C63FF),
+        backgroundColor: const Color(0xFF00E4D7),
       ),
     );
   }
@@ -485,7 +485,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
       case 'landing':
         return const Color(0xFF9C27B0); // Purple for templates
       default:
-        return const Color(0xFF6C63FF);
+        return const Color(0xFF00E4D7);
     }
   }
 }

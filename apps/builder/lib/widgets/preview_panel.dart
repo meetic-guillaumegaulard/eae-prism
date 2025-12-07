@@ -39,7 +39,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
           ),
           child: Row(
             children: [
-              const Icon(Icons.preview, size: 16, color: Color(0xFF6C63FF)),
+              const Icon(Icons.preview, size: 16, color: Color(0xFF00E4D7)),
               const SizedBox(width: 8),
               const Text(
                 'Preview',
@@ -53,7 +53,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
               // View mode selector
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF252538),
+                  color: const Color(0xFF2D1B4E),
                   borderRadius: BorderRadius.circular(6),
                   border:
                       Border.all(color: Colors.white.withValues(alpha: 0.1)),
@@ -89,7 +89,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
         // Preview content
         Expanded(
           child: Container(
-            color: const Color(0xFF131322), // Darker background for canvas
+            color: const Color(0xFF150a25), // Darker background for canvas (0xFF201034 darkened)
             child: _isMobileMode
                 ? Center(
                     child: FittedBox(
@@ -99,7 +99,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
                         height: 844,
                         margin: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A1A2E),
+                          color: const Color(0xFF201034),
                           borderRadius: BorderRadius.circular(32),
                           border: Border.all(
                             color: Colors.black,
@@ -123,7 +123,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
                 : Container(
                     margin: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A1A2E),
+                      color: const Color(0xFF201034),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.1),
@@ -159,14 +159,14 @@ class _PreviewPanelState extends State<PreviewPanel> {
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6C63FF).withValues(alpha: 0.2)
+              ? const Color(0xFF00E4D7).withValues(alpha: 0.2)
               : null,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Icon(
           icon,
           size: 16,
-          color: isSelected ? const Color(0xFF6C63FF) : Colors.white54,
+          color: isSelected ? const Color(0xFF00E4D7) : Colors.white54,
         ),
       ),
     );

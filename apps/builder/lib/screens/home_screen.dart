@@ -63,15 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: const Color(0xFF201034),
         title: Text(isFolder ? 'New Folder' : 'New Page'),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
             labelText: 'Path',
-            hintText: isFolder
-                ? 'brand/flow'
-                : 'brand/flow/screen',
+            hintText: isFolder ? 'brand/flow' : 'brand/flow/screen',
           ),
           autofocus: true,
         ),
@@ -131,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: const Color(0xFF201034),
         title: const Text('Confirm Deletion'),
         content: Text(
           'Are you sure you want to delete "${item.name}"?',
@@ -187,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A2E),
+              color: const Color(0xFF201034),
               border: Border(
                 bottom: BorderSide(
                   color: Colors.white.withValues(alpha: 0.1),
@@ -196,18 +194,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF6C63FF), Color(0xFF9D4EDD)],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
+                Image.asset(
+                  'assets/eae-prism-logo.png',
+                  height: 80,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => const Icon(
                     Icons.dashboard_customize,
-                    color: Colors.white,
-                    size: 28,
+                    color: Color(0xFF00E4D7),
+                    size: 80,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -239,8 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: const Text('New Folder'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white70,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    side:
+                        BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -249,8 +245,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.add, size: 18),
                   label: const Text('New Page'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    backgroundColor: const Color(0xFF00E4D7),
+                    foregroundColor: const Color(0xFF201034),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                 ),
               ],
@@ -269,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(
-          color: Color(0xFF6C63FF),
+          color: Color(0xFF00E4D7),
         ),
       );
     }
@@ -368,7 +366,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           Expanded(
             child: ListView(
-              children: _fileTree.map((item) => _buildTreeItem(item, 0)).toList(),
+              children:
+                  _fileTree.map((item) => _buildTreeItem(item, 0)).toList(),
             ),
           ),
         ],
@@ -416,12 +415,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF6C63FF).withValues(alpha: 0.2),
+                      color: const Color(0xFF00E4D7).withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const Icon(
                       Icons.description,
-                      color: Color(0xFF6C63FF),
+                      color: Color(0xFF00E4D7),
                       size: 14,
                     ),
                   ),
@@ -432,13 +431,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     item.name,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
-                      fontWeight: item.isFolder ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight:
+                          item.isFolder ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ),
                 if (item.isFolder && item.children != null) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -486,4 +487,3 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
-

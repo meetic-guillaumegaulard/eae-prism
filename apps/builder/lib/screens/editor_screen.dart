@@ -568,7 +568,7 @@ class _EditorScreenState extends State<EditorScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: const Color(0xFF201034),
         title: const Text('Unsaved Changes'),
         content: const Text('Do you want to save before leaving?'),
         actions: [
@@ -622,7 +622,7 @@ class _EditorScreenState extends State<EditorScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A2E),
+        color: const Color(0xFF201034),
         border: Border(
           bottom: BorderSide(
             color: Colors.white.withValues(alpha: 0.1),
@@ -646,7 +646,7 @@ class _EditorScreenState extends State<EditorScreen> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF6C63FF), Color(0xFF9D4EDD)],
+                colors: [Color(0xFF00E4D7), Color(0xFF00C2B8)],
               ),
               borderRadius: BorderRadius.circular(8),
             ),
@@ -722,13 +722,13 @@ class _EditorScreenState extends State<EditorScreen> {
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return const Color(0xFF6C63FF);
+                  return const Color(0xFF00E4D7);
                 }
                 return Colors.transparent;
               }),
               foregroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
-                  return Colors.white;
+                  return const Color(0xFF201034);
                 }
                 return Colors.white54;
               }),
@@ -744,7 +744,9 @@ class _EditorScreenState extends State<EditorScreen> {
             label: const Text('Save'),
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  _hasChanges ? const Color(0xFF6C63FF) : Colors.grey,
+                  _hasChanges ? const Color(0xFF00E4D7) : Colors.grey,
+              foregroundColor:
+                  _hasChanges ? const Color(0xFF201034) : Colors.white,
             ),
           ),
         ],
@@ -756,7 +758,7 @@ class _EditorScreenState extends State<EditorScreen> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(
-          color: Color(0xFF6C63FF),
+          color: Color(0xFF00E4D7),
         ),
       );
     }

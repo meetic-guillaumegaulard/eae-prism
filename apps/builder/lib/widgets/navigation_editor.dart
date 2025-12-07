@@ -21,7 +21,7 @@ class NavigationEditor extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF252538),
+        color: const Color(0xFF2D1B4E),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.1),
@@ -35,7 +35,7 @@ class NavigationEditor extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                const Icon(Icons.navigation, size: 16, color: Color(0xFF6C63FF)),
+                const Icon(Icons.navigation, size: 16, color: Color(0xFF00E4D7)),
                 const SizedBox(width: 8),
                 const Text(
                   'Navigation',
@@ -119,20 +119,20 @@ class NavigationEditor extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFF6C63FF).withValues(alpha: 0.2),
+        color: const Color(0xFF00E4D7).withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: const Color(0xFF6C63FF)),
+          Icon(icon, size: 12, color: const Color(0xFF00E4D7)),
           const SizedBox(width: 4),
           Text(
             type == 'refresh' ? 'Refresh' : direction,
             style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF6C63FF),
+              color: Color(0xFF00E4D7),
             ),
           ),
         ],
@@ -176,7 +176,7 @@ class NavigationEditor extends StatelessWidget {
           height: 32,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF252538),
+            color: const Color(0xFF2D1B4E),
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.1),
@@ -187,7 +187,7 @@ class NavigationEditor extends StatelessWidget {
               value: items.contains(value) ? value : items.first,
               isExpanded: true,
               isDense: true,
-              dropdownColor: const Color(0xFF252538),
+              dropdownColor: const Color(0xFF2D1B4E),
               style: const TextStyle(fontSize: 12, color: Colors.white),
               icon: Icon(
                 Icons.expand_more,
@@ -227,7 +227,7 @@ class NavigationEditor extends StatelessWidget {
         Container(
           height: 32,
           decoration: BoxDecoration(
-            color: const Color(0xFF252538),
+            color: const Color(0xFF2D1B4E),
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.1),

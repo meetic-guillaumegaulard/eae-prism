@@ -89,12 +89,12 @@ class _ComponentTreeState extends State<ComponentTree> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6C63FF).withValues(alpha: 0.1)
+              ? const Color(0xFF00E4D7).withValues(alpha: 0.1)
               : null,
           border: Border(
             bottom: BorderSide(
               color: isSelected
-                  ? const Color(0xFF6C63FF)
+                  ? const Color(0xFF00E4D7)
                   : Colors.white.withValues(alpha: 0.1),
               width: 2, // Largeur fixe pour éviter le changement de hauteur
             ),
@@ -104,7 +104,7 @@ class _ComponentTreeState extends State<ComponentTree> {
           children: [
             Icon(Icons.web,
                 size: 16,
-                color: isSelected ? const Color(0xFF6C63FF) : Colors.white70),
+                color: isSelected ? const Color(0xFF00E4D7) : Colors.white70),
             const SizedBox(width: 8),
             Text(
               'Page',
@@ -119,7 +119,7 @@ class _ComponentTreeState extends State<ComponentTree> {
             Icon(
               Icons.edit,
               size: 12,
-              color: isSelected ? const Color(0xFF6C63FF) : Colors.white24,
+              color: isSelected ? const Color(0xFF00E4D7) : Colors.white24,
             ),
             const Spacer(),
             if (widget.selectedPath != null)
@@ -200,11 +200,11 @@ class _ComponentTreeState extends State<ComponentTree> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
             color: isHovered
-                ? const Color(0xFF6C63FF).withValues(alpha: 0.1)
+                ? const Color(0xFF00E4D7).withValues(alpha: 0.1)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
             border:
-                isHovered ? Border.all(color: const Color(0xFF6C63FF)) : null,
+                isHovered ? Border.all(color: const Color(0xFF00E4D7)) : null,
           ),
           child: Row(
             children: [
@@ -234,7 +234,7 @@ class _ComponentTreeState extends State<ComponentTree> {
                 const Spacer(),
                 const Text(
                   'Add to end',
-                  style: TextStyle(fontSize: 10, color: Color(0xFF6C63FF)),
+                  style: TextStyle(fontSize: 10, color: Color(0xFF00E4D7)),
                 ),
               ],
             ],
@@ -303,7 +303,7 @@ class _ComponentTreeState extends State<ComponentTree> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: showActive
-                  ? const Color(0xFF6C63FF)
+                  ? const Color(0xFF00E4D7)
                   : (_isDragging
                       ? Colors.white.withValues(alpha: 0.1)
                       : Colors.transparent),
@@ -311,7 +311,7 @@ class _ComponentTreeState extends State<ComponentTree> {
               boxShadow: showActive
                   ? [
                       BoxShadow(
-                        color: const Color(0xFF6C63FF).withValues(alpha: 0.5),
+                        color: const Color(0xFF00E4D7).withValues(alpha: 0.5),
                         blurRadius: 4,
                         spreadRadius: 0,
                       )
@@ -415,7 +415,7 @@ class _ComponentTreeState extends State<ComponentTree> {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: const Color(0xFF6C63FF).withValues(alpha: 0.3),
+                  color: const Color(0xFF00E4D7).withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
@@ -451,7 +451,7 @@ class _ComponentTreeState extends State<ComponentTree> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFF6C63FF),
+          color: const Color(0xFF00E4D7),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
@@ -514,12 +514,12 @@ class _ComponentTreeState extends State<ComponentTree> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6C63FF).withValues(alpha: 0.2)
-              : const Color(0xFF252538),
+              ? const Color(0xFF00E4D7).withValues(alpha: 0.2)
+              : const Color(0xFF2D1B4E),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF6C63FF)
+                ? const Color(0xFF00E4D7)
                 : Colors.white.withValues(alpha: 0.1),
             width: isSelected ? 2 : 1,
           ),
@@ -725,7 +725,7 @@ class _ComponentTreeState extends State<ComponentTree> {
       case 'scrollable':
         return const Color(0xFFFF9800);
       default:
-        return const Color(0xFF6C63FF);
+        return const Color(0xFF00E4D7);
     }
   }
 }
