@@ -207,23 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 16),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'EAE Page Builder',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'WYSIWYG Editor for Dynamic Pages',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white54,
-                      ),
-                    ),
-                  ],
+                  children: [],
                 ),
                 const Spacer(),
                 // Actions

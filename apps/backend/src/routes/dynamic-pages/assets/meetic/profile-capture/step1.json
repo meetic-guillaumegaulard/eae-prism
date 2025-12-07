@@ -16,7 +16,7 @@
       {
         "type": "progress_bar",
         "props": {
-          "value": 40,
+          "value": 10,
           "showCounter": false
         }
       },
@@ -29,7 +29,7 @@
           {
             "type": "text",
             "props": {
-              "text": "Étape 1: Informations",
+              "text": "Etape 1",
               "type": "headline_medium",
               "fontWeight": "bold"
             }
@@ -38,6 +38,14 @@
       }
     ],
     "content": [
+      {
+        "type": "header",
+        "props": {
+          "showBackButton": true,
+          "title": "Coucou",
+          "subtitle": "Coucou"
+        }
+      },
       {
         "type": "column",
         "props": {
@@ -72,21 +80,6 @@
                   "label": "Nom",
                   "hintText": "Entrez votre nom",
                   "field": "lastName"
-                }
-              }
-            ]
-          },
-          {
-            "type": "padding",
-            "props": {
-              "padding": 16
-            },
-            "children": [
-              {
-                "type": "progress_bar",
-                "props": {
-                  "value": 33,
-                  "showCounter": true
                 }
               }
             ]
