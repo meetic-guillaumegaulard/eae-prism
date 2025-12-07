@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   context
-                      .push('/dynamic-pages/$_brandSlug/profile-capture/step1');
+                      .push('/dynamic-pages/$_brandSlug/profile-capture/start');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(

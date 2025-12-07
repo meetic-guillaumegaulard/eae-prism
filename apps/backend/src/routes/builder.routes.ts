@@ -62,8 +62,128 @@ function buildFileTree(
 /**
  * Routes pour l'édition des fichiers JSON (builder)
  */
+
+/**
+ * Représente un noeud dans le graphe de fichiers
+ */
+interface GraphNode {
+  id: string;
+  label: string;
+  type: "screen" | "logic";
+  path: string;
+}
+
+/**
+ * Représente un lien entre deux fichiers
+ */
+interface GraphEdge {
+  source: string;
+  target: string;
+  label?: string;
+}
+
+/**
+ * Analyse le contenu d'un fichier pour trouver les liens sortants
+ */
+function analyzeFileLinks(content: any): string[] {
+  const links: string[] = [];
+
+  function traverse(obj: any) {
+    if (!obj) return;
+
+    if (typeof obj === "object") {
+      // Vérifier si c'est une propriété apiEndpoint
+      if (obj.apiEndpoint && typeof obj.apiEndpoint === "string") {
+        links.push(obj.apiEndpoint);
+      }
+      // Vérifier si c'est une propriété exit
+      if (obj.exit && typeof obj.exit === "string") {
+        links.push(obj.exit);
+      }
+
+      // Parcourir les enfants
+      for (const key in obj) {
+        traverse(obj[key]);
+      }
+    } else if (Array.isArray(obj)) {
+      obj.forEach(traverse);
+    }
+  }
+
+  traverse(content);
+  return links;
+}
+
 export const builderRoutes = new Elysia({ prefix: "/api/builder" })
+  // ... (existing routes)
+
+  // Obtenir le graphe de fichiers pour un dossier
+  .get("/graph/*", ({ params }) => {
+    const path = (params as { "*": string })["*"];
+    const folderPath = join(assetsPath, path);
+
+    if (!existsSync(folderPath)) {
+      return { error: "Folder not found", path };
+    }
+
+    const nodes: GraphNode[] = [];
+    const edges: GraphEdge[] = [];
+    const files = readdirSync(folderPath).filter((f) => f.endsWith(".json"));
+
+    // 1. Créer les noeuds
+    for (const file of files) {
+      const fileName = file.replace(".json", "");
+      const filePath = join(folderPath, file);
+
+      nodes.push({
+        id: fileName,
+        label: fileName,
+        type: "screen",
+        path: `${path}/${fileName}`,
+      });
+    }
+
+    // 2. Analyser les liens
+    for (const file of files) {
+      const sourceId = file.replace(".json", "");
+      const filePath = join(folderPath, file);
+
+      try {
+        const content = JSON.parse(readFileSync(filePath, "utf-8"));
+        const links = analyzeFileLinks(content);
+
+        for (const link of links) {
+          // Résoudre le lien vers un ID de fichier
+          // Ex: "/dynamic-pages/meetic/profile-capture/step2" -> "step2"
+          // Ex: ":back" -> ignored or special node
+
+          if (link === ":back") continue;
+
+          const parts = link.split("/");
+          const targetId = parts[parts.length - 1];
+
+          // Vérifier si la cible existe dans ce dossier (ou lien externe ?)
+          // Pour l'instant on assume que c'est dans le même dossier si c'est un ID simple
+          // ou si le chemin correspond
+
+          if (nodes.find((n) => n.id === targetId)) {
+            edges.push({
+              source: sourceId,
+              target: targetId,
+              label: "navigates to",
+            });
+          }
+        }
+      } catch (e) {
+        console.error(`Error parsing ${file} for graph:`, e);
+      }
+    }
+
+    return { nodes, edges };
+  })
+
   // Lister tous les fichiers (arborescence complète)
+
   .get("/files", () => {
     const tree = buildFileTree(assetsPath);
     return { tree };

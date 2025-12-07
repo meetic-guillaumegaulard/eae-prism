@@ -73,5 +73,13 @@ class ApiService {
     }
     throw Exception('Failed to load component specs');
   }
-}
 
+  /// Get graph data for a folder
+  static Future<Map<String, dynamic>> getFolderGraph(String path) async {
+    final response = await http.get(Uri.parse('$baseUrl/graph/$path'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    throw Exception('Failed to load folder graph: $path');
+  }
+}

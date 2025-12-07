@@ -15,6 +15,12 @@ class FileTreeItem {
   bool get isFolder => type == 'folder';
   bool get isFile => type == 'file';
 
+  /// Check if this folder contains screens (JSON files)
+  bool get hasScreens {
+    if (children == null) return false;
+    return children!.any((child) => child.isFile && child.name != 'manifest');
+  }
+
   factory FileTreeItem.fromJson(Map<String, dynamic> json) {
     return FileTreeItem(
       name: json['name'] as String,
@@ -22,7 +28,8 @@ class FileTreeItem {
       path: json['path'] as String,
       children: json['children'] != null
           ? (json['children'] as List)
-              .map((item) => FileTreeItem.fromJson(item as Map<String, dynamic>))
+              .map(
+                  (item) => FileTreeItem.fromJson(item as Map<String, dynamic>))
               .toList()
           : null,
     );
@@ -32,7 +39,8 @@ class FileTreeItem {
         'name': name,
         'type': type,
         'path': path,
-        if (children != null) 'children': children!.map((c) => c.toJson()).toList(),
+        if (children != null)
+          'children': children!.map((c) => c.toJson()).toList(),
       };
 }
 
@@ -44,4 +52,3 @@ List<FileTreeItem> parseFileTree(Map<String, dynamic> response) {
       .map((item) => FileTreeItem.fromJson(item as Map<String, dynamic>))
       .toList();
 }
-

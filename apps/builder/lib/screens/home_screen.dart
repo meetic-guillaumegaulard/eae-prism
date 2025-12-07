@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/file_tree.dart';
 import 'editor_screen.dart';
+import '../widgets/folder_graph_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   String? _error;
   final Set<String> _expandedFolders = {};
+  String? _selectedFolderForGraph;
 
   @override
   void initState() {
@@ -48,6 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (_) => EditorScreen(filePath: path),
       ),
     );
+  }
+
+  void _openGraph(String path) {
+    setState(() {
+      _selectedFolderForGraph = path;
+    });
+  }
+
+  void _closeGraph() {
+    setState(() {
+      _selectedFolderForGraph = null;
+    });
   }
 
   void _createNewFile() {
@@ -194,14 +208,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Row(
               children: [
-                Image.asset(
-                  'assets/eae-prism-logo.png',
-                  height: 80,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) => const Icon(
-                    Icons.dashboard_customize,
-                    color: Color(0xFF00E4D7),
-                    size: 80,
+                GestureDetector(
+                  onTap: null,
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/eae-prism-logo.png',
+                        height: 80,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(
+                          Icons.dashboard_customize,
+                          color: Color(0xFF00E4D7),
+                          size: 80,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -361,6 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildTreeItem(FileTreeItem item, int depth) {
     final isExpanded = _expandedFolders.contains(item.path);
+    final isGraphView = _selectedFolderForGraph == item.path;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,13 +391,28 @@ class _HomeScreenState extends State<HomeScreen> {
         InkWell(
           onTap: () {
             if (item.isFolder) {
-              setState(() {
-                if (isExpanded) {
-                  _expandedFolders.remove(item.path);
+              if (item.hasScreens) {
+                // Toggle between graph and list view
+                if (isGraphView) {
+                  _closeGraph();
+                  setState(() {
+                    _expandedFolders.add(item.path);
+                  });
                 } else {
-                  _expandedFolders.add(item.path);
+                  _openGraph(item.path);
+                  setState(() {
+                    _expandedFolders.remove(item.path);
+                  });
                 }
-              });
+              } else {
+                setState(() {
+                  if (isExpanded) {
+                    _expandedFolders.remove(item.path);
+                  } else {
+                    _expandedFolders.add(item.path);
+                  }
+                });
+              }
             } else {
               _openEditor(item.path);
             }
@@ -391,8 +429,12 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 if (item.isFolder) ...[
                   Icon(
-                    isExpanded ? Icons.folder_open : Icons.folder,
-                    color: _getBrandColor(item.name),
+                    item.hasScreens
+                        ? (isGraphView ? Icons.hub : Icons.hub_outlined)
+                        : (isExpanded ? Icons.folder_open : Icons.folder),
+                    color: item.hasScreens
+                        ? const Color(0xFF00E4D7)
+                        : _getBrandColor(item.name),
                     size: 20,
                   ),
                 ] else ...[
@@ -420,37 +462,92 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                if (item.isFolder && item.children != null) ...[
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '${item.children!.length}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white54,
+                if (item.isFolder) ...[
+                  if (item.children != null && !isGraphView) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${item.children!.length}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white54,
+                        ),
                       ),
                     ),
+                  ],
+                  // Toggle button for flow folders to switch to list view
+                  if (item.hasScreens) ...[
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(
+                        isGraphView ? Icons.list : Icons.hub,
+                        size: 18,
+                      ),
+                      tooltip: isGraphView
+                          ? 'Switch to List View'
+                          : 'Switch to Graph View',
+                      onPressed: () {
+                        if (isGraphView) {
+                          _closeGraph();
+                          setState(() {
+                            _expandedFolders.add(item.path);
+                          });
+                        } else {
+                          _openGraph(item.path);
+                          setState(() {
+                            _expandedFolders.remove(item.path);
+                          });
+                        }
+                      },
+                      style: IconButton.styleFrom(
+                        foregroundColor: Colors.white54,
+                      ),
+                    ),
+                  ],
+                ],
+                if (!item.isFolder) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline, size: 18),
+                    onPressed: () => _deleteItem(item),
+                    style: IconButton.styleFrom(
+                      foregroundColor: Colors.white38,
+                    ),
+                    tooltip: 'Delete',
                   ),
                 ],
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 18),
-                  onPressed: () => _deleteItem(item),
-                  style: IconButton.styleFrom(
-                    foregroundColor: Colors.white38,
-                  ),
-                  tooltip: 'Delete',
-                ),
               ],
             ),
           ),
         ),
-        if (item.isFolder && isExpanded && item.children != null)
+        // Render Graph View inline
+        if (isGraphView)
+          Container(
+            height: 400,
+            margin: const EdgeInsets.only(top: 8, bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: FolderGraphView(
+                folderPath: item.path,
+                onFileTap: _openEditor,
+              ),
+            ),
+          ),
+        // Render Children (List View)
+        if (item.isFolder &&
+            isExpanded &&
+            item.children != null &&
+            !isGraphView)
           ...item.children!.map((child) => _buildTreeItem(child, depth + 1)),
       ],
     );
