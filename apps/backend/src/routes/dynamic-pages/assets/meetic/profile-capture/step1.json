@@ -16,7 +16,7 @@
       {
         "type": "progress_bar",
         "props": {
-          "value": 10,
+          "value": 20,
           "showCounter": false
         }
       },
@@ -63,7 +63,8 @@
                 "props": {
                   "label": "Prénom",
                   "hintText": "Entrez votre prénom",
-                  "field": "firstName"
+                  "field": "firstName",
+                  "obscureText": true
                 }
               }
             ]
@@ -79,7 +80,8 @@
                 "props": {
                   "label": "Nom",
                   "hintText": "Entrez votre nom",
-                  "field": "lastName"
+                  "field": "lastName",
+                  "isRequired": true
                 }
               }
             ]

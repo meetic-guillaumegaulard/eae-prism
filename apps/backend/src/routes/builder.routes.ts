@@ -25,7 +25,10 @@ interface FileTreeItem {
   children?: FileTreeItem[];
 }
 
-function buildFileTree(basePath: string, relativePath: string = ""): FileTreeItem[] {
+function buildFileTree(
+  basePath: string,
+  relativePath: string = ""
+): FileTreeItem[] {
   const fullPath = join(basePath, relativePath);
   if (!existsSync(fullPath)) return [];
 
@@ -67,24 +70,21 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
   })
 
   // Lire un fichier JSON
-  .get(
-    "/files/*",
-    ({ params }) => {
-      const path = (params as { "*": string })["*"];
-      const filePath = join(assetsPath, `${path}.json`);
+  .get("/files/*", ({ params }) => {
+    const path = (params as { "*": string })["*"];
+    const filePath = join(assetsPath, `${path}.json`);
 
-      if (!existsSync(filePath)) {
-        return { error: "File not found", path };
-      }
-
-      try {
-        const content = readFileSync(filePath, "utf-8");
-        return { path, content: JSON.parse(content) };
-      } catch (error) {
-        return { error: "Failed to read file", details: String(error) };
-      }
+    if (!existsSync(filePath)) {
+      return { error: "File not found", path };
     }
-  )
+
+    try {
+      const content = readFileSync(filePath, "utf-8");
+      return { path, content: JSON.parse(content) };
+    } catch (error) {
+      return { error: "Failed to read file", details: String(error) };
+    }
+  })
 
   // Créer ou mettre à jour un fichier JSON
   .put(
@@ -113,64 +113,55 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
   )
 
   // Supprimer un fichier JSON
-  .delete(
-    "/files/*",
-    ({ params }) => {
-      const path = (params as { "*": string })["*"];
-      const filePath = join(assetsPath, `${path}.json`);
+  .delete("/files/*", ({ params }) => {
+    const path = (params as { "*": string })["*"];
+    const filePath = join(assetsPath, `${path}.json`);
 
-      if (!existsSync(filePath)) {
-        return { error: "File not found", path };
-      }
-
-      try {
-        unlinkSync(filePath);
-        return { success: true, path };
-      } catch (error) {
-        return { error: "Failed to delete file", details: String(error) };
-      }
+    if (!existsSync(filePath)) {
+      return { error: "File not found", path };
     }
-  )
+
+    try {
+      unlinkSync(filePath);
+      return { success: true, path };
+    } catch (error) {
+      return { error: "Failed to delete file", details: String(error) };
+    }
+  })
 
   // Créer un dossier
-  .post(
-    "/folders/*",
-    ({ params }) => {
-      const path = (params as { "*": string })["*"];
-      const folderPath = join(assetsPath, path);
+  .post("/folders/*", ({ params }) => {
+    const path = (params as { "*": string })["*"];
+    const folderPath = join(assetsPath, path);
 
-      if (existsSync(folderPath)) {
-        return { error: "Folder already exists", path };
-      }
-
-      try {
-        mkdirSync(folderPath, { recursive: true });
-        return { success: true, path };
-      } catch (error) {
-        return { error: "Failed to create folder", details: String(error) };
-      }
+    if (existsSync(folderPath)) {
+      return { error: "Folder already exists", path };
     }
-  )
+
+    try {
+      mkdirSync(folderPath, { recursive: true });
+      return { success: true, path };
+    } catch (error) {
+      return { error: "Failed to create folder", details: String(error) };
+    }
+  })
 
   // Supprimer un dossier (vide)
-  .delete(
-    "/folders/*",
-    ({ params }) => {
-      const path = (params as { "*": string })["*"];
-      const folderPath = join(assetsPath, path);
+  .delete("/folders/*", ({ params }) => {
+    const path = (params as { "*": string })["*"];
+    const folderPath = join(assetsPath, path);
 
-      if (!existsSync(folderPath)) {
-        return { error: "Folder not found", path };
-      }
-
-      try {
-        rmdirSync(folderPath, { recursive: true });
-        return { success: true, path };
-      } catch (error) {
-        return { error: "Failed to delete folder", details: String(error) };
-      }
+    if (!existsSync(folderPath)) {
+      return { error: "Folder not found", path };
     }
-  )
+
+    try {
+      rmdirSync(folderPath, { recursive: true });
+      return { success: true, path };
+    } catch (error) {
+      return { error: "Failed to delete folder", details: String(error) };
+    }
+  })
 
   // Obtenir les specs des composants disponibles
   .get("/component-specs", () => {
@@ -180,7 +171,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "screen_layout",
           label: "Screen Layout",
-          description: "Layout standard avec header, content, footer",
+          description: "Standard layout with header, content, footer",
           props: {
             backgroundColor: { type: "color", default: "#FFFFFF" },
             topBarHeight: { type: "number", default: 80 },
@@ -190,36 +181,84 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "landing",
           label: "Landing Screen",
-          description: "Landing page avec background image",
+          description: "Landing page with background image",
           props: {
-            brand: { type: "enum", values: ["match", "meetic", "okc", "pof"], required: true },
+            brand: {
+              type: "enum",
+              values: ["match", "meetic", "okc", "pof"],
+              required: true,
+            },
             backgroundImageMobile: { type: "string" },
             backgroundImageDesktop: { type: "string" },
-            mobileLogoType: { type: "enum", values: ["small", "onDark", "onWhite"], default: "onDark" },
-            desktopLogoType: { type: "enum", values: ["small", "onDark", "onWhite"], default: "small" },
+            mobileLogoType: {
+              type: "enum",
+              values: ["small", "onDark", "onWhite"],
+              default: "onDark",
+            },
+            desktopLogoType: {
+              type: "enum",
+              values: ["small", "onDark", "onWhite"],
+              default: "small",
+            },
           },
         },
       ],
       atoms: [
         {
           type: "text",
-          label: "Texte",
-          description: "Affiche du texte",
+          label: "Text",
+          description: "Displays text",
           props: {
             text: { type: "string", required: true },
-            type: { type: "enum", values: ["headline_large", "headline_medium", "headline_small", "body_large", "body_medium", "body_small", "label_large", "label_medium", "label_small"], default: "body_medium" },
-            fontWeight: { type: "enum", values: ["normal", "bold", "w100", "w200", "w300", "w400", "w500", "w600", "w700", "w800", "w900"] },
+            type: {
+              type: "enum",
+              values: [
+                "headline_large",
+                "headline_medium",
+                "headline_small",
+                "body_large",
+                "body_medium",
+                "body_small",
+                "label_large",
+                "label_medium",
+                "label_small",
+              ],
+              default: "body_medium",
+            },
+            fontWeight: {
+              type: "enum",
+              values: [
+                "normal",
+                "bold",
+                "w100",
+                "w200",
+                "w300",
+                "w400",
+                "w500",
+                "w600",
+                "w700",
+                "w800",
+                "w900",
+              ],
+            },
             color: { type: "color" },
-            textAlign: { type: "enum", values: ["left", "center", "right", "justify"] },
+            textAlign: {
+              type: "enum",
+              values: ["left", "center", "right", "justify"],
+            },
           },
         },
         {
           type: "button",
-          label: "Bouton",
-          description: "Bouton interactif",
+          label: "Button",
+          description: "Interactive button",
           props: {
             label: { type: "string", required: true },
-            variant: { type: "enum", values: ["primary", "secondary", "tertiary", "ghost"], default: "primary" },
+            variant: {
+              type: "enum",
+              values: ["primary", "secondary", "tertiary", "ghost"],
+              default: "primary",
+            },
             isFullWidth: { type: "boolean", default: false },
             apiEndpoint: { type: "string" },
             exit: { type: "string" },
@@ -227,20 +266,22 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         },
         {
           type: "text_input",
-          label: "Champ texte",
-          description: "Champ de saisie texte",
+          label: "Text Input",
+          description: "Text input field",
           props: {
             field: { type: "string", required: true },
             label: { type: "string" },
             hintText: { type: "string" },
-            isRequired: { type: "boolean", default: false },
-            isPassword: { type: "boolean", default: false },
+            defaultValue: { type: "string" },
+            obscureText: { type: "boolean", default: false },
+            enabled: { type: "boolean", default: true },
+            errorText: { type: "string" },
           },
         },
         {
           type: "checkbox",
           label: "Checkbox",
-          description: "Case à cocher",
+          description: "Checkbox input",
           props: {
             field: { type: "string", required: true },
             label: { type: "string" },
@@ -249,7 +290,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "toggle",
           label: "Toggle",
-          description: "Interrupteur on/off",
+          description: "On/off switch",
           props: {
             field: { type: "string", required: true },
             label: { type: "string" },
@@ -258,7 +299,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "slider",
           label: "Slider",
-          description: "Curseur de valeur",
+          description: "Value slider",
           props: {
             field: { type: "string", required: true },
             min: { type: "number", default: 0 },
@@ -269,8 +310,8 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         },
         {
           type: "progress_bar",
-          label: "Barre de progression",
-          description: "Indicateur de progression",
+          label: "Progress Bar",
+          description: "Progress indicator",
           props: {
             value: { type: "number", required: true },
             showCounter: { type: "boolean", default: false },
@@ -278,8 +319,8 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         },
         {
           type: "icon",
-          label: "Icône",
-          description: "Icône Material",
+          label: "Icon",
+          description: "Material icon",
           props: {
             icon: { type: "string", required: true },
             size: { type: "number", default: 24 },
@@ -289,10 +330,18 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "logo",
           label: "Logo",
-          description: "Logo de marque",
+          description: "Brand logo",
           props: {
-            brand: { type: "enum", values: ["match", "meetic", "okc", "pof"], required: true },
-            type: { type: "enum", values: ["small", "onDark", "onWhite"], default: "small" },
+            brand: {
+              type: "enum",
+              values: ["match", "meetic", "okc", "pof"],
+              required: true,
+            },
+            type: {
+              type: "enum",
+              values: ["small", "onDark", "onWhite"],
+              default: "small",
+            },
             height: { type: "number" },
           },
         },
@@ -301,7 +350,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "header",
           label: "Header",
-          description: "En-tête avec titre et bouton retour",
+          description: "Header with title and back button",
           props: {
             title: { type: "string" },
             subtitle: { type: "string" },
@@ -310,23 +359,69 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         },
         {
           type: "selection_group",
-          label: "Groupe de sélection",
-          description: "Groupe de radio buttons ou checkboxes",
+          label: "Selection Group",
+          description: "Group of radio buttons or checkboxes",
           props: {
             field: { type: "string", required: true },
-            options: { type: "array", items: { label: "string", value: "string" }, required: true },
+            options: {
+              type: "array",
+              items: { label: "string", value: "string" },
+              required: true,
+            },
             isMultiple: { type: "boolean", default: false },
           },
         },
         {
           type: "selectable_button_group",
-          label: "Groupe de boutons sélectionnables",
-          description: "Grille de boutons sélectionnables",
+          label: "Selectable Button Group",
+          description: "Grid of selectable buttons",
           props: {
             field: { type: "string", required: true },
-            options: { type: "array", items: { label: "string", value: "string" }, required: true },
+            options: {
+              type: "array",
+              items: { label: "string", value: "string" },
+              required: true,
+            },
             isMultiple: { type: "boolean", default: false },
             columns: { type: "number", default: 2 },
+          },
+        },
+        {
+          type: "labeled_control",
+          label: "Labeled Control",
+          description: "Label with checkbox or toggle",
+          props: {
+            htmlLabel: { type: "string" },
+            label: { type: "string" },
+            field: { type: "string" },
+            controlType: {
+              type: "enum",
+              values: ["checkbox", "toggle"],
+              default: "checkbox",
+            },
+            defaultValue: { type: "boolean", default: false },
+            expanded: { type: "boolean", default: true },
+          },
+        },
+        {
+          type: "selectable_tag_group",
+          label: "Tag Group",
+          description: "Selectable cloud of tags",
+          props: {
+            field: { type: "string" },
+            labels: {
+              type: "array",
+              items: { type: "string" },
+              required: true,
+            },
+            title: { type: "string" },
+            defaultValue: { type: "array", items: { type: "string" } },
+            tagSize: {
+              type: "enum",
+              values: ["small", "medium", "large"],
+              default: "medium",
+            },
+            tagSpacing: { type: "number", default: 8.0 },
           },
         },
       ],
@@ -334,7 +429,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "container",
           label: "Container",
-          description: "Conteneur simple",
+          description: "Simple container",
           hasChildren: true,
           props: {
             padding: { type: "number" },
@@ -344,30 +439,60 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         },
         {
           type: "column",
-          label: "Colonne",
-          description: "Disposition verticale",
+          label: "Column",
+          description: "Vertical arrangement",
           hasChildren: true,
           props: {
-            mainAxisAlignment: { type: "enum", values: ["start", "end", "center", "spaceBetween", "spaceAround", "spaceEvenly"], default: "start" },
-            crossAxisAlignment: { type: "enum", values: ["start", "end", "center", "stretch"], default: "center" },
+            mainAxisAlignment: {
+              type: "enum",
+              values: [
+                "start",
+                "end",
+                "center",
+                "spaceBetween",
+                "spaceAround",
+                "spaceEvenly",
+              ],
+              default: "start",
+            },
+            crossAxisAlignment: {
+              type: "enum",
+              values: ["start", "end", "center", "stretch"],
+              default: "center",
+            },
             spacing: { type: "number" },
           },
         },
         {
           type: "row",
-          label: "Ligne",
-          description: "Disposition horizontale",
+          label: "Row",
+          description: "Horizontal arrangement",
           hasChildren: true,
           props: {
-            mainAxisAlignment: { type: "enum", values: ["start", "end", "center", "spaceBetween", "spaceAround", "spaceEvenly"], default: "start" },
-            crossAxisAlignment: { type: "enum", values: ["start", "end", "center", "stretch"], default: "center" },
+            mainAxisAlignment: {
+              type: "enum",
+              values: [
+                "start",
+                "end",
+                "center",
+                "spaceBetween",
+                "spaceAround",
+                "spaceEvenly",
+              ],
+              default: "start",
+            },
+            crossAxisAlignment: {
+              type: "enum",
+              values: ["start", "end", "center", "stretch"],
+              default: "center",
+            },
             spacing: { type: "number" },
           },
         },
         {
           type: "padding",
           label: "Padding",
-          description: "Ajoute un espacement interne",
+          description: "Adds internal spacing",
           hasChildren: true,
           props: {
             padding: { type: "number" },
@@ -382,7 +507,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "expanded",
           label: "Expanded",
-          description: "Remplit l'espace disponible",
+          description: "Fills available space",
           hasChildren: true,
           props: {
             flex: { type: "number", default: 1 },
@@ -391,7 +516,7 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "sized_box",
           label: "SizedBox",
-          description: "Boîte de taille fixe",
+          description: "Fixed size box",
           hasChildren: true,
           props: {
             width: { type: "number" },
@@ -401,17 +526,21 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
         {
           type: "center",
           label: "Center",
-          description: "Centre le contenu",
+          description: "Centers content",
           hasChildren: true,
           props: {},
         },
         {
           type: "scrollable",
           label: "Scrollable",
-          description: "Zone défilable",
+          description: "Scrollable area",
           hasChildren: true,
           props: {
-            direction: { type: "enum", values: ["vertical", "horizontal"], default: "vertical" },
+            direction: {
+              type: "enum",
+              values: ["vertical", "horizontal"],
+              default: "vertical",
+            },
           },
         },
       ],
@@ -419,4 +548,3 @@ export const builderRoutes = new Elysia({ prefix: "/api/builder" })
 
     return specs;
   });
-
