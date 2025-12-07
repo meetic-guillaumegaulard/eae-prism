@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:design_system/design_system.dart';
+import 'package:design_system/design_system.dart' hide ComponentSpec, PropSpec;
 import '../services/api_service.dart';
 import '../models/component_spec.dart';
 import '../widgets/component_tree.dart';
 import '../widgets/property_editor.dart';
 import '../widgets/component_palette.dart';
 import '../widgets/preview_panel.dart';
-import '../widgets/navigation_editor.dart';
 
 class EditorScreen extends StatefulWidget {
   final String filePath;
@@ -48,6 +47,22 @@ class _EditorScreenState extends State<EditorScreen> {
       final specsResponse = await ApiService.getComponentSpecs();
       _componentSpecs = ComponentSpecs.fromJson(specsResponse);
 
+      // Inject "screen" spec manually so it's recognized by PropertyEditor
+      // This allows editing global page properties like topBarHeight
+      _componentSpecs!.templates.add(
+        const ComponentSpec(
+          type: 'screen',
+          label: 'Page Configuration',
+          description: 'Global page settings',
+          hasChildren: true,
+          props: {
+            'screenId': PropSpec(type: 'text', required: true),
+            'backgroundColor': PropSpec(type: 'color', defaultValue: '#FFFFFF'),
+            'topBarHeight': PropSpec(type: 'number', defaultValue: 80),
+          },
+        ),
+      );
+
       if (widget.isNew) {
         // Create default page config
         _pageConfig = _createDefaultPageConfig();
@@ -59,6 +74,8 @@ class _EditorScreenState extends State<EditorScreen> {
 
       setState(() {
         _isLoading = false;
+        // Select page configuration by default
+        _selectedComponentPath = 'root';
       });
     } catch (e) {
       setState(() {
@@ -101,7 +118,7 @@ class _EditorScreenState extends State<EditorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Fichier sauvegardé'),
+            content: Text('File saved'),
             backgroundColor: Colors.green,
           ),
         );
@@ -110,7 +127,7 @@ class _EditorScreenState extends State<EditorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erreur: $e'),
+            content: Text('Error: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -180,7 +197,8 @@ class _EditorScreenState extends State<EditorScreen> {
     });
   }
 
-  void _insertNestedComponent(List<dynamic> list, List<String> pathParts, Map<String, dynamic> component) {
+  void _insertNestedComponent(List<dynamic> list, List<String> pathParts,
+      Map<String, dynamic> component) {
     if (pathParts.isEmpty) return;
 
     final index = int.tryParse(pathParts[0]);
@@ -194,7 +212,7 @@ class _EditorScreenState extends State<EditorScreen> {
     if (pathParts[1] == 'children') {
       final parent = Map<String, dynamic>.from(list[index]);
       final children = List<dynamic>.from(parent['children'] ?? []);
-      
+
       if (pathParts.length == 2) {
         // Append to children
         children.add(component);
@@ -207,65 +225,70 @@ class _EditorScreenState extends State<EditorScreen> {
           _insertNestedComponent(children, pathParts.sublist(2), component);
         }
       }
-      
+
       parent['children'] = children;
       list[index] = parent;
     }
   }
 
-  void _moveComponent(String sourcePath, String targetParentPath, int targetIndex) {
+  void _moveComponent(
+      String sourcePath, String targetParentPath, int targetIndex) {
     if (_pageConfig == null) return;
-    
+
     // 1. Create a deep copy of the entire screen configuration
     // This ensures we can modify it freely without state issues until we're done
     final screen = _deepCopy(_pageConfig!['screen'] ?? {});
-    
+
     // 2. Locate source list and item
     final sourceParts = sourcePath.split('.');
     final sourceSection = sourceParts[0];
-    final sourceParentParts = sourceParts.sublist(1, sourceParts.length - 1); // exclude index
+    final sourceParentParts =
+        sourceParts.sublist(1, sourceParts.length - 1); // exclude index
     final sourceIndex = int.tryParse(sourceParts.last);
-    
+
     if (sourceIndex == null) return;
-    
+
     // Find the list containing the source item
     List<dynamic>? sourceList;
     if (sourceParentParts.isEmpty) {
       sourceList = screen[sourceSection] as List<dynamic>?;
     } else {
-      final container = _findContainerByPath(screen[sourceSection], sourceParentParts);
+      final container =
+          _findContainerByPath(screen[sourceSection], sourceParentParts);
       if (container is List) {
         sourceList = container;
       } else if (container is Map) {
-         // If path ended at a map but we expected a list (e.g. "children"), take it?
-         // No, our path logic always ends with the list property name if it's nested
-         // Wait, sourceParentParts from "content.0.children.1" is "0.children"
-         // _findContainerByPath will return the children list.
-         // BUT wait, in findContainer logic:
-         // part "0" -> current becomes map
-         // part "children" -> current becomes list
-         // So it returns List. Correct.
+        // If path ended at a map but we expected a list (e.g. "children"), take it?
+        // No, our path logic always ends with the list property name if it's nested
+        // Wait, sourceParentParts from "content.0.children.1" is "0.children"
+        // _findContainerByPath will return the children list.
+        // BUT wait, in findContainer logic:
+        // part "0" -> current becomes map
+        // part "children" -> current becomes list
+        // So it returns List. Correct.
       }
       sourceList = container as List<dynamic>?;
     }
-    
+
     if (sourceList == null || sourceIndex >= sourceList.length) return;
-    
+
     // 3. Locate target list
     final targetParts = targetParentPath.split('.');
     final targetSection = targetParts[0];
-    final targetParentParts = targetParts.length > 1 ? targetParts.sublist(1) : <String>[];
-    
+    final targetParentParts =
+        targetParts.length > 1 ? targetParts.sublist(1) : <String>[];
+
     dynamic targetContainer;
     List<dynamic>? targetList;
-    
+
     if (targetParentParts.isEmpty) {
       // Root section list
       targetList = screen[targetSection] as List<dynamic>?;
     } else {
       // Find the container element that holds the list
-      targetContainer = _findContainerByPath(screen[targetSection], targetParentParts);
-      
+      targetContainer =
+          _findContainerByPath(screen[targetSection], targetParentParts);
+
       if (targetContainer is Map) {
         // We found a component, get or create its children list
         if (targetContainer['children'] == null) {
@@ -277,22 +300,24 @@ class _EditorScreenState extends State<EditorScreen> {
         targetList = targetContainer;
       }
     }
-    
+
     if (targetList == null) return;
-    
+
     // 4. Perform the move
     // If source and target are the exact same list instance (check identity implies complexity with copies, so check paths)
     // Note: We need to check if we are moving within the same parent list
     // sourcePath parent is implicit from the structure
-    final sourceParentPath = sourcePath.substring(0, sourcePath.lastIndexOf('.'));
+    final sourceParentPath =
+        sourcePath.substring(0, sourcePath.lastIndexOf('.'));
     final isSameList = sourceParentPath == targetParentPath;
-    
+
     if (isSameList) {
       // Moving within same list
       if (sourceIndex < sourceList.length) {
         final item = sourceList.removeAt(sourceIndex);
         // Adjust target index because removal might shift it
-        final adjustedIndex = targetIndex > sourceIndex ? targetIndex - 1 : targetIndex;
+        final adjustedIndex =
+            targetIndex > sourceIndex ? targetIndex - 1 : targetIndex;
         targetList.insert(adjustedIndex.clamp(0, targetList.length), item);
       }
     } else {
@@ -302,7 +327,7 @@ class _EditorScreenState extends State<EditorScreen> {
         targetList.insert(targetIndex.clamp(0, targetList.length), item);
       }
     }
-    
+
     // 5. Update state once with the fully modified tree
     _updatePageConfig({
       ..._pageConfig!,
@@ -317,17 +342,17 @@ class _EditorScreenState extends State<EditorScreen> {
     // This helper was confusing. Let's use _findContainerByPath instead.
     return null;
   }
-  
+
   // Follows the path to find the element pointed to by the path
   // path ["0"] -> returns element at index 0 (Map)
   // path ["0", "children", "1"] -> returns element at index 1 of children (Map)
   dynamic _findContainerByPath(dynamic root, List<String> parts) {
     if (root == null) return null;
     dynamic current = root; // Start with the section list
-    
+
     for (int i = 0; i < parts.length; i++) {
       final part = parts[i];
-      
+
       if (current is List) {
         final index = int.tryParse(part);
         if (index != null && index < current.length) {
@@ -347,10 +372,9 @@ class _EditorScreenState extends State<EditorScreen> {
         return null;
       }
     }
-    
+
     return current;
   }
-
 
   Map<String, dynamic> _deepCopy(Map<String, dynamic> original) {
     final copy = <String, dynamic>{};
@@ -380,7 +404,7 @@ class _EditorScreenState extends State<EditorScreen> {
 
     final section = parts[0];
     final screen = Map<String, dynamic>.from(_pageConfig!['screen'] ?? {});
-    
+
     if (parts.length == 2) {
       // Direct child of section
       final index = int.tryParse(parts[1]);
@@ -406,7 +430,8 @@ class _EditorScreenState extends State<EditorScreen> {
     }
   }
 
-  void _removeNestedComponent(Map<String, dynamic> screen, String section, List<String> pathParts) {
+  void _removeNestedComponent(
+      Map<String, dynamic> screen, String section, List<String> pathParts) {
     final list = List<dynamic>.from(screen[section] ?? []);
     dynamic current = list;
 
@@ -435,6 +460,22 @@ class _EditorScreenState extends State<EditorScreen> {
   void _updateComponent(String path, Map<String, dynamic> props) {
     if (_pageConfig == null) return;
 
+    if (path == 'root') {
+      final screen = Map<String, dynamic>.from(_pageConfig!['screen'] ?? {});
+      final currentProps = Map<String, dynamic>.from(screen['props'] ?? {});
+
+      screen['props'] = {
+        ...currentProps,
+        ...props,
+      };
+
+      _updatePageConfig({
+        ..._pageConfig!,
+        'screen': screen,
+      });
+      return;
+    }
+
     final parts = path.split('.');
     if (parts.length < 2) return;
 
@@ -452,7 +493,8 @@ class _EditorScreenState extends State<EditorScreen> {
     });
   }
 
-  void _updateNestedComponent(List<dynamic> list, List<String> pathParts, Map<String, dynamic> props) {
+  void _updateNestedComponent(
+      List<dynamic> list, List<String> pathParts, Map<String, dynamic> props) {
     if (pathParts.isEmpty) return;
 
     final firstIndex = int.tryParse(pathParts[0]);
@@ -479,6 +521,14 @@ class _EditorScreenState extends State<EditorScreen> {
   Map<String, dynamic>? _getComponentAtPath(String? path) {
     if (path == null || _pageConfig == null) return null;
 
+    if (path == 'root') {
+      final screen = _pageConfig!['screen'] as Map<String, dynamic>? ?? {};
+      return {
+        'type': 'screen',
+        'props': screen['props'] ?? {},
+      };
+    }
+
     final parts = path.split('.');
     if (parts.length < 2) return null;
 
@@ -492,7 +542,8 @@ class _EditorScreenState extends State<EditorScreen> {
     return _getNestedComponent(list, parts.sublist(1));
   }
 
-  Map<String, dynamic>? _getNestedComponent(List<dynamic> list, List<String> pathParts) {
+  Map<String, dynamic>? _getNestedComponent(
+      List<dynamic> list, List<String> pathParts) {
     if (pathParts.isEmpty) return null;
 
     final firstIndex = int.tryParse(pathParts[0]);
@@ -518,23 +569,23 @@ class _EditorScreenState extends State<EditorScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A2E),
-        title: const Text('Modifications non sauvegardées'),
-        content: const Text('Voulez-vous sauvegarder avant de quitter?'),
+        title: const Text('Unsaved Changes'),
+        content: const Text('Do you want to save before leaving?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Ne pas sauvegarder'),
+            child: const Text('Don\'t Save'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
               await _saveFile();
               if (context.mounted) Navigator.pop(context, true);
             },
-            child: const Text('Sauvegarder'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -588,7 +639,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             },
             icon: const Icon(Icons.arrow_back),
-            tooltip: 'Retour',
+            tooltip: 'Back',
           ),
           const SizedBox(width: 8),
           Container(
@@ -623,13 +674,14 @@ class _EditorScreenState extends State<EditorScreen> {
                     if (_hasChanges) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.orange.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
-                          'Non sauvegardé',
+                          'Unsaved',
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.orange,
@@ -641,7 +693,7 @@ class _EditorScreenState extends State<EditorScreen> {
                   ],
                 ),
                 Text(
-                  widget.isNew ? 'Nouvelle page' : 'Édition',
+                  widget.isNew ? 'New Page' : 'Editing',
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white54,
@@ -652,7 +704,7 @@ class _EditorScreenState extends State<EditorScreen> {
           ),
           // Preview brand selector
           const Text(
-            'Aperçu:',
+            'Preview:',
             style: TextStyle(color: Colors.white54, fontSize: 12),
           ),
           const SizedBox(width: 8),
@@ -689,9 +741,10 @@ class _EditorScreenState extends State<EditorScreen> {
           ElevatedButton.icon(
             onPressed: _saveFile,
             icon: const Icon(Icons.save, size: 18),
-            label: const Text('Sauvegarder'),
+            label: const Text('Save'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: _hasChanges ? const Color(0xFF6C63FF) : Colors.grey,
+              backgroundColor:
+                  _hasChanges ? const Color(0xFF6C63FF) : Colors.grey,
             ),
           ),
         ],
@@ -716,7 +769,7 @@ class _EditorScreenState extends State<EditorScreen> {
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
-              'Erreur de chargement',
+              'Loading Error',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white.withValues(alpha: 0.8),
@@ -732,7 +785,7 @@ class _EditorScreenState extends State<EditorScreen> {
             ElevatedButton.icon(
               onPressed: _loadData,
               icon: const Icon(Icons.refresh),
-              label: const Text('Réessayer'),
+              label: const Text('Retry'),
             ),
           ],
         ),
@@ -753,16 +806,11 @@ class _EditorScreenState extends State<EditorScreen> {
           width: 1,
           color: Colors.white.withValues(alpha: 0.1),
         ),
-        // Column 2: Structure (Navigation + Tree)
+        // Column 2: Structure (Tree)
         Expanded(
           flex: 2,
           child: Column(
             children: [
-              // Navigation editor
-              NavigationEditor(
-                navigation: _pageConfig?['navigation'] as Map<String, dynamic>?,
-                onUpdate: _updateNavigation,
-              ),
               // Component tree
               Expanded(
                 child: ComponentTree(
@@ -789,6 +837,9 @@ class _EditorScreenState extends State<EditorScreen> {
             componentPath: _selectedComponentPath,
             specs: _componentSpecs,
             onUpdate: _updateComponent,
+            navigationConfig:
+                _pageConfig?['navigation'] as Map<String, dynamic>?,
+            onNavigationUpdate: _updateNavigation,
           ),
         ),
         VerticalDivider(

@@ -14,8 +14,17 @@
     },
     "header": [
       {
+        "type": "progress_bar",
+        "props": {
+          "value": 40,
+          "showCounter": false
+        }
+      },
+      {
         "type": "container",
-        "props": { "padding": 16 },
+        "props": {
+          "padding": 16
+        },
         "children": [
           {
             "type": "text",
@@ -31,11 +40,15 @@
     "content": [
       {
         "type": "column",
-        "props": { "crossAxisAlignment": "stretch" },
+        "props": {
+          "crossAxisAlignment": "stretch"
+        },
         "children": [
           {
             "type": "padding",
-            "props": { "padding": 16 },
+            "props": {
+              "padding": 16
+            },
             "children": [
               {
                 "type": "text_input",
@@ -49,7 +62,9 @@
           },
           {
             "type": "padding",
-            "props": { "padding": 16 },
+            "props": {
+              "padding": 16
+            },
             "children": [
               {
                 "type": "text_input",
@@ -63,7 +78,9 @@
           },
           {
             "type": "padding",
-            "props": { "padding": 16 },
+            "props": {
+              "padding": 16
+            },
             "children": [
               {
                 "type": "progress_bar",
@@ -80,7 +97,9 @@
     "footer": [
       {
         "type": "container",
-        "props": { "padding": 16 },
+        "props": {
+          "padding": 16
+        },
         "children": [
           {
             "type": "button",

@@ -19,81 +19,92 @@ class NavigationEditor extends StatelessWidget {
     final durationMs = nav['durationMs'] as int? ?? 300;
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A2E),
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.white.withValues(alpha: 0.1),
-          ),
+        color: const Color(0xFF252538),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          Row(
-            children: [
-              const Icon(Icons.navigation, size: 16, color: Color(0xFF6C63FF)),
-              const SizedBox(width: 8),
-              const Text(
-                'Navigation',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                const Icon(Icons.navigation, size: 16, color: Color(0xFF6C63FF)),
+                const SizedBox(width: 8),
+                const Text(
+                  'Navigation',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              _buildInfoBadge(type, direction),
-            ],
+                const Spacer(),
+                _buildInfoBadge(type, direction),
+              ],
+            ),
           ),
           const SizedBox(height: 12),
+          const Divider(height: 1, color: Colors.white10),
+          const SizedBox(height: 12),
           
-          // Type & Direction row
-          Row(
-            children: [
-              Expanded(
-                child: _buildDropdown(
-                  label: 'Type',
-                  value: type,
-                  items: const ['navigate', 'refresh'],
-                  onChanged: (value) => _updateField('type', value),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              children: [
+                // Type & Direction row
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildDropdown(
+                        label: 'Type',
+                        value: type,
+                        items: const ['navigate', 'refresh'],
+                        onChanged: (value) => _updateField('type', value),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildDropdown(
+                        label: 'Direction',
+                        value: direction,
+                        items: const ['left', 'right', 'up', 'down'],
+                        onChanged: (value) => _updateField('direction', value),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildDropdown(
-                  label: 'Direction',
-                  value: direction,
-                  items: const ['left', 'right', 'up', 'down'],
-                  onChanged: (value) => _updateField('direction', value),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          
-          // Scope & Duration row
-          Row(
-            children: [
-              Expanded(
-                child: _buildDropdown(
-                  label: 'Scope',
-                  value: scope,
-                  items: const ['content', 'full'],
-                  onChanged: (value) => _updateField('scope', value),
-                ),
-              ),
-              const SizedBox(width: 12),
+                const SizedBox(height: 10),
+                
+                // Scope & Duration row
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildDropdown(
+                        label: 'Scope',
+                        value: scope,
+                        items: const ['content', 'full'],
+                        onChanged: (value) => _updateField('scope', value),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
               Expanded(
                 child: _buildNumberInput(
-                  label: 'Durée (ms)',
+                  label: 'Duration (ms)',
                   value: durationMs,
                   onChanged: (value) => _updateField('durationMs', value),
                 ),
               ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

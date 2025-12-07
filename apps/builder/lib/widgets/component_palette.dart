@@ -48,7 +48,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
                   const Icon(Icons.widgets, size: 18, color: Color(0xFF6C63FF)),
                   const SizedBox(width: 8),
                   const Text(
-                    'Composants',
+                    'Components',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -82,7 +82,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Glissez les composants vers la structure ou cliquez pour ajouter',
+                'Drag components to structure or click to add',
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.white.withValues(alpha: 0.5),
@@ -231,7 +231,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
                         ),
                       ),
                       Text(
-                        'Glissez vers la structure',
+                        'Drag to structure',
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.white.withValues(alpha: 0.7),
@@ -319,9 +319,9 @@ class _ComponentPaletteState extends State<ComponentPalette> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A2E),
-        title: Text('Ajouter ${spec.label}'),
+        title: Text('Add ${spec.label}'),
         content: const Text(
-          'Dans quelle section voulez-vous ajouter ce composant?',
+          'In which section do you want to add this component?',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -357,7 +357,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${spec.label} ajouté au $section'),
+        content: Text('${spec.label} added to $section'),
         duration: const Duration(seconds: 1),
         backgroundColor: const Color(0xFF6C63FF),
       ),
@@ -389,7 +389,7 @@ class _ComponentPaletteState extends State<ComponentPalette> {
 
     switch (propSpec.type) {
       case 'string':
-        if (key == 'text' || key == 'label') return 'Texte';
+        if (key == 'text' || key == 'label') return 'Text';
         if (key == 'field') return 'field_name';
         return '';
       case 'number':

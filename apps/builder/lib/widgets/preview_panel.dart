@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
-class PreviewPanel extends StatelessWidget {
+class PreviewPanel extends StatefulWidget {
   final Map<String, dynamic>? pageConfig;
   final Brand brand;
   final String? selectedPath;
@@ -14,6 +14,13 @@ class PreviewPanel extends StatelessWidget {
     this.selectedPath,
     required this.onSelect,
   });
+
+  @override
+  State<PreviewPanel> createState() => _PreviewPanelState();
+}
+
+class _PreviewPanelState extends State<PreviewPanel> {
+  bool _isMobileMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +42,43 @@ class PreviewPanel extends StatelessWidget {
               const Icon(Icons.preview, size: 16, color: Color(0xFF6C63FF)),
               const SizedBox(width: 8),
               const Text(
-                'Aperçu',
+                'Preview',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 16),
+              // View mode selector
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF252538),
+                  borderRadius: BorderRadius.circular(6),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildModeButton(
+                      icon: Icons.aspect_ratio,
+                      tooltip: 'Responsive',
+                      isSelected: !_isMobileMode,
+                      onTap: () => setState(() => _isMobileMode = false),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 20,
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
+                    _buildModeButton(
+                      icon: Icons.smartphone,
+                      tooltip: 'Mobile',
+                      isSelected: _isMobileMode,
+                      onTap: () => setState(() => _isMobileMode = true),
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),
@@ -50,28 +89,86 @@ class PreviewPanel extends StatelessWidget {
         // Preview content
         Expanded(
           child: Container(
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1A1A2E),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.1),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: _buildPreview(),
-            ),
+            color: const Color(0xFF131322), // Darker background for canvas
+            child: _isMobileMode
+                ? Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Container(
+                        width: 390,
+                        height: 844,
+                        margin: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A2E),
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 12,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 40,
+                              offset: const Offset(0, 20),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: _buildPreviewContent(),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A1A2E),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: _buildPreviewContent(),
+                    ),
+                  ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildModeButton({
+    required IconData icon,
+    required String tooltip,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFF6C63FF).withValues(alpha: 0.2)
+              : null,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: isSelected ? const Color(0xFF6C63FF) : Colors.white54,
+        ),
+      ),
     );
   }
 
@@ -86,7 +183,7 @@ class PreviewPanel extends StatelessWidget {
         ),
       ),
       child: Text(
-        brand.name.toUpperCase(),
+        widget.brand.name.toUpperCase(),
         style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -97,7 +194,7 @@ class PreviewPanel extends StatelessWidget {
   }
 
   Color _getBrandColor() {
-    switch (brand) {
+    switch (widget.brand) {
       case Brand.match:
         return const Color(0xFF11144C);
       case Brand.meetic:
@@ -109,12 +206,12 @@ class PreviewPanel extends StatelessWidget {
     }
   }
 
-  Widget _buildPreview() {
-    if (pageConfig == null) {
+  Widget _buildPreviewContent() {
+    if (widget.pageConfig == null) {
       return _buildEmptyPreview();
     }
 
-    final screen = pageConfig!['screen'] as Map<String, dynamic>?;
+    final screen = widget.pageConfig!['screen'] as Map<String, dynamic>?;
     if (screen == null) {
       return _buildEmptyPreview();
     }
@@ -123,7 +220,7 @@ class PreviewPanel extends StatelessWidget {
     try {
       final screenConfig = ScreenConfig.fromJson(screen);
       return Theme(
-        data: BrandTheme.getTheme(brand),
+        data: BrandTheme.getTheme(widget.brand),
         child: DynamicScreen(
           config: screenConfig,
           onFormChanged: (_) {},
@@ -148,7 +245,7 @@ class PreviewPanel extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Aucun contenu',
+            'No content',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white.withValues(alpha: 0.5),
@@ -156,7 +253,7 @@ class PreviewPanel extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Ajoutez des composants pour voir l\'aperçu',
+            'Add components to see the preview',
             style: TextStyle(
               fontSize: 13,
               color: Colors.white.withValues(alpha: 0.3),
@@ -181,7 +278,7 @@ class PreviewPanel extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Erreur de rendu',
+              'Rendering Error',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -203,4 +300,3 @@ class PreviewPanel extends StatelessWidget {
     );
   }
 }
-

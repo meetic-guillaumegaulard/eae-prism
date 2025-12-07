@@ -64,11 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A2E),
-        title: Text(isFolder ? 'Nouveau dossier' : 'Nouvelle page'),
+        title: Text(isFolder ? 'New Folder' : 'New Page'),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
-            labelText: 'Chemin',
+            labelText: 'Path',
             hintText: isFolder
                 ? 'brand/flow'
                 : 'brand/flow/screen',
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   await _loadFileTree();
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Dossier "$path" créé')),
+                      SnackBar(content: Text('Folder "$path" created')),
                     );
                   }
                 } else {
@@ -113,14 +113,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Erreur: $e'),
+                      content: Text('Error: $e'),
                       backgroundColor: Colors.red,
                     ),
                   );
                 }
               }
             },
-            child: const Text('Créer'),
+            child: const Text('Create'),
           ),
         ],
       ),
@@ -132,21 +132,21 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A2E),
-        title: const Text('Confirmer la suppression'),
+        title: const Text('Confirm Deletion'),
         content: Text(
-          'Voulez-vous vraiment supprimer "${item.name}"?',
+          'Are you sure you want to delete "${item.name}"?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Supprimer'),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -163,14 +163,14 @@ class _HomeScreenState extends State<HomeScreen> {
       await _loadFileTree();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('"${item.name}" supprimé')),
+          SnackBar(content: Text('"${item.name}" deleted')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erreur: $e'),
+            content: Text('Error: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      'Éditeur WYSIWYG pour pages dynamiques',
+                      'WYSIWYG Editor for Dynamic Pages',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white54,
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 OutlinedButton.icon(
                   onPressed: _createNewFolder,
                   icon: const Icon(Icons.create_new_folder, size: 18),
-                  label: const Text('Nouveau dossier'),
+                  label: const Text('New Folder'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white70,
                     side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton.icon(
                   onPressed: _createNewFile,
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Nouvelle page'),
+                  label: const Text('New Page'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6C63FF),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
-              'Erreur de connexion',
+              'Connection Error',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white.withValues(alpha: 0.8),
@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton.icon(
               onPressed: _loadFileTree,
               icon: const Icon(Icons.refresh),
-              label: const Text('Réessayer'),
+              label: const Text('Retry'),
             ),
           ],
         ),
@@ -317,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Aucun fichier',
+              'No Files',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white.withValues(alpha: 0.6),
@@ -325,14 +325,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Commencez par créer une nouvelle page',
+              'Start by creating a new page',
               style: TextStyle(color: Colors.white54),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: _createNewFile,
               icon: const Icon(Icons.add),
-              label: const Text('Nouvelle page'),
+              label: const Text('New Page'),
             ),
           ],
         ),
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               Text(
-                'Fichiers',
+                'Files',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -358,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 onPressed: _loadFileTree,
                 icon: const Icon(Icons.refresh, size: 18),
-                tooltip: 'Actualiser',
+                tooltip: 'Refresh',
                 style: IconButton.styleFrom(
                   foregroundColor: Colors.white54,
                 ),
@@ -459,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: IconButton.styleFrom(
                     foregroundColor: Colors.white38,
                   ),
-                  tooltip: 'Supprimer',
+                  tooltip: 'Delete',
                 ),
               ],
             ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/component_spec.dart';
+import 'navigation_editor.dart';
 
 class PropertyEditor extends StatelessWidget {
   final Map<String, dynamic>? component;
   final String? componentPath;
   final ComponentSpecs? specs;
   final void Function(String path, Map<String, dynamic> props) onUpdate;
+  final Map<String, dynamic>? navigationConfig;
+  final void Function(Map<String, dynamic> navigation)? onNavigationUpdate;
 
   const PropertyEditor({
     super.key,
@@ -13,6 +16,8 @@ class PropertyEditor extends StatelessWidget {
     this.componentPath,
     this.specs,
     required this.onUpdate,
+    this.navigationConfig,
+    this.onNavigationUpdate,
   });
 
   @override
@@ -35,7 +40,7 @@ class PropertyEditor extends StatelessWidget {
               Icon(Icons.tune, size: 16, color: Color(0xFF6C63FF)),
               SizedBox(width: 8),
               Text(
-                'Propriétés',
+                'Properties',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -67,7 +72,7 @@ class PropertyEditor extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Sélectionnez un composant',
+            'Select a component',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.5),
               fontSize: 13,
@@ -75,7 +80,7 @@ class PropertyEditor extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'pour éditer ses propriétés',
+            'to edit its properties',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.3),
               fontSize: 12,
@@ -90,6 +95,7 @@ class PropertyEditor extends StatelessWidget {
     final type = component!['type'] as String? ?? 'unknown';
     final props = Map<String, dynamic>.from(component!['props'] ?? {});
     final spec = specs?.findByType(type);
+    final isScreen = type == 'screen';
 
     return ListView(
       padding: const EdgeInsets.all(12),
@@ -110,7 +116,7 @@ class PropertyEditor extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(
-                  _getIconForType(type),
+                  isScreen ? Icons.web : _getIconForType(type),
                   size: 18,
                   color: const Color(0xFF6C63FF),
                 ),
@@ -144,6 +150,16 @@ class PropertyEditor extends StatelessWidget {
             ],
           ),
         ),
+
+        // Navigation Editor (Only for screen)
+        if (isScreen && onNavigationUpdate != null) ...[
+          const SizedBox(height: 16),
+          NavigationEditor(
+            navigation: navigationConfig,
+            onUpdate: onNavigationUpdate!,
+          ),
+        ],
+
         const SizedBox(height: 16),
 
         // Properties
@@ -249,7 +265,8 @@ class PropertyEditor extends StatelessWidget {
       case 'color':
         return _buildColorInput(key, currentValue, allProps);
       case 'enum':
-        return _buildEnumInput(key, propSpec.enumValues ?? [], currentValue, allProps);
+        return _buildEnumInput(
+            key, propSpec.enumValues ?? [], currentValue, allProps);
       default:
         return _buildStringInput(key, currentValue?.toString(), allProps);
     }
@@ -264,8 +281,9 @@ class PropertyEditor extends StatelessWidget {
       initialValue: currentValue?.toString() ?? '',
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        hintText: 'Entrez une valeur...',
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        hintText: 'Enter a value...',
         hintStyle: TextStyle(
           color: Colors.white.withValues(alpha: 0.3),
           fontSize: 13,
@@ -288,7 +306,8 @@ class PropertyEditor extends StatelessWidget {
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         hintText: '0',
         hintStyle: TextStyle(
           color: Colors.white.withValues(alpha: 0.3),
@@ -323,7 +342,7 @@ class PropertyEditor extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          currentValue == true ? 'Activé' : 'Désactivé',
+          currentValue == true ? 'Enabled' : 'Disabled',
           style: TextStyle(
             fontSize: 12,
             color: Colors.white.withValues(alpha: 0.7),
@@ -373,7 +392,8 @@ class PropertyEditor extends StatelessWidget {
             ),
             style: const TextStyle(fontSize: 13, color: Colors.white),
             onChanged: (value) {
-              if (value.isEmpty || (value.startsWith('#') && value.length == 7)) {
+              if (value.isEmpty ||
+                  (value.startsWith('#') && value.length == 7)) {
                 _updateProperty(key, value.isEmpty ? null : value);
               }
             },
@@ -390,11 +410,13 @@ class PropertyEditor extends StatelessWidget {
     Map<String, dynamic> allProps,
   ) {
     return DropdownButtonFormField<String>(
-      initialValue: values.contains(currentValue) ? currentValue as String : null,
+      initialValue:
+          values.contains(currentValue) ? currentValue as String : null,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        hintText: 'Sélectionnez...',
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        hintText: 'Select...',
         hintStyle: TextStyle(
           color: Colors.white.withValues(alpha: 0.3),
           fontSize: 13,
@@ -469,4 +491,3 @@ class PropertyEditor extends StatelessWidget {
     }
   }
 }
-

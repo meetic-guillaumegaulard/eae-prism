@@ -23,7 +23,8 @@ class ComponentTree extends StatefulWidget {
   final void Function(String?) onSelect;
   final void Function(String path) onRemove;
   final void Function(String path, Map<String, dynamic> component) onInsert;
-  final void Function(String sourcePath, String targetParentPath, int targetIndex) onMove;
+  final void Function(
+      String sourcePath, String targetParentPath, int targetIndex) onMove;
 
   const ComponentTree({
     super.key,
@@ -48,7 +49,7 @@ class _ComponentTreeState extends State<ComponentTree> {
     if (widget.screen == null) {
       return Center(
         child: Text(
-          'Aucune page',
+          'No page',
           style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         ),
       );
@@ -80,61 +81,60 @@ class _ComponentTreeState extends State<ComponentTree> {
   }
 
   Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+    final isSelected = widget.selectedPath == 'root';
+
+    return InkWell(
+      onTap: () => widget.onSelect('root'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFF6C63FF).withValues(alpha: 0.1)
+              : null,
+          border: Border(
+            bottom: BorderSide(
+              color: isSelected
+                  ? const Color(0xFF6C63FF)
+                  : Colors.white.withValues(alpha: 0.1),
+              width: 2, // Largeur fixe pour éviter le changement de hauteur
+            ),
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.account_tree, size: 16, color: Color(0xFF6C63FF)),
-          const SizedBox(width: 8),
-          const Text(
-            'Structure',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50).withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.drag_indicator, size: 10, color: Color(0xFF4CAF50)),
-                SizedBox(width: 2),
-                Text(
-                  'Drag & Drop',
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: Color(0xFF4CAF50),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          if (widget.selectedPath != null)
-            IconButton(
-              icon: const Icon(Icons.deselect, size: 16),
-              onPressed: () => widget.onSelect(null),
-              tooltip: 'Désélectionner',
-              style: IconButton.styleFrom(
-                foregroundColor: Colors.white54,
-                padding: EdgeInsets.zero,
-                minimumSize: const Size(28, 28),
+        child: Row(
+          children: [
+            Icon(Icons.web,
+                size: 16,
+                color: isSelected ? const Color(0xFF6C63FF) : Colors.white70),
+            const SizedBox(width: 8),
+            Text(
+              'Page',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : Colors.white70,
               ),
             ),
-        ],
+            const SizedBox(width: 8),
+            // Edit icon indicator
+            Icon(
+              Icons.edit,
+              size: 12,
+              color: isSelected ? const Color(0xFF6C63FF) : Colors.white24,
+            ),
+            const Spacer(),
+            if (widget.selectedPath != null)
+              IconButton(
+                icon: const Icon(Icons.deselect, size: 16),
+                onPressed: () => widget.onSelect(null),
+                tooltip: 'Deselect',
+                style: IconButton.styleFrom(
+                  foregroundColor: Colors.white54,
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(28, 28),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -174,8 +174,7 @@ class _ComponentTreeState extends State<ComponentTree> {
                 _buildDropZone(section, i + 1),
               ],
               // Empty state
-              if (components.isEmpty)
-                _buildEmptyState(section),
+              if (components.isEmpty) _buildEmptyState(section),
             ],
           ),
         ),
@@ -183,11 +182,13 @@ class _ComponentTreeState extends State<ComponentTree> {
     );
   }
 
-  Widget _buildSectionHeader(String section, String label, IconData icon, int count) {
+  Widget _buildSectionHeader(
+      String section, String label, IconData icon, int count) {
     return DragTarget<DragComponentData>(
       onWillAcceptWithDetails: (details) {
         // Prevent dropping a section onto itself
-        if (details.data.sourcePath != null && details.data.sourcePath == section) return false;
+        if (details.data.sourcePath != null &&
+            details.data.sourcePath == section) return false;
         return true;
       },
       onAcceptWithDetails: (details) {
@@ -198,9 +199,12 @@ class _ComponentTreeState extends State<ComponentTree> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
-            color: isHovered ? const Color(0xFF6C63FF).withValues(alpha: 0.1) : Colors.transparent,
+            color: isHovered
+                ? const Color(0xFF6C63FF).withValues(alpha: 0.1)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
-            border: isHovered ? Border.all(color: const Color(0xFF6C63FF)) : null,
+            border:
+                isHovered ? Border.all(color: const Color(0xFF6C63FF)) : null,
           ),
           child: Row(
             children: [
@@ -229,7 +233,7 @@ class _ComponentTreeState extends State<ComponentTree> {
               if (isHovered) ...[
                 const Spacer(),
                 const Text(
-                  'Ajouter à la fin',
+                  'Add to end',
                   style: TextStyle(fontSize: 10, color: Color(0xFF6C63FF)),
                 ),
               ],
@@ -247,18 +251,16 @@ class _ComponentTreeState extends State<ComponentTree> {
     return DragTarget<DragComponentData>(
       onWillAcceptWithDetails: (details) {
         final data = details.data;
-        
+
         // Always accept new components
         if (data.isNew) return true;
-        
+
         // Prevent dropping onto itself or its own children
         if (data.sourcePath != null) {
-          // Can't drop inside itself
           if (parentPath.startsWith(data.sourcePath!)) {
             return false;
           }
-          
-          // Check if drop is at same position (no-op)
+
           final sourceParent = _getParentPath(data.sourcePath!);
           if (sourceParent == parentPath) {
             final sourceIndex = _getIndexFromPath(data.sourcePath!);
@@ -267,7 +269,7 @@ class _ComponentTreeState extends State<ComponentTree> {
             }
           }
         }
-        
+
         return true;
       },
       onAcceptWithDetails: (details) {
@@ -285,53 +287,38 @@ class _ComponentTreeState extends State<ComponentTree> {
         }
       },
       builder: (context, candidateData, rejectedData) {
-        // Show active state if we are hovering OR if drag data is acceptable
-        // This fixes "doesn't activate" issue by being more permissive visually
         final showActive = isHovered || candidateData.isNotEmpty;
-        
-        // Always show drop zones during drag, larger when active
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
+
+        // Fixed height container to prevent layout shifts
+        // This acts as the margin between components
+        return Container(
+          height: 10,
+          width: double.infinity,
           margin: const EdgeInsets.only(left: 12, right: 4),
-          height: _isDragging ? (showActive ? 48 : 32) : 4,
-          decoration: BoxDecoration(
-            color: showActive
-                ? const Color(0xFF6C63FF).withValues(alpha: 0.25)
-                : (_isDragging ? const Color(0xFF6C63FF).withValues(alpha: 0.08) : Colors.transparent),
-            borderRadius: BorderRadius.circular(8),
-            border: showActive
-                ? Border.all(color: const Color(0xFF6C63FF), width: 2)
-                : (_isDragging 
-                    ? Border.all(color: const Color(0xFF6C63FF).withValues(alpha: 0.3), width: 1)
-                    : null),
+          alignment: Alignment.center,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            height: showActive ? 2 : (_isDragging ? 1 : 0),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: showActive
+                  ? const Color(0xFF6C63FF)
+                  : (_isDragging
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.transparent),
+              borderRadius: BorderRadius.circular(1),
+              boxShadow: showActive
+                  ? [
+                      BoxShadow(
+                        color: const Color(0xFF6C63FF).withValues(alpha: 0.5),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                      )
+                    ]
+                  : null,
+            ),
           ),
-          child: _isDragging
-              ? Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        showActive ? Icons.check_circle : Icons.add_circle_outline,
-                        size: 16,
-                        color: showActive 
-                            ? const Color(0xFF6C63FF) 
-                            : const Color(0xFF6C63FF).withValues(alpha: 0.5),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        showActive ? 'Relâcher ici' : 'Position ${index + 1}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: showActive 
-                              ? const Color(0xFF6C63FF) 
-                              : const Color(0xFF6C63FF).withValues(alpha: 0.5),
-                          fontWeight: showActive ? FontWeight.w600 : FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : null,
         );
       },
     );
@@ -350,7 +337,7 @@ class _ComponentTreeState extends State<ComponentTree> {
       ),
       child: Center(
         child: Text(
-          'Glissez des composants ici',
+          'Drop components here',
           style: TextStyle(
             fontSize: 11,
             color: Colors.white.withValues(alpha: 0.4),
@@ -371,12 +358,12 @@ class _ComponentTreeState extends State<ComponentTree> {
     final type = component['type'] as String? ?? 'unknown';
     final props = component['props'] as Map<String, dynamic>? ?? {};
     final children = component['children'] as List<dynamic>?;
-    
+
     // Construct full path: "content.0.children.1"
-    final currentPath = parentPath == section 
-        ? '$section.$index' 
+    final currentPath = parentPath == section
+        ? '$section.$index'
         : '$parentPath.children.$index';
-        
+
     final isSelected = widget.selectedPath == currentPath;
 
     // Get display label
@@ -385,7 +372,8 @@ class _ComponentTreeState extends State<ComponentTree> {
       label = '$type: "${props['label']}"';
     } else if (props.containsKey('text')) {
       final text = props['text'] as String;
-      label = '$type: "${text.length > 15 ? '${text.substring(0, 15)}...' : text}"';
+      label =
+          '$type: "${text.length > 15 ? '${text.substring(0, 15)}...' : text}"';
     } else if (props.containsKey('field')) {
       label = '$type [${props['field']}]';
     }
@@ -414,9 +402,11 @@ class _ComponentTreeState extends State<ComponentTree> {
           feedback: _buildDragFeedback(type, label, children?.length ?? 0),
           childWhenDragging: Opacity(
             opacity: 0.3,
-            child: _buildItemContent(type, label, children, false, currentPath, depth),
+            child: _buildItemContent(
+                type, label, children, false, currentPath, depth),
           ),
-          child: _buildItemContent(type, label, children, isSelected, currentPath, depth),
+          child: _buildItemContent(
+              type, label, children, isSelected, currentPath, depth),
         ),
         // Render children recursively
         if (children != null && children.isNotEmpty)
@@ -528,7 +518,9 @@ class _ComponentTreeState extends State<ComponentTree> {
               : const Color(0xFF252538),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: isSelected ? const Color(0xFF6C63FF) : Colors.white.withValues(alpha: 0.1),
+            color: isSelected
+                ? const Color(0xFF6C63FF)
+                : Colors.white.withValues(alpha: 0.1),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -607,10 +599,22 @@ class _ComponentTreeState extends State<ComponentTree> {
     );
   }
 
-  void _handleDrop(DragComponentData data, String targetParentPath, int targetIndex) {
+  void _handleDrop(
+      DragComponentData data, String targetParentPath, int targetIndex) {
     if (data.isNew) {
       // Add new component
-      widget.onInsert(targetParentPath, data.component);
+      // Construct the full path including the target index
+      String fullPath;
+      if (targetParentPath == 'header' ||
+          targetParentPath == 'content' ||
+          targetParentPath == 'footer') {
+        // Root section insert: "content.0"
+        fullPath = '$targetParentPath.$targetIndex';
+      } else {
+        // Nested insert: "content.0.children.1"
+        fullPath = '$targetParentPath.children.$targetIndex';
+      }
+      widget.onInsert(fullPath, data.component);
     } else {
       // Move existing component
       if (data.sourcePath != null) {
@@ -622,7 +626,7 @@ class _ComponentTreeState extends State<ComponentTree> {
   String _getParentPath(String path) {
     final parts = path.split('.');
     if (parts.length <= 2) return parts[0]; // section
-    
+
     // Remove ".children.index" from end
     return parts.sublist(0, parts.length - 2).join('.');
   }
@@ -653,26 +657,46 @@ class _ComponentTreeState extends State<ComponentTree> {
 
   IconData _getIconForType(String type) {
     switch (type) {
-      case 'text': return Icons.text_fields;
-      case 'button': return Icons.smart_button;
-      case 'text_input': return Icons.edit;
-      case 'checkbox': return Icons.check_box_outlined;
-      case 'toggle': return Icons.toggle_on_outlined;
-      case 'slider': return Icons.linear_scale;
-      case 'progress_bar': return Icons.percent;
-      case 'icon': return Icons.emoji_emotions_outlined;
-      case 'logo': return Icons.branding_watermark;
-      case 'header': return Icons.title;
-      case 'selection_group': return Icons.checklist;
-      case 'container': return Icons.crop_square;
-      case 'column': return Icons.view_column;
-      case 'row': return Icons.view_stream;
-      case 'padding': return Icons.padding;
-      case 'expanded': return Icons.expand;
-      case 'sized_box': return Icons.crop;
-      case 'center': return Icons.center_focus_strong;
-      case 'scrollable': return Icons.unfold_more;
-      default: return Icons.widgets;
+      case 'text':
+        return Icons.text_fields;
+      case 'button':
+        return Icons.smart_button;
+      case 'text_input':
+        return Icons.edit;
+      case 'checkbox':
+        return Icons.check_box_outlined;
+      case 'toggle':
+        return Icons.toggle_on_outlined;
+      case 'slider':
+        return Icons.linear_scale;
+      case 'progress_bar':
+        return Icons.percent;
+      case 'icon':
+        return Icons.emoji_emotions_outlined;
+      case 'logo':
+        return Icons.branding_watermark;
+      case 'header':
+        return Icons.title;
+      case 'selection_group':
+        return Icons.checklist;
+      case 'container':
+        return Icons.crop_square;
+      case 'column':
+        return Icons.view_column;
+      case 'row':
+        return Icons.view_stream;
+      case 'padding':
+        return Icons.padding;
+      case 'expanded':
+        return Icons.expand;
+      case 'sized_box':
+        return Icons.crop;
+      case 'center':
+        return Icons.center_focus_strong;
+      case 'scrollable':
+        return Icons.unfold_more;
+      default:
+        return Icons.widgets;
     }
   }
 
