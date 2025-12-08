@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class DynamicScreenUsecases extends StatelessWidget {
-  const DynamicScreenUsecases({Key? key}) : super(key: key);
+  const DynamicScreenUsecases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -336,16 +336,16 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
   @override
   Widget build(BuildContext context) {
     // Create a config programmatically
-    final config = ScreenConfig(
+    const config = ScreenConfig(
       template: 'screen_layout',
       header: [
         ComponentConfig(
           type: 'container',
-          props: const {'padding': 16},
+          props: {'padding': 16},
           children: [
             ComponentConfig(
               type: 'text',
-              props: const {
+              props: {
                 'text': 'Preferences',
                 'type': 'headline_medium',
                 'fontWeight': 'bold',
@@ -357,18 +357,18 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
       content: [
         ComponentConfig(
           type: 'column',
-          props: const {
+          props: {
             'mainAxisAlignment': 'start',
             'crossAxisAlignment': 'stretch',
           },
           children: [
             ComponentConfig(
               type: 'padding',
-              props: const {'padding': 16},
+              props: {'padding': 16},
               children: [
                 ComponentConfig(
                   type: 'text',
-                  props: const {
+                  props: {
                     'text': 'Select your gender',
                     'type': 'title_medium',
                   },
@@ -377,13 +377,13 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
             ),
             ComponentConfig(
               type: 'padding',
-              props: const {
+              props: {
                 'padding': {'left': 16, 'right': 16, 'bottom': 16}
               },
               children: [
                 ComponentConfig(
                   type: 'selectable_button_group',
-                  props: const {
+                  props: {
                     'labels': ['Male', 'Female', 'Other'],
                     'field': 'profile.gender',
                     'defaultValue': 'Male',
@@ -393,11 +393,11 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
             ),
             ComponentConfig(
               type: 'padding',
-              props: const {'padding': 16},
+              props: {'padding': 16},
               children: [
                 ComponentConfig(
                   type: 'text',
-                  props: const {
+                  props: {
                     'text': 'Your height',
                     'type': 'title_medium',
                   },
@@ -406,13 +406,13 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
             ),
             ComponentConfig(
               type: 'padding',
-              props: const {
+              props: {
                 'padding': {'left': 16, 'right': 16, 'bottom': 16}
               },
               children: [
                 ComponentConfig(
                   type: 'height_slider',
-                  props: const {
+                  props: {
                     'field': 'profile.height',
                     'minValue': 140,
                     'maxValue': 220,
@@ -423,11 +423,11 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
             ),
             ComponentConfig(
               type: 'padding',
-              props: const {'padding': 16},
+              props: {'padding': 16},
               children: [
                 ComponentConfig(
                   type: 'text',
-                  props: const {
+                  props: {
                     'text': 'Your interests',
                     'type': 'title_medium',
                   },
@@ -436,13 +436,13 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
             ),
             ComponentConfig(
               type: 'padding',
-              props: const {
+              props: {
                 'padding': {'left': 16, 'right': 16, 'bottom': 16}
               },
               children: [
                 ComponentConfig(
                   type: 'selectable_tag_group',
-                  props: const {
+                  props: {
                     'labels': [
                       'Travel',
                       'Music',
@@ -463,15 +463,15 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
       footer: [
         ComponentConfig(
           type: 'container',
-          props: const {'padding': 16},
+          props: {'padding': 16},
           children: [
             ComponentConfig(
               type: 'row',
-              props: const {'mainAxisAlignment': 'spaceEvenly'},
+              props: {'mainAxisAlignment': 'spaceEvenly'},
               children: [
                 ComponentConfig(
                   type: 'button',
-                  props: const {
+                  props: {
                     'label': 'Reset',
                     'variant': 'outline',
                     'exit': 'reset',
@@ -479,7 +479,7 @@ class _CustomConfigExampleState extends State<_CustomConfigExample> {
                 ),
                 ComponentConfig(
                   type: 'button',
-                  props: const {
+                  props: {
                     'label': 'Save Profile',
                     'variant': 'primary',
                     'exit': 'submit',

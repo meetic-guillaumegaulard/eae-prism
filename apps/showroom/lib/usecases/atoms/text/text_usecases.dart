@@ -4,99 +4,99 @@ import 'package:design_system/design_system.dart';
 class _AllTextTypesDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+    return const SingleChildScrollView(
+      padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Display
-          const TextEAE(
+          TextEAE(
             'Display Large',
             type: TextTypeEAE.displayLarge,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Display Medium',
             type: TextTypeEAE.displayMedium,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Display Small',
             type: TextTypeEAE.displaySmall,
           ),
-          const SizedBox(height: 32),
-          const Divider(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
+          Divider(),
+          SizedBox(height: 32),
 
           // Headlines
-          const TextEAE(
+          TextEAE(
             'Headline Large (H1)',
             type: TextTypeEAE.headlineLarge,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Headline Medium (H2)',
             type: TextTypeEAE.headlineMedium,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Headline Small (H3)',
             type: TextTypeEAE.headlineSmall,
           ),
-          const SizedBox(height: 32),
-          const Divider(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
+          Divider(),
+          SizedBox(height: 32),
 
           // Titles
-          const TextEAE(
+          TextEAE(
             'Title Large (H4)',
             type: TextTypeEAE.titleLarge,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Title Medium (H5)',
             type: TextTypeEAE.titleMedium,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Title Small (H6)',
             type: TextTypeEAE.titleSmall,
           ),
-          const SizedBox(height: 32),
-          const Divider(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
+          Divider(),
+          SizedBox(height: 32),
 
           // Body
-          const TextEAE(
+          TextEAE(
             'Body Large - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             type: TextTypeEAE.bodyLarge,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Body Medium - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             type: TextTypeEAE.bodyMedium,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Body Small - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             type: TextTypeEAE.bodySmall,
           ),
-          const SizedBox(height: 32),
-          const Divider(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
+          Divider(),
+          SizedBox(height: 32),
 
           // Labels
-          const TextEAE(
+          TextEAE(
             'Label Large',
             type: TextTypeEAE.labelLarge,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Label Medium',
             type: TextTypeEAE.labelMedium,
           ),
-          const SizedBox(height: 16),
-          const TextEAE(
+          SizedBox(height: 16),
+          TextEAE(
             'Label Small',
             type: TextTypeEAE.labelSmall,
           ),
@@ -109,34 +109,34 @@ class _AllTextTypesDemo extends StatelessWidget {
 class _ShorthandConstructorsDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+    return const SingleChildScrollView(
+      padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TextEAE.h1('Titre H1 avec constructeur raccourci'),
-          const SizedBox(height: 16),
-          const TextEAE.h2('Titre H2 avec constructeur raccourci'),
-          const SizedBox(height: 16),
-          const TextEAE.h3('Titre H3 avec constructeur raccourci'),
-          const SizedBox(height: 16),
-          const TextEAE.h4('Titre H4 avec constructeur raccourci'),
-          const SizedBox(height: 16),
-          const TextEAE.h5('Titre H5 avec constructeur raccourci'),
-          const SizedBox(height: 16),
-          const TextEAE.h6('Titre H6 avec constructeur raccourci'),
-          const SizedBox(height: 32),
-          const Divider(),
-          const SizedBox(height: 32),
-          const TextEAE.body(
+          TextEAE.h1('Titre H1 avec constructeur raccourci'),
+          SizedBox(height: 16),
+          TextEAE.h2('Titre H2 avec constructeur raccourci'),
+          SizedBox(height: 16),
+          TextEAE.h3('Titre H3 avec constructeur raccourci'),
+          SizedBox(height: 16),
+          TextEAE.h4('Titre H4 avec constructeur raccourci'),
+          SizedBox(height: 16),
+          TextEAE.h5('Titre H5 avec constructeur raccourci'),
+          SizedBox(height: 16),
+          TextEAE.h6('Titre H6 avec constructeur raccourci'),
+          SizedBox(height: 32),
+          Divider(),
+          SizedBox(height: 32),
+          TextEAE.body(
             'Paragraphe normal avec le constructeur .body(). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
           ),
-          const SizedBox(height: 16),
-          const TextEAE.small(
+          SizedBox(height: 16),
+          TextEAE.small(
             'Petit texte avec le constructeur .small(). Texte secondaire ou notes.',
           ),
-          const SizedBox(height: 16),
-          const TextEAE.label('Label avec le constructeur .label()'),
+          SizedBox(height: 16),
+          TextEAE.label('Label avec le constructeur .label()'),
         ],
       ),
     );

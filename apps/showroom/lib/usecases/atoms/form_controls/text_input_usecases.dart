@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 Widget buildDefaultTextInput(BuildContext context) {
-  return Center(
+  return const Center(
     child: Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: const TextInputEAE(
+      padding: EdgeInsets.all(24.0),
+      child: TextInputEAE(
         label: 'Email',
         hintText: 'Enter your email',
       ),
@@ -14,12 +14,12 @@ Widget buildDefaultTextInput(BuildContext context) {
 }
 
 Widget buildTextInputStates(BuildContext context) {
-  return Center(
+  return const Center(
     child: Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           TextInputEAE(
             label: 'Enabled',
             hintText: 'Type something...',
@@ -48,12 +48,12 @@ Widget buildTextInputStates(BuildContext context) {
 }
 
 Widget buildTextInputNoLabel(BuildContext context) {
-  return Center(
+  return const Center(
     child: Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           TextInputEAE(
             hintText: 'Type something...',
           ),

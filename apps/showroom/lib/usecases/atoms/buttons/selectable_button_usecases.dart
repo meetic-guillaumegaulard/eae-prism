@@ -8,11 +8,11 @@ class _SelectableButtonDemo extends StatefulWidget {
   final bool isFullWidth;
 
   const _SelectableButtonDemo({
-    Key? key,
+    super.key,
     required this.label,
     this.size = ButtonEAESize.medium,
     this.isFullWidth = false,
-  }) : super(key: key);
+  });
 
   @override
   State<_SelectableButtonDemo> createState() => _SelectableButtonDemoState();
@@ -44,11 +44,11 @@ Widget buildSelectableButton(BuildContext context) {
 }
 
 Widget buildSelectableButtonGroup(BuildContext context) {
-  return Center(
+  return const Center(
     child: Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: const [
+      children: [
         _SelectableButtonDemo(label: 'Option 1'),
         _SelectableButtonDemo(label: 'Option 2'),
         _SelectableButtonDemo(label: 'Option 3'),
@@ -58,13 +58,13 @@ Widget buildSelectableButtonGroup(BuildContext context) {
 }
 
 Widget buildSelectableButtonWidthBehavior(BuildContext context) {
-  return Center(
+  return const Center(
     child: Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text('Fit Content (Default):',
               style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 8),

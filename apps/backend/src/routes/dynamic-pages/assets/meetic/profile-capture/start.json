@@ -29,9 +29,9 @@
           {
             "type": "text",
             "props": {
-              "text": "Etape 1",
+              "text": "Etape 1 ezahjezahkj",
               "type": "headline_medium",
-              "fontWeight": "bold"
+              "fontWeight": "normal"
             }
           }
         ]
@@ -82,6 +82,23 @@
                   "hintText": "Entrez votre nom",
                   "field": "lastName",
                   "isRequired": true
+                }
+              }
+            ]
+          },
+          {
+            "type": "padding",
+            "props": {
+              "padding": 16
+            },
+            "children": [
+              {
+                "type": "labeled_control",
+                "props": {
+                  "controlType": "checkbox",
+                  "defaultValue": false,
+                  "expanded": true,
+                  "label": "Register"
                 }
               }
             ]

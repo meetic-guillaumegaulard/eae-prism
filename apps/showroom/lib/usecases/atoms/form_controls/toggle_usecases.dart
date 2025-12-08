@@ -65,11 +65,11 @@ class _ToggleStatesDemo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          Row(
+          const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Disabled Off: '),
-              const SizedBox(width: 8),
+              Text('Disabled Off: '),
+              SizedBox(width: 8),
               ToggleEAE(
                 value: false,
                 onChanged: null,
@@ -77,11 +77,11 @@ class _ToggleStatesDemo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          Row(
+          const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Disabled On: '),
-              const SizedBox(width: 8),
+              Text('Disabled On: '),
+              SizedBox(width: 8),
               ToggleEAE(
                 value: true,
                 onChanged: null,
@@ -101,4 +101,3 @@ Widget buildToggle(BuildContext context) {
 Widget buildToggleStates(BuildContext context) {
   return _ToggleStatesDemo();
 }
-

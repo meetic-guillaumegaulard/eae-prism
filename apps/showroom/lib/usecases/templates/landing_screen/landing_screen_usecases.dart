@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class LandingScreenUsecases extends StatelessWidget {
-  const LandingScreenUsecases({Key? key}) : super(key: key);
+  const LandingScreenUsecases({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _LandingScreenDemo();
+    return const _LandingScreenDemo();
   }
 }
 
@@ -16,13 +16,13 @@ class _LandingScreenDemo extends StatelessWidget {
   /// Détecte la brand courante en fonction du thème
   Brand _detectBrand(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    
+
     // Match: #11144C, Meetic: #E9006D, OKC: #0046D5, POF: #000000
     if (primaryColor == const Color(0xFF11144C)) return Brand.match;
     if (primaryColor == const Color(0xFFE9006D)) return Brand.meetic;
     if (primaryColor == const Color(0xFF0046D5)) return Brand.okc;
     if (primaryColor == const Color(0xFF000000)) return Brand.pof;
-    
+
     return Brand.match; // default
   }
 
@@ -129,18 +129,18 @@ class _LandingScreenDemo extends StatelessWidget {
 
 /// Version avec image de fond personnalisée
 class LandingScreenWithBackgroundDemo extends StatelessWidget {
-  const LandingScreenWithBackgroundDemo({Key? key}) : super(key: key);
+  const LandingScreenWithBackgroundDemo({super.key});
 
   /// Détecte la brand courante en fonction du thème
   Brand _detectBrand(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    
+
     // Match: #11144C, Meetic: #E9006D, OKC: #0046D5, POF: #000000
     if (primaryColor == const Color(0xFF11144C)) return Brand.match;
     if (primaryColor == const Color(0xFFE9006D)) return Brand.meetic;
     if (primaryColor == const Color(0xFF0046D5)) return Brand.okc;
     if (primaryColor == const Color(0xFF000000)) return Brand.pof;
-    
+
     return Brand.match; // default
   }
 

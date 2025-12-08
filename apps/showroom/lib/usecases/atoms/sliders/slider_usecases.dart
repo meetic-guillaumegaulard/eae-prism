@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class SliderUsecases extends StatefulWidget {
-  const SliderUsecases({Key? key}) : super(key: key);
+  const SliderUsecases({super.key});
 
   @override
   State<SliderUsecases> createState() => _SliderUsecasesState();
@@ -147,7 +147,8 @@ class _SliderUsecasesState extends State<SliderUsecases> {
                 label: 'Select range',
                 showMinMaxLabels: false,
                 onRangeChanged: (values) {
-                  debugPrint('Range: ${values.start.round()} - ${values.end.round()}');
+                  debugPrint(
+                      'Range: ${values.start.round()} - ${values.end.round()}');
                 },
               ),
             ),
@@ -219,4 +220,3 @@ class _SliderUsecasesState extends State<SliderUsecases> {
     );
   }
 }
-

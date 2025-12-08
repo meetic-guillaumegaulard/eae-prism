@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class HeightSliderUsecases extends StatefulWidget {
-  const HeightSliderUsecases({Key? key}) : super(key: key);
+  const HeightSliderUsecases({super.key});
 
   @override
   State<HeightSliderUsecases> createState() => _HeightSliderUsecasesState();
@@ -203,4 +203,3 @@ class _HeightSliderUsecasesState extends State<HeightSliderUsecases> {
     );
   }
 }
-

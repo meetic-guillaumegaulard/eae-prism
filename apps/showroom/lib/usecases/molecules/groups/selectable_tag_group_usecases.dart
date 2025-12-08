@@ -3,7 +3,7 @@ import 'package:design_system/design_system.dart';
 
 /// Use cases for the SelectableTagGroupEAE component
 class SelectableTagGroupUseCases extends StatelessWidget {
-  const SelectableTagGroupUseCases({Key? key}) : super(key: key);
+  const SelectableTagGroupUseCases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +12,23 @@ class SelectableTagGroupUseCases extends StatelessWidget {
       children: [
         _buildHeader('Selectable Tag Group', 'Groupes de tags sélectionnables'),
         const SizedBox(height: 32),
-        _buildUseCase('Basic - Multi-groups', _BasicMultiGroupsExample()),
+        _buildUseCase('Basic - Multi-groups', const _BasicMultiGroupsExample()),
         const SizedBox(height: 40),
-        _buildUseCase('With Max Selection', _MaxSelectionExample()),
+        _buildUseCase('With Max Selection', const _MaxSelectionExample()),
         const SizedBox(height: 40),
-        _buildUseCase('Different Sizes', _DifferentSizesExample()),
-        const SizedBox(height: 40),
-        _buildUseCase('With Initial Selection', _InitialSelectionExample()),
+        _buildUseCase('Different Sizes', const _DifferentSizesExample()),
         const SizedBox(height: 40),
         _buildUseCase(
-            'Custom Colors - Match Brand', _CustomColorsMatchExample()),
+            'With Initial Selection', const _InitialSelectionExample()),
         const SizedBox(height: 40),
         _buildUseCase(
-            'Custom Colors - Meetic Brand', _CustomColorsMeeticExample()),
+            'Custom Colors - Match Brand', const _CustomColorsMatchExample()),
         const SizedBox(height: 40),
         _buildUseCase(
-            'Real-world Example: Interests', _RealWorldInterestsExample()),
+            'Custom Colors - Meetic Brand', const _CustomColorsMeeticExample()),
+        const SizedBox(height: 40),
+        _buildUseCase('Real-world Example: Interests',
+            const _RealWorldInterestsExample()),
       ],
     );
   }
@@ -90,34 +91,34 @@ class _BasicMultiGroupsExampleState extends State<_BasicMultiGroupsExample> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectableTagGroupEAE<String>(
-          groups: [
+          groups: const [
             TagGroup(
               title: 'Activités sportives',
               options: [
-                const TagOption(label: 'Football', value: 'football'),
-                const TagOption(label: 'Basketball', value: 'basketball'),
-                const TagOption(label: 'Tennis', value: 'tennis'),
-                const TagOption(label: 'Natation', value: 'natation'),
-                const TagOption(label: 'Course à pied', value: 'running'),
+                TagOption(label: 'Football', value: 'football'),
+                TagOption(label: 'Basketball', value: 'basketball'),
+                TagOption(label: 'Tennis', value: 'tennis'),
+                TagOption(label: 'Natation', value: 'natation'),
+                TagOption(label: 'Course à pied', value: 'running'),
               ],
             ),
             TagGroup(
               title: 'Activités culturelles',
               options: [
-                const TagOption(label: 'Cinéma', value: 'cinema'),
-                const TagOption(label: 'Musique', value: 'music'),
-                const TagOption(label: 'Lecture', value: 'reading'),
-                const TagOption(label: 'Théâtre', value: 'theatre'),
-                const TagOption(label: 'Musées', value: 'museums'),
+                TagOption(label: 'Cinéma', value: 'cinema'),
+                TagOption(label: 'Musique', value: 'music'),
+                TagOption(label: 'Lecture', value: 'reading'),
+                TagOption(label: 'Théâtre', value: 'theatre'),
+                TagOption(label: 'Musées', value: 'museums'),
               ],
             ),
             TagGroup(
               title: 'Cuisine',
               options: [
-                const TagOption(label: 'Italienne', value: 'italian'),
-                const TagOption(label: 'Japonaise', value: 'japanese'),
-                const TagOption(label: 'Française', value: 'french'),
-                const TagOption(label: 'Mexicaine', value: 'mexican'),
+                TagOption(label: 'Italienne', value: 'italian'),
+                TagOption(label: 'Japonaise', value: 'japanese'),
+                TagOption(label: 'Française', value: 'french'),
+                TagOption(label: 'Mexicaine', value: 'mexican'),
               ],
             ),
           ],
@@ -177,18 +178,18 @@ class _MaxSelectionExampleState extends State<_MaxSelectionExample> {
         const SizedBox(height: 16),
         SelectableTagGroupEAE<String>(
           maxSelections: 3,
-          groups: [
+          groups: const [
             TagGroup(
               title: 'Langues parlées',
               options: [
-                const TagOption(label: 'Français', value: 'fr'),
-                const TagOption(label: 'Anglais', value: 'en'),
-                const TagOption(label: 'Espagnol', value: 'es'),
-                const TagOption(label: 'Italien', value: 'it'),
-                const TagOption(label: 'Allemand', value: 'de'),
-                const TagOption(label: 'Portugais', value: 'pt'),
-                const TagOption(label: 'Chinois', value: 'zh'),
-                const TagOption(label: 'Japonais', value: 'ja'),
+                TagOption(label: 'Français', value: 'fr'),
+                TagOption(label: 'Anglais', value: 'en'),
+                TagOption(label: 'Espagnol', value: 'es'),
+                TagOption(label: 'Italien', value: 'it'),
+                TagOption(label: 'Allemand', value: 'de'),
+                TagOption(label: 'Portugais', value: 'pt'),
+                TagOption(label: 'Chinois', value: 'zh'),
+                TagOption(label: 'Japonais', value: 'ja'),
               ],
             ),
           ],
@@ -236,13 +237,13 @@ class _DifferentSizesExampleState extends State<_DifferentSizesExample> {
         const SizedBox(height: 8),
         SelectableTagGroupEAE<String>(
           tagSize: TagEAESize.small,
-          groups: [
+          groups: const [
             TagGroup(
               title: '',
               options: [
-                const TagOption(label: 'Tag 1', value: '1'),
-                const TagOption(label: 'Tag 2', value: '2'),
-                const TagOption(label: 'Tag 3', value: '3'),
+                TagOption(label: 'Tag 1', value: '1'),
+                TagOption(label: 'Tag 2', value: '2'),
+                TagOption(label: 'Tag 3', value: '3'),
               ],
             ),
           ],
@@ -258,13 +259,13 @@ class _DifferentSizesExampleState extends State<_DifferentSizesExample> {
         const SizedBox(height: 8),
         SelectableTagGroupEAE<String>(
           tagSize: TagEAESize.medium,
-          groups: [
+          groups: const [
             TagGroup(
               title: '',
               options: [
-                const TagOption(label: 'Tag 1', value: '1'),
-                const TagOption(label: 'Tag 2', value: '2'),
-                const TagOption(label: 'Tag 3', value: '3'),
+                TagOption(label: 'Tag 1', value: '1'),
+                TagOption(label: 'Tag 2', value: '2'),
+                TagOption(label: 'Tag 3', value: '3'),
               ],
             ),
           ],
@@ -279,13 +280,13 @@ class _DifferentSizesExampleState extends State<_DifferentSizesExample> {
         const SizedBox(height: 8),
         SelectableTagGroupEAE<String>(
           tagSize: TagEAESize.large,
-          groups: [
+          groups: const [
             TagGroup(
               title: '',
               options: [
-                const TagOption(label: 'Tag 1', value: '1'),
-                const TagOption(label: 'Tag 2', value: '2'),
-                const TagOption(label: 'Tag 3', value: '3'),
+                TagOption(label: 'Tag 1', value: '1'),
+                TagOption(label: 'Tag 2', value: '2'),
+                TagOption(label: 'Tag 3', value: '3'),
               ],
             ),
           ],
@@ -333,29 +334,29 @@ class _InitialSelectionExampleState extends State<_InitialSelectionExample> {
         const SizedBox(height: 16),
         SelectableTagGroupEAE<String>(
           initialSelectedValues: selectedValues,
-          groups: [
+          groups: const [
             TagGroup(
               title: 'Activités',
               options: [
-                const TagOption(label: 'Football', value: 'football'),
-                const TagOption(label: 'Tennis', value: 'tennis'),
-                const TagOption(label: 'Natation', value: 'natation'),
+                TagOption(label: 'Football', value: 'football'),
+                TagOption(label: 'Tennis', value: 'tennis'),
+                TagOption(label: 'Natation', value: 'natation'),
               ],
             ),
             TagGroup(
               title: 'Loisirs',
               options: [
-                const TagOption(label: 'Cinéma', value: 'cinema'),
-                const TagOption(label: 'Musique', value: 'music'),
-                const TagOption(label: 'Lecture', value: 'reading'),
+                TagOption(label: 'Cinéma', value: 'cinema'),
+                TagOption(label: 'Musique', value: 'music'),
+                TagOption(label: 'Lecture', value: 'reading'),
               ],
             ),
             TagGroup(
               title: 'Cuisine',
               options: [
-                const TagOption(label: 'Italienne', value: 'italian'),
-                const TagOption(label: 'Japonaise', value: 'japanese'),
-                const TagOption(label: 'Française', value: 'french'),
+                TagOption(label: 'Italienne', value: 'italian'),
+                TagOption(label: 'Japonaise', value: 'japanese'),
+                TagOption(label: 'Française', value: 'french'),
               ],
             ),
           ],
@@ -406,15 +407,15 @@ class _CustomColorsMatchExampleState extends State<_CustomColorsMatchExample> {
           selectedBorderColor: matchBlue,
           unselectedBorderColor: Colors.grey[400],
           unselectedForegroundColor: Colors.grey[700],
-          groups: [
+          groups: const [
             TagGroup(
               title: 'Vos intérêts (Match)',
               options: [
-                const TagOption(label: 'Sport', value: 'sport'),
-                const TagOption(label: 'Voyage', value: 'travel'),
-                const TagOption(label: 'Gastronomie', value: 'food'),
-                const TagOption(label: 'Art', value: 'art'),
-                const TagOption(label: 'Technologie', value: 'tech'),
+                TagOption(label: 'Sport', value: 'sport'),
+                TagOption(label: 'Voyage', value: 'travel'),
+                TagOption(label: 'Gastronomie', value: 'food'),
+                TagOption(label: 'Art', value: 'art'),
+                TagOption(label: 'Technologie', value: 'tech'),
               ],
             ),
           ],
@@ -465,15 +466,15 @@ class _CustomColorsMeeticExampleState
           selectedForegroundColor: Colors.white,
           unselectedBackgroundColor: Colors.grey[200],
           unselectedForegroundColor: Colors.grey[700],
-          groups: [
+          groups: const [
             TagGroup(
               title: 'Vos passions (Meetic)',
               options: [
-                const TagOption(label: 'Randonnée', value: 'hiking'),
-                const TagOption(label: 'Photographie', value: 'photo'),
-                const TagOption(label: 'Jardinage', value: 'garden'),
-                const TagOption(label: 'Yoga', value: 'yoga'),
-                const TagOption(label: 'Cuisine', value: 'cooking'),
+                TagOption(label: 'Randonnée', value: 'hiking'),
+                TagOption(label: 'Photographie', value: 'photo'),
+                TagOption(label: 'Jardinage', value: 'garden'),
+                TagOption(label: 'Yoga', value: 'yoga'),
+                TagOption(label: 'Cuisine', value: 'cooking'),
               ],
             ),
           ],
@@ -549,48 +550,48 @@ class _RealWorldInterestsExampleState
           maxSelections: 5,
           initialSelectedValues: selectedValues,
           tagVariant: TagEAEVariant.filled,
-          groups: [
+          groups: const [
             TagGroup(
               title: '🏃 Sports & Activités',
               options: [
-                const TagOption(label: 'Fitness', value: 'fitness'),
-                const TagOption(label: 'Course à pied', value: 'running'),
-                const TagOption(label: 'Yoga', value: 'yoga'),
-                const TagOption(label: 'Natation', value: 'swimming'),
-                const TagOption(label: 'Vélo', value: 'cycling'),
-                const TagOption(label: 'Randonnée', value: 'hiking'),
+                TagOption(label: 'Fitness', value: 'fitness'),
+                TagOption(label: 'Course à pied', value: 'running'),
+                TagOption(label: 'Yoga', value: 'yoga'),
+                TagOption(label: 'Natation', value: 'swimming'),
+                TagOption(label: 'Vélo', value: 'cycling'),
+                TagOption(label: 'Randonnée', value: 'hiking'),
               ],
             ),
             TagGroup(
               title: '🎨 Culture & Arts',
               options: [
-                const TagOption(label: 'Cinéma', value: 'movies'),
-                const TagOption(label: 'Musique', value: 'music'),
-                const TagOption(label: 'Peinture', value: 'painting'),
-                const TagOption(label: 'Photographie', value: 'photography'),
-                const TagOption(label: 'Théâtre', value: 'theatre'),
-                const TagOption(label: 'Lecture', value: 'reading'),
+                TagOption(label: 'Cinéma', value: 'movies'),
+                TagOption(label: 'Musique', value: 'music'),
+                TagOption(label: 'Peinture', value: 'painting'),
+                TagOption(label: 'Photographie', value: 'photography'),
+                TagOption(label: 'Théâtre', value: 'theatre'),
+                TagOption(label: 'Lecture', value: 'reading'),
               ],
             ),
             TagGroup(
               title: '🌍 Lifestyle',
               options: [
-                const TagOption(label: 'Voyage', value: 'travel'),
-                const TagOption(label: 'Cuisine', value: 'cooking'),
-                const TagOption(label: 'Gastronomie', value: 'gastronomy'),
-                const TagOption(label: 'Vin', value: 'wine'),
-                const TagOption(label: 'Jardinage', value: 'gardening'),
-                const TagOption(label: 'Mode', value: 'fashion'),
+                TagOption(label: 'Voyage', value: 'travel'),
+                TagOption(label: 'Cuisine', value: 'cooking'),
+                TagOption(label: 'Gastronomie', value: 'gastronomy'),
+                TagOption(label: 'Vin', value: 'wine'),
+                TagOption(label: 'Jardinage', value: 'gardening'),
+                TagOption(label: 'Mode', value: 'fashion'),
               ],
             ),
             TagGroup(
               title: '🎮 Loisirs',
               options: [
-                const TagOption(label: 'Jeux vidéo', value: 'gaming'),
-                const TagOption(label: 'Jeux de société', value: 'boardgames'),
-                const TagOption(label: 'Danse', value: 'dancing'),
-                const TagOption(label: 'Animaux', value: 'animals'),
-                const TagOption(label: 'Technologie', value: 'tech'),
+                TagOption(label: 'Jeux vidéo', value: 'gaming'),
+                TagOption(label: 'Jeux de société', value: 'boardgames'),
+                TagOption(label: 'Danse', value: 'dancing'),
+                TagOption(label: 'Animaux', value: 'animals'),
+                TagOption(label: 'Technologie', value: 'tech'),
               ],
             ),
           ],

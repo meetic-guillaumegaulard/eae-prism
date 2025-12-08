@@ -188,7 +188,9 @@ class _ComponentTreeState extends State<ComponentTree> {
       onWillAcceptWithDetails: (details) {
         // Prevent dropping a section onto itself
         if (details.data.sourcePath != null &&
-            details.data.sourcePath == section) return false;
+            details.data.sourcePath == section) {
+          return false;
+        }
         return true;
       },
       onAcceptWithDetails: (details) {

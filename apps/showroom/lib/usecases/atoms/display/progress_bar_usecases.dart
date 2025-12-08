@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class ProgressBarUsecases extends StatefulWidget {
-  const ProgressBarUsecases({Key? key}) : super(key: key);
+  const ProgressBarUsecases({super.key});
 
   @override
   State<ProgressBarUsecases> createState() => _ProgressBarUsecasesState();
@@ -128,7 +128,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Range 0-100',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 0,
                 max: 100,
                 value: 35,
@@ -186,7 +186,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Range 10-50',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 10,
                 max: 50,
                 value: 30,
@@ -201,7 +201,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Just Started (0%)',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 0,
                 max: 10,
                 value: 0,
@@ -212,7 +212,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Half Way (50%)',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 0,
                 max: 10,
                 value: 5,
@@ -223,7 +223,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Almost Done (90%)',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 0,
                 max: 10,
                 value: 9,
@@ -234,7 +234,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Completed (100%)',
-              child: ProgressBarEAE(
+              child: const ProgressBarEAE(
                 min: 0,
                 max: 10,
                 value: 10,
@@ -249,11 +249,12 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Match Gradient (Theme-based)',
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Match brand uses a gradient with transparent background'),
-                  const SizedBox(height: 16),
+                  Text(
+                      'Match brand uses a gradient with transparent background'),
+                  SizedBox(height: 16),
                   ProgressBarEAE(
                     min: 0,
                     max: 10,
@@ -298,11 +299,12 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Default (Theme-based)',
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Uses brand configuration (Match/Meetic: 0, OKC/POF: 4)'),
-                  const SizedBox(height: 16),
+                  Text(
+                      'Uses brand configuration (Match/Meetic: 0, OKC/POF: 4)'),
+                  SizedBox(height: 16),
                   ProgressBarEAE(
                     min: 0,
                     max: 10,
@@ -316,11 +318,11 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Sharp Corners (borderRadius: 0)',
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('No rounded corners'),
-                  const SizedBox(height: 16),
+                  Text('No rounded corners'),
+                  SizedBox(height: 16),
                   ProgressBarEAE(
                     min: 0,
                     max: 10,
@@ -335,11 +337,11 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Rounded Corners (borderRadius: 8)',
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('More rounded appearance'),
-                  const SizedBox(height: 16),
+                  Text('More rounded appearance'),
+                  SizedBox(height: 16),
                   ProgressBarEAE(
                     min: 0,
                     max: 10,
@@ -354,11 +356,11 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
 
             _buildCard(
               title: 'Fully Rounded (borderRadius: 999)',
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Capsule shape'),
-                  const SizedBox(height: 16),
+                  Text('Capsule shape'),
+                  SizedBox(height: 16),
                   ProgressBarEAE(
                     min: 0,
                     max: 10,
@@ -387,7 +389,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
                   const SizedBox(height: 8),
                   const Text('Add more details to increase your match rate'),
                   const SizedBox(height: 16),
-                  ProgressBarEAE(
+                  const ProgressBarEAE(
                     min: 0,
                     max: 5,
                     value: 3,
@@ -410,7 +412,7 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
                   const SizedBox(height: 8),
                   const Text('Complete the setup to start using the app'),
                   const SizedBox(height: 16),
-                  ProgressBarEAE(
+                  const ProgressBarEAE(
                     min: 1,
                     max: 4,
                     value: 2,
@@ -431,9 +433,10 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
-                  const Text('Answer a few questions to personalize your experience'),
+                  const Text(
+                      'Answer a few questions to personalize your experience'),
                   const SizedBox(height: 16),
-                  ProgressBarEAE(
+                  const ProgressBarEAE(
                     min: 1,
                     max: 10,
                     value: 6,
@@ -494,4 +497,3 @@ class _ProgressBarUsecasesState extends State<ProgressBarUsecases> {
     );
   }
 }
-

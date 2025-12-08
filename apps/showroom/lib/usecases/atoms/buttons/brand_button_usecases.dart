@@ -160,7 +160,7 @@ Widget buildDisabledButton(BuildContext context) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ButtonEAE(
+        const ButtonEAE(
           label: 'Disabled Button',
           onPressed: null, // Setting onPressed to null disables the button
           variant: ButtonEAEVariant.primary,

@@ -11,7 +11,7 @@ enum ScreenLayoutExample {
 }
 
 class ScreenLayoutInteractiveUsecases extends StatefulWidget {
-  const ScreenLayoutInteractiveUsecases({Key? key}) : super(key: key);
+  const ScreenLayoutInteractiveUsecases({super.key});
 
   @override
   State<ScreenLayoutInteractiveUsecases> createState() =>

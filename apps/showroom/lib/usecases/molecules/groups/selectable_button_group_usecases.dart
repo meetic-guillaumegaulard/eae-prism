@@ -3,7 +3,7 @@ import 'package:design_system/design_system.dart';
 
 // Demo avec groupe vertical aligné à gauche
 Widget buildSelectableButtonGroupVerticalStart(BuildContext context) {
-  return _SelectableButtonGroupDemoWithVariableText(
+  return const _SelectableButtonGroupDemoWithVariableText(
     axis: SelectableButtonGroupAxis.vertical,
     alignment: SelectableButtonGroupAlignment.start,
   );
@@ -11,7 +11,7 @@ Widget buildSelectableButtonGroupVerticalStart(BuildContext context) {
 
 // Demo avec groupe vertical aligné à droite
 Widget buildSelectableButtonGroupVerticalEnd(BuildContext context) {
-  return _SelectableButtonGroupDemoWithVariableText(
+  return const _SelectableButtonGroupDemoWithVariableText(
     axis: SelectableButtonGroupAxis.vertical,
     alignment: SelectableButtonGroupAlignment.end,
   );
@@ -19,7 +19,7 @@ Widget buildSelectableButtonGroupVerticalEnd(BuildContext context) {
 
 // Demo avec groupe vertical en pleine largeur
 Widget buildSelectableButtonGroupVerticalStretch(BuildContext context) {
-  return _SelectableButtonGroupDemo(
+  return const _SelectableButtonGroupDemo(
     axis: SelectableButtonGroupAxis.vertical,
     alignment: SelectableButtonGroupAlignment.stretch,
   );
@@ -44,13 +44,13 @@ Widget buildSelectableButtonGroupWithAdditional(BuildContext context) {
 
 // Demo avec différentes tailles
 Widget buildSelectableButtonGroupSizes(BuildContext context) {
-  return Center(
+  return const Center(
     child: Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text('Small:', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
           _SelectableButtonGroupDemo(
@@ -59,7 +59,8 @@ Widget buildSelectableButtonGroupSizes(BuildContext context) {
             size: ButtonEAESize.small,
           ),
           SizedBox(height: 32),
-          Text('Medium (Default):', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Medium (Default):',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
           _SelectableButtonGroupDemo(
             axis: SelectableButtonGroupAxis.vertical,
@@ -95,12 +96,12 @@ class _SelectableButtonGroupDemo extends StatefulWidget {
   final bool hasAdditionalOptions;
 
   const _SelectableButtonGroupDemo({
-    Key? key,
+    super.key,
     this.axis = SelectableButtonGroupAxis.vertical,
     this.alignment = SelectableButtonGroupAlignment.stretch,
     this.size = ButtonEAESize.medium,
     this.hasAdditionalOptions = false,
-  }) : super(key: key);
+  });
 
   @override
   State<_SelectableButtonGroupDemo> createState() =>
@@ -182,7 +183,7 @@ class _SelectableButtonGroupDemoState
 
 // Demo avec icônes
 class _SelectableButtonGroupDemoWithIcons extends StatefulWidget {
-  const _SelectableButtonGroupDemoWithIcons({Key? key}) : super(key: key);
+  const _SelectableButtonGroupDemoWithIcons({super.key});
 
   @override
   State<_SelectableButtonGroupDemoWithIcons> createState() =>
@@ -247,10 +248,10 @@ class _SelectableButtonGroupDemoWithVariableText extends StatefulWidget {
   final SelectableButtonGroupAlignment alignment;
 
   const _SelectableButtonGroupDemoWithVariableText({
-    Key? key,
+    super.key,
     this.axis = SelectableButtonGroupAxis.vertical,
     this.alignment = SelectableButtonGroupAlignment.stretch,
-  }) : super(key: key);
+  });
 
   @override
   State<_SelectableButtonGroupDemoWithVariableText> createState() =>
@@ -333,4 +334,3 @@ class _SelectableButtonGroupDemoWithVariableTextState
     );
   }
 }
-

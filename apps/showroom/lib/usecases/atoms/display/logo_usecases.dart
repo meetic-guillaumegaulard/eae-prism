@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class LogoUsecases extends StatelessWidget {
-  const LogoUsecases({Key? key}) : super(key: key);
+  const LogoUsecases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,16 +127,21 @@ class LogoUsecases extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('URLs générées:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('URLs générées:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Text('Small: ${ApiUtils.logoUrl('meetic', LogoType.small)}',
-                      style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
+                      style: const TextStyle(
+                          fontSize: 12, fontFamily: 'monospace')),
                   const SizedBox(height: 4),
                   Text('OnDark: ${ApiUtils.logoUrl('meetic', LogoType.onDark)}',
-                      style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
+                      style: const TextStyle(
+                          fontSize: 12, fontFamily: 'monospace')),
                   const SizedBox(height: 4),
-                  Text('OnWhite: ${ApiUtils.logoUrl('meetic', LogoType.onWhite)}',
-                      style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
+                  Text(
+                      'OnWhite: ${ApiUtils.logoUrl('meetic', LogoType.onWhite)}',
+                      style: const TextStyle(
+                          fontSize: 12, fontFamily: 'monospace')),
                 ],
               ),
             ),
@@ -150,10 +155,10 @@ class LogoUsecases extends StatelessWidget {
     // Détecte la marque courante en utilisant les couleurs du thème
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
-    
+
     String brandName = 'Marque inconnue';
     Brand brand = Brand.match;
-    
+
     // Match: #11144C, Meetic: #E9006D, OKC: #0046D5, POF: #000000
     if (primaryColor == const Color(0xFF11144C)) {
       brandName = 'Match';
@@ -252,4 +257,3 @@ class LogoUsecases extends StatelessWidget {
     );
   }
 }
-

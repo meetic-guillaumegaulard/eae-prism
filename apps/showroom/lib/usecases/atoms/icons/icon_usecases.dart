@@ -3,7 +3,7 @@ import 'package:design_system/design_system.dart';
 
 /// Widget stateful pour démontrer les usecases des icônes
 class IconUsecases extends StatelessWidget {
-  const IconUsecases({Key? key}) : super(key: key);
+  const IconUsecases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +96,16 @@ class IconUsecases extends StatelessWidget {
       spacing: 24,
       runSpacing: 16,
       children: [
-        _buildIconWithLabel(context, const IconEAE.xs(Icons.star), 'IconEAE.xs'),
-        _buildIconWithLabel(context, const IconEAE.sm(Icons.star), 'IconEAE.sm'),
-        _buildIconWithLabel(context, const IconEAE.md(Icons.star), 'IconEAE.md'),
-        _buildIconWithLabel(context, const IconEAE.lg(Icons.star), 'IconEAE.lg'),
-        _buildIconWithLabel(context, const IconEAE.xl(Icons.star), 'IconEAE.xl'),
+        _buildIconWithLabel(
+            context, const IconEAE.xs(Icons.star), 'IconEAE.xs'),
+        _buildIconWithLabel(
+            context, const IconEAE.sm(Icons.star), 'IconEAE.sm'),
+        _buildIconWithLabel(
+            context, const IconEAE.md(Icons.star), 'IconEAE.md'),
+        _buildIconWithLabel(
+            context, const IconEAE.lg(Icons.star), 'IconEAE.lg'),
+        _buildIconWithLabel(
+            context, const IconEAE.xl(Icons.star), 'IconEAE.xl'),
         _buildIconWithLabel(
           context,
           const IconEAE.custom(Icons.star, size: 36),
@@ -189,7 +194,7 @@ class IconUsecases extends StatelessWidget {
       children: [
         Column(
           children: [
-            IconCircleEAE(
+            const IconCircleEAE(
               icon: Icons.person,
               iconSize: IconSizeEAE.md,
             ),
@@ -301,4 +306,3 @@ class IconUsecases extends StatelessWidget {
     );
   }
 }
-

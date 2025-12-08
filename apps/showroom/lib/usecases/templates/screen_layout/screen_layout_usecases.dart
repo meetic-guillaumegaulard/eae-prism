@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 
 class ScreenLayoutUsecases extends StatelessWidget {
-  const ScreenLayoutUsecases({Key? key}) : super(key: key);
+  const ScreenLayoutUsecases({super.key});
 
   @override
   Widget build(BuildContext context) {

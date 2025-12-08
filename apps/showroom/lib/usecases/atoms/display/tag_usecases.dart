@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class TagUsecases extends StatefulWidget {
-  const TagUsecases({Key? key}) : super(key: key);
+  const TagUsecases({super.key});
 
   @override
   State<TagUsecases> createState() => _TagUsecasesState();
@@ -30,13 +30,13 @@ class _TagUsecasesState extends State<TagUsecases> {
           _buildSection(
             'Mode Lecture Seule',
             'Tags en lecture seule pour afficher de l\'information. Match: fond gris clair. Meetic: fond gris-bleu clair.',
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Style Match (avec émojis/icônes)',
+                Text('Style Match (avec émojis/icônes)',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -58,11 +58,11 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Style Meetic (avec émojis/icônes)',
+                SizedBox(height: 16),
+                Text('Style Meetic (avec émojis/icônes)',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -84,11 +84,11 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Style POF (fond blanc + bordure grise)',
+                SizedBox(height: 16),
+                Text('Style POF (fond blanc + bordure grise)',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -110,11 +110,11 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Style OKC (similaire à POF)',
+                SizedBox(height: 16),
+                Text('Style OKC (similaire à POF)',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -136,11 +136,10 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Filled',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 16),
+                Text('Filled', style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -471,13 +470,13 @@ class _TagUsecasesState extends State<TagUsecases> {
           _buildSection(
             'Cas d\'usage combinés',
             'Exemples de tags en lecture seule dans différents contextes',
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Profil utilisateur',
+                Text('Profil utilisateur',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
@@ -503,11 +502,11 @@ class _TagUsecasesState extends State<TagUsecases> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Catégories en lecture seule',
+                SizedBox(height: 16),
+                Text('Catégories en lecture seule',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                const Wrap(
+                SizedBox(height: 8),
+                Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
